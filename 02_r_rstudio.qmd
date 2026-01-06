@@ -55,12 +55,6 @@ To learn more about how the industry is addressing this question, it is worth vi
 
 The R Validation Hub have produced a [white paper](https://www.pharmar.org/white-paper/) entitled, "A Risk-based Approach for Assessing R package Accuracy within a Validated Infrastructure".
 
-`r if (params$who != "gsk") "::: {.content-hidden}"`
-
-{{< include 02_vvv_clin_prog.qmd >}}
-
-`r if (params$who != "gsk") ":::"`
-
 ## Working in RStudio
 
 Let's start off by watching a short video from RStudio showcasing their IDE.  Don't worry, there will be a deep-dive into each part that the presenter goes over and even more!
@@ -304,28 +298,6 @@ library(dplyr)
 library(tidyr)
 # etc.
 ```
-
-
-
-`r if (params$who != "gsk") "::: {.content-hidden}"`
-
-{{< include 02_xxx_installing_gsk.qmd >}}
-
-`r if (params$who != "gsk") ":::"`
-
-
-`r if (params$who != "psi") "::: {.content-hidden}"`
-
-{{< include 02_xxx_installing_psi.qmd >}}
-
-`r if (params$who != "psi") ":::"`
-
-
-`r if (params$who != "gsk") "::: {.content-hidden}"`
-
-{{< include 02_yyy_warp.qmd >}}
-
-`r if (params$who != "gsk") ":::"`
 
 `r if (params$who != "external") "::: {.content-hidden}"`
 
