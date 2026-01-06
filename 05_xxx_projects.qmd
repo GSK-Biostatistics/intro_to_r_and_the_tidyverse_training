@@ -1,0 +1,8 @@
+
+
+## Projects
+
+We started this course by creating an RStudio project.  One of the benefits of creating a project within a directory is that it sets the workspace to that directory.  This means that we can immediately use relative file paths for any local data.
+
+For more information on RStudio projects see [RStudio Projects]
+

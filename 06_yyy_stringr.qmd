@@ -1,0 +1,157 @@
+<!-- NOTE TO TRAINERS: This is not intended to be taught if short on time -->
+## String Manipulation with the stringr Package
+
+The stringr package, which is part of the tidyverse, provides a whole heap of functions for working with text string.  Almost all of the functions in the stringr package (and all of the functions that we look at in this section) begin with the prefix "`str_`".  Each function takes the text that we're interested in doing something with as the first argument.
+
+```{r stringr}
+# Load the Package
+library(stringr)
+# What's inside?
+objects("package:stringr")
+```
+
+### String Length
+
+Let's look at a few of the most useful functions, starting with `str_length` which simply tells us how long a string is.  For the examples we work with vectors directly but in practice these functions will most likely be called via the `mutate` function.
+
+```{r string_length}
+str_length("GSK")  # equivalenetly `nchar("GSK")`
+```
+
+### Adding White Space: Formatting
+
+When producing production outputs we often have to work with white space. The `str_pad` function adds white space to the left, right or both sides of the given text string depending on what we pass to the `side` argument.  By default the space is added to the left.  We add space providing a number, which represents the desired length of each string in the vector.
+
+```{r white_space_add}
+# Some values that we wish to right align
+aes <- c(15, 10, 7, 2, 1, 1)
+
+# Add some padding to the left in order to right align the text
+ae_pad <- str_pad(aes, 2)
+ae_pad
+
+# Or left align for some reason
+str_pad(aes, 3, side="right")
+```
+
+### Removal of White Space
+
+White space can be useful for formatting but often it just gets in the way, for example of concatenation (see below).  As easily as we can add it, we can take it away.  We use `str_trim` (the opposite of `str_pad`) to remove unwanted space at either end of the string.
+
+```{r white_space_remove}
+# Get rid of the white space that we just added
+str_trim(ae_pad)
+```
+
+### Concatenation 
+
+The `str_c` functions allows us to combine/concatenate string.  We simply provide the function with vectors or single pieces of string that we wish to use for the concatenation.
+
+```{r concat}
+# Calculate percentages and right-align
+ae_perc <- round(100*aes / 30)
+ae_perc_pad <- str_pad(ae_perc, 2)
+
+# Joing the padded data together for nicely formatted results
+str_c(ae_pad, " (", ae_perc_pad, "%)")
+```
+
+### Paragraphs
+
+When trying to fit lots of text into a confined space it can be useful to wrap when it exceeds some predefined length.  The `str_wrap` function achieves this by strategically placing the return escape, `"\n"`, within the given text.
+
+```{r paragraphs}
+# Create a paragraph of text
+some_text <- "When working in a late phase pharmaceutical environment, it is common to have long titles.  But alas, we must fit these long titles within the limited space offered by the L10 format that we use.  Sad face."
+
+# Insert returns in so that it fits within some pre-specified width.
+str_wrap(some_text, 108) 
+```
+
+
+### Finding Patterns
+
+The stringr package also contains a number of functions that build upon R's regular expression capabilities.  The string functions are similar to others that exist in R but are much more consistent in terms of the order of variables (the string that we're querying is always the first argument).
+
+In the example below we simulate some asthma treatments and find those containing a "LABA" component using the `str_detect` function.
+
+```{r str_detect}
+# Create some asthma treatments
+treats <- sample(c("ICS", "ICS/LABA"), 10, replace = TRUE)
+treats
+
+# Find subjects with LABA component
+str_detect(treats, "LABA")
+```
+
+### Replacing Values
+
+Once we've found a string pattern we may wish to replace it with something else.  The `str_replace` function allows us to replace one piece of string with another.  In order to do so we provide three arguments: the string; the text that we want to find; the text that we want to replace it with when we find it.
+
+```{r str_replace}
+study_conclusion <- "The p-value was less than 0.05"
+str_replace(study_conclusion, "less than", "greater than")
+```
+
+Once we know what we're doing we can use the `str_replace` function to do clever things like replace white space in the middle of a text string.
+
+```{r str_replace_na}
+messy_text <- c("How did    I   end  up with  so   much white           space?")
+# "\\s+" searches for cases with any length of white space
+str_replace_all(messy_text, pattern="\\s+", " ")
+```
+
+\newline
+
+## EXERCISE {#mutate}
+
+1. Create a new column, `ACTTOT`, which is the sum of the 5 ACT items in the `act` data
+
+2. Create a column, `ACTRESP`, which partitions `ACTTOT` into "controlled" if ACTTOT >= 20 or "uncontrolled" otherwise.
+
+3. Create a new variable, `VISITNew`, by formatting the `VISITNUM` column so that it displays "Screening", "Randomisation", "Early Withdrawal" or the appropriate week of the trial, e.g. "Week 6".  *HINT: Use the `fct_recode` function from the forcats package.*  
+
+4. Create a flag that identifies whether or not it's a phone visit. *HINT: Use the `str_detect` or `str_starts` function from the stringr package within `if_else`.*  
+
+5. Filter the `act` data to find QSDT dates starting with "2012". *HINT: Use the `str_detect`, or `str_starts` function from the stringr package.* 
+
+6. Create a vector of subject IDs (`SUBJID`) from 1 to 20.  Turn this into a suitable USUBJID format for study "GSK456789" (i.e. "GSK456789:000001" etc.) *HINT: Use the appropriate function from the stringr package.* 
+
+
+```{r}
+#| label: ex_ans_string
+#| eval: false
+#| echo: false
+
+# Exercise Answers: String Manipulation
+# 1
+act <- mutate(act, ACTTOT = ACT0101 + ACT0102 + ACT0103 + ACT0104 + ACT0105)
+act
+# 2
+act <- mutate(act, ACTRESP = cut(ACTTOT,  
+                                 c(4, 19, 25), 
+                                 labels = c("uncontrolled", "controlled")))
+# 3
+act <- mutate(act, 
+       VISITNew = factor(VISITNUM),
+       VISITNew = fct_recode(VISITNew, 
+                             "Screening" = "10", 
+                             "Randomisation" = "20",
+                             "Week 6" = "30",
+                             "Week 12" = "40",
+                             "Week 18" = "50",
+                             "Week 24" = "60",
+                             "Early Withdrawal" = "70"))
+# 4
+act %>%
+  mutate(PHONE_CALL = if_else(condition = str_detect(VISIT, "PHONE CALL"),
+                              true = TRUE, false = FALSE))
+# 5
+act %>% filter(str_detect(QSDTC, "^2012"))
+str_subset(act$QSDTC, "^2012") # alternative answer
+# 6
+SUBJID <- 1:20
+SUBJID_formatted <- str_pad(SUBJID, 6, pad="0")
+USUBJID <- str_c("GSK456789:", SUBJID_formatted)
+USUBJID
+```

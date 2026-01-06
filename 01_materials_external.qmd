@@ -1,0 +1,21 @@
+# Course Materials
+
+These materials have been written such that you should be able to follow along without the aid of an instructor.
+
+To get the data you will need to install the `gskRtraining` package and then run the `setup_training()` function. After running the `setup_training()` function a new directory/project will be created called `gsk_R_training` in your home directory, or in the `/mnt/code/` folder if you're working in Domino. The folder will contain the data and course scripts.  The script for this course is called 'tidyverse.R'.  This script contains a copy of all of the code from the grey boxes within these materials, as well as the answers to the exercises (note that these are commented out but should run if un-commented).
+
+```{r,eval = FALSE}
+ 
+install.packages("gskRtraining")
+library("gskRtraining")
+
+setup_training()
+```
+
+The new folder should look like this: <img src="./img/new_course_data.PNG" class="border"/>
+
+## Initialising the Course 'Project'
+
+Now you have copied the materials, please open the newly created `gsk_R_training` directory (folder) and click on the RStudio project file (`gsk_R_training.Rproj`) to start a new project. This ensures all the relative paths work as expected. We will briefly discuss further benefits of RStudio Projects later in the course.
+
+<img src="./img/open_proj.png" class="border"/>

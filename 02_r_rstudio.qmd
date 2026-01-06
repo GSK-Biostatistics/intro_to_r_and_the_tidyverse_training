@@ -1,0 +1,334 @@
+---
+params:
+  who: external
+---
+# Introduction to R and RStudio
+
+<!-- <br> -->
+<!-- <br> -->
+<!-- <br> -->
+<!-- <br> -->
+
+<!-- At the end of Chapter 2 students will be able to:   -->
+
+<!-- 1. Understand the uses of R for Regulatory Work -->
+<!-- 2. Navigate the four panes of the RStudio IDE -->
+<!-- 3. Install and Load R Packages -->
+<!-- 4. Create Sessions and Projects in RStudio -->
+
+```{r setup, include=FALSE, collapse=TRUE, prompt = TRUE, purl = FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE,
+                      prompt = TRUE, comment = NA)
+```
+
+```{r load_data, include=FALSE, collapse=TRUE, prompt = TRUE}
+library(tidyverse); theme_set(theme_bw(base_size = 12)) # This sets the default ggplot theme to white
+library(haven)
+
+# SAS versions
+act <- read_sas("data/act.sas7bdat")
+act_full <- read_sas("data/actFull.sas7bdat")
+act_long <- read_sas("data/actLong.sas7bdat")
+vs <- read_sas("data/vs.sas7bdat")
+dm <- read_sas( "data/dm.sas7bdat")
+sl <- read_sas( "data/sl.sas7bdat")
+theoph <- read_csv("data/theoph.csv")
+```
+
+
+## Ownership of R
+
+R is free and open source under a GPL-2 license.  This means that you can download it at home and, if you want, see how it has been written.  It also means that you get a "ABSOLUTELY NO WARRANTY" message every time you load up R.  But don't let that put you off!
+
+<img src="./img/r_ownership.PNG" class="border">
+
+
+### A Note on Using R for Regulatory Work
+
+Despite common opinion, there is no reason why R cannot be used for regulatory work.  It is true that the FDA require the use SAS transport files for a submission, however these are not a proprietary format and you can produce them using R.  And even this requirement could disappear in the future in favour of a more open format such as XML.
+
+R is widely used at the FDA (there are several presentations available online from people at the FDA stating this).  The R Foundation have also released an official document outlining their understanding of how R can be used in a regulated clinical trial environment: [https://www.r-project.org/doc/R-FDA.pdf](https://www.r-project.org/doc/R-FDA.pdf).  However, R is still not commonly used for submission work, and hence for clinical analysis.
+
+Whenever discussing the use of R in a regulatory environment always remember that there is a clear distinction between: the base R language, that has been built up over several years and widely tested by the R community; and the publically available R packages, which anyone can develop (and may, or may not, do what they are supposed to).
+
+To learn more about how the industry is addressing this question, it is worth visiting the "R Validation Hub", [www.pharmar.org](https://www.pharmar.org).  The Hub is an industry-wide effort to agree upon some basic principles regarding the use of R in a regulatory setting.
+
+The R Validation Hub have produced a [white paper](https://www.pharmar.org/white-paper/) entitled, "A Risk-based Approach for Assessing R package Accuracy within a Validated Infrastructure".
+
+`r if (params$who != "gsk") "::: {.content-hidden}"`
+
+{{< include 02_vvv_clin_prog.qmd >}}
+
+`r if (params$who != "gsk") ":::"`
+
+## Working in RStudio
+
+Let's start off by watching a short video from RStudio showcasing their IDE.  Don't worry, there will be a deep-dive into each part that the presenter goes over and even more!
+
+<iframe width="760" height="515" src="https://fast.wistia.net/embed/iframe/520zbd3tij?videoFoam=true" frameborder="0" allowfullscreen></iframe>
+
+Notice how the presenter covered the four different panes of RStudio.  We are going to follow almost the same method.  
+
+1.  Explore the Console by doing some Simple Arithmetic
+2.  Write our first R script by using the Scripting Editor.
+3.  Discuss objects while looking at the Environment Pane
+4.  Look at a function and its parameters in the Help Tab.
+
+There are more Tabs within each Pane.  We will cover the remaining tabs at the end of this Chapter using our Script to do another walkthrough.  The RStudio IDE is powerful, but can be overwhelming so start small and expand your abilities as you code.
+
+## Simple arithmetic using the Console
+
+Like most scripting languages R provides us with a console for direct interaction.  In other words we can directly ask R questions without the need for scripts.  This course contains many simple, "one line" examples that we will execute directly in the console.  
+
+Let's enter a few R statements into the Console and use the return key to execute it. Results are displayed right under the statement entered.  
+
+- 3 + 4
+- 3 - 4
+- 5 * 8
+
+Please, type the above statements into the console, pressing the return key after each one and see that it matches up with the below image.  Take a note on how R indicates that something is an output.
+
+
+![](./img/console1.png)
+
+## Creating Objects
+
+So far we have simply printed output to the console.  We can also store any objects and use them later on.  The convention in the R community is to use `<-` to assign and store objects, however `=` may also be used.  
+
+```{r storing_values}
+# Methods of assigning/storing values
+x <- 5
+y = 6
+z <- "GSK"
+```
+
+Objects are created in our global environment, similar to the 'work' area in SAS. We can always see a list of created objects in the 'Environment' tab with a little information about their structure. Additionally, you can use the `str` function to learn more about an object's structure, or simply type it's name in the console to print it out.
+
+\newline
+
+![*Figure 3: Global Environment*](./img/env.PNG)
+
+\newline
+
+To produce a list of these objects in the console we can call either of the in-built functions `ls()` or `objects()`
+
+```{r environment_objects}
+# Things I have created
+objects()
+```
+
+The broom symbol in the environments tab allows us to delete all objects that we have created.  Alternatively we can do so programatically.
+
+```{r clear_env, eval = FALSE}
+# Remove all objects from workspace
+rm(list=ls())
+```
+
+
+### Naming Conventions
+
+At this point it is worth stressing that R is case sensitive and so "x" and "X" are not the same!  Names can be as long as we like and use any combination of upper case, lower case, numerics, underscores and dots.  However, they may not start with a number or underscore.  Today, most R users either use `camelCase` or `snake_case` to separate out words when naming objects.  At GSK we have opted to use the [tidyverse style guide](https://style.tidyverse.org/), which advocates `snake_case`.
+
+### Using Objects
+
+To use the objects we just reference them in exactly the same way that we created them.
+
+```{r using_values, error=TRUE}
+# Use values that have been previously stored
+x + y
+
+# Now let's do something silly to get a really helpful error message!
+x + z
+```
+
+Data types cannot usually be combined so it is important to recognise the basic types of data (and error messages) that exist in R.
+
+## Our first R Script
+
+Let's create our first R script, by navigating to the top-left corner.  First, we click the green plus sign and select R Script.  There are several other ways to create a new script, one of which is `Crtl+Shift+N`, or using `File` > `New File` > `R Script`. 
+
+![](./img/first_script.png)
+
+### The Script Editor
+
+The script editor is very much like the SAS script editor, or any other script editor for that matter.  Syntax highlighting improves readability and there is a first line layer of code recognition which can identify common scripting errors such as a bracket or quotation mark that hasn't been opened/closed.
+
+![](./img/rwarning.PNG)
+
+
+Other default features of the editor include automatic indentation, closing of brackets, color-coded brackets, and quotations and auto-completion of code.  All of these features can be modified or switched off via the
+
+Code menu: *Tools > Global Options > Code*.
+
+![](./img/1_code_options.PNG)
+
+To execute the code that we write in the script editor we can either click on the *Run* button at the top of the window or use *Ctrl + Enter* on the keyboard.   By default, code is executed line by line depending on where the cursor is located.  To run sections of code (or the entire script) we must highlight the code that we want to run.  Alternatively, we can run the entire script by saving and clicking the *Source* button.
+
+Now, let's work on our first script. First, let's save our `Unititled` file as `my_first_R_script.R` in the folder `/Home/gsk_R_training`
+
+In this brief walk through we will create and summarise some data.  We will learn **a lot** more about what exactly is happening later in the course.
+
+Now, let's create some dummy data for `weight` and `height`. Note that the list of 5 numbers is wrapped in parentheses with a `c` in front.  This is how R creates a "vector" (similar to a column of data).  We have just created two such objects called `weight` and `height`.
+
+```{r script}
+
+weight <- c(70.9, 87.2, 90.8, 68.1, 72.6)
+height <- c(170, 185, 178, 175, 180)
+```
+
+
+Let's find the bmi of the 5 subjects that we created.  Notice how the output is reported back to us.
+
+```{r}
+weight/ (height / 100)^2
+```
+
+Now, lets find the mean of the `height` variable, by using the function `mean`.  After you type the word `mean` in your script, hit `tab` and see what appears.  If you press `F1` it wil bring up a help page for the mean function. You can also type `?mean`.  
+
+![](./img/rhelp.PNG)
+
+```{r}
+mean(height)
+
+```
+
+
+In our R script, lets save the `mean(height)` as `mean_hgt` and `weight/ (height / 100)^2` as `bmi`.  
+
+
+```{r}
+mean_hgt <- mean(height)
+bmi <- weight/ (height / 100)^2
+
+```
+
+Where did they go?  There is no longer any output in the console!  Remember, you can view objects in the Environment tab in the upper right hand window of Rstudio.  
+
+![](./img/environment.png)
+
+
+### Functions and Help
+
+R has many built-in functions to aid you in your work, typically the R community refers to these as base-R functions.  Where a base-R function is lacking or not available, then enterprising folks have used R's powerful package building process to supplement base-R functions.  We will cover packages very soon, specifically the `tidyverse` package.  Now lets take another look at our `mean` function again.  You can type `?mean` to bring up documentation and examples of how to use the `mean` function or tab and `f1` right you type the function.  
+
+![](./img/r_mean_help.PNG)
+
+If you scroll to the bottom of the help page, you can see an example.  Try to run the example in your console by highligting the text and clicking `ctrl+enter` .  What is the value of `xm`?
+
+###  Clearing History, Console, Environment
+
+The console can be cleared by choosing the menu item `Edit -> Clear Console`.  Else you can use the keyboard shortcut *Ctrl + L*.
+
+You can also clear the console by clicking the broom.
+
+![](./img/clear1.PNG)
+
+To clear the Environment Variables you can click another broom.  It is a good programming practice to clear your environmental variables after you are finish writing your script and then rerun it.
+
+![](./img/clear2.PNG)
+
+###  Restarting or Terminating our Session 
+
+Sometimes it makes sense to restart with a clean slate (eg to test code). The current R session can be restarted by choosing the menu item `Session -> Restart R`.  This removes all objects and unloads all packages.
+
+Note that closing the browser does not terminate the R session.  To completely terminate the session you should use the orange 'power button' icon in the top right hand part of the window.
+
+It is possible to save objects (eg large data sets that take a long time to import) using the `save` function but this is not covered on this course.  
+
+### A Paneful Tour
+
+The interface of RStudio consists of 4 main panes and sub-panes within those main panes
+
+
+Additional panes can appear for additional functionality, e.g. the R Markdown or Git pane. Note, the Editor pane is only visible if at least one source code file is open.
+
+- `Editor` pane for editing source code files like R scripts or R Markdown files (top left 
+part in the screenshot)
+- `Console` pane for running R code interactively
+- `Terminal` pane for using a terminal within RStudio
+- `Jobs` pane for running R jobs
+- `Environment` pane displaying objects created in a R session
+- `History` pane displaying the statement history
+- `Connections` pane for connections to databases
+- `Files` pane for browsing and handling files/directories
+- `Plots` pane displaying plots
+- `Packages` pane for installing and updating R packages
+- `Help` pane displaying R help pages
+- `Viewer` pane displaying rendered R Markdown documents and Shiny apps
+
+As you work through this training keep in mind that this comes with accompanying script that contains all the code and exercise solutions:  This script can be found at `/home/gsk_R_training/tidyverse.R`.
+
+## Packages
+
+An R package is just a collection of R *objects*.  The majority of these objects are functions but may also be data or other forms of object.
+
+R is essentially a collection of "packages".  An R package is what other programming languages usually call a "library" (or "module" in SAS).  In other words it is a bundle of code that implements some functionality that extends the language. This course is based around one package in particular, called "tidyverse" (which is itself a collection of other packages).
+
+The R installation itself is actually just a collection of around 30 packages, several of which are automatically loaded when you start an R session:
+
+```{r packages_loaded}
+# R packages loaded in my session:
+search()
+```
+
+The vast majority of R packages contain utility functions for performing data manipulation or analysis, or for drawing graphics.  In many cases they also come packed with examples and even dummy data sets to use.
+
+
+The 30 packages that make up the base R installation are maintained by the <a href="https://www.r-project.org/contributors.html">R Core Team</a>.  However there are also more than 10,000 publically available R packages available on <a href = "https://cran.r-project.org/">CRAN</a> (The Comprehensive R Archive Network).
+
+<iframe height="900" width="750" frameborder="yes" src="https://gallery.shinyapps.io/cran-explorer/?_ga=2.118984969.1876785344.1589225611-1547009910.1569460555#cran-stats"> </iframe>
+
+### Loading Packages
+
+Each time we start a new R session, only a handful of our installed packages are actually loaded.  
+
+```{r}
+# These packages are currently loaded in my environment:
+search()
+```
+
+This course is based around the tidyverse, which is not loaded by default.  We can either load the package manually by checking the box next to the named package in the packages menu or, as is more common when writing scripts, we can add a statement `library(PACKAGENAME)` to our script.  
+
+```{r}
+# Run this or the course won't be much fun!
+library(tidyverse)
+```
+
+**It is good practice to place all of our library calls at the top of our script**.  Thus, when sharing a script anyone else can immediately see what they need to have installed in order to use the script.
+
+The 'tidyverse' is an umbrella term/package for a number of other packages.  Calling `library(tidyverse)` actually loads several useful packages including readr, dplyr, tidyr, stringr, forcats and ggplot2.  This is a great short-hand when working interactively but for formal code development it is **best practice to load the components that you actually need individually**:
+
+```{r not_tidyverse, eval = FALSE}
+library(readr)
+library(dplyr)
+library(tidyr)
+# etc.
+```
+
+
+
+`r if (params$who != "gsk") "::: {.content-hidden}"`
+
+{{< include 02_xxx_installing_gsk.qmd >}}
+
+`r if (params$who != "gsk") ":::"`
+
+
+`r if (params$who != "psi") "::: {.content-hidden}"`
+
+{{< include 02_xxx_installing_psi.qmd >}}
+
+`r if (params$who != "psi") ":::"`
+
+
+`r if (params$who != "gsk") "::: {.content-hidden}"`
+
+{{< include 02_yyy_warp.qmd >}}
+
+`r if (params$who != "gsk") ":::"`
+
+`r if (params$who != "external") "::: {.content-hidden}"`
+
+{{< include 02_xxx_installing_external.qmd >}}
+
+`r if (params$who != "external") ":::"`

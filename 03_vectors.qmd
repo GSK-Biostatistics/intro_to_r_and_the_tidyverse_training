@@ -1,0 +1,289 @@
+# Data Types and Vectors
+
+## Data Types
+
+R has 4 basic data types (modes) from which almost everything else is built upon.  These are:
+
+- numeric
+- character
+- logical
+- complex (which we will ignore in this course)
+
+```{r data_types}
+# Numeric
+3 + 7
+6 - 14
+5*9
+100/3
+
+# Character
+"Hello! I work at GSK"
+
+# Logical
+6 > 7
+is.numeric(12)
+```
+
+Note that the logical values `TRUE` and `FALSE` are reserved words, meaning that we cannot overwrite (mask) them.  In the examples above the logicals were produced by asking a question.  It is also possible to create them directly (`x <- TRUE`).  When doing so, they must be written exactly using capital letters and without quotation marks.  We will look at the usage of logicals more closely later on in the course.
+
+\newline
+
+The terms used above are formal definitions in R.  The `mode` function lets us query the type of any element.
+
+```{r data_types_2}
+mode(5)                 # numeric
+mode("have a guess")    # character
+```
+
+
+## Combining Elements to Make a Vector
+
+A vector is a collection of elements/values that have the same type or "mode".  In R, vectors technically have no dimension but we will usually treat them as columns of data in a dataset (data frame).
+
+\newline
+
+We can easily create vectors using the `c` function to "combine" one or more elements together.
+
+```{r vectors_c}
+# Numeric vectors
+c(5, 42, 99)
+c(6.423, 7.324, 9.225)
+
+# Character vectors
+c("I", "have", "four", "elements")
+```
+
+We can also combine vectors using `c`.
+
+```{r vectors_c2}
+# Create a couple of vectors
+vec1 <- c(5,9,2)
+vec1
+vec2 <- c(7,8,1)
+vec2
+
+# Combine the vectors
+vec3 <- c(vec1, vec2)
+vec3
+```
+
+NB: A scalar (single value) is technically just a vector with 1 element.
+
+## Sequences
+
+In addition to the `c` function, R contains a number of useful operators and utility functions for creating vectors.  First we look at the `seq` function for generating sequences.
+
+\newline
+
+The `seq` function takes self-explanatory arguments "from" and "to".  By default, the incremental value is 1.  We can optionally provide either "by" or "length" to change this.
+
+```{r seq}
+# Simple sequence
+seq(from = 1, to = 10)
+
+# The same, but without specifying the arguments:
+seq(1, 10)
+
+# Counting down
+seq(80, 60, by = -5)
+
+# Using 'by' and 'length'
+seq(from = 1, to = 10, by = 0.5)
+seq(from = 10, to = 50, length = 5)
+```
+
+If we simply need a sequence of integers then the `:` operator provides a simple shortcut.
+
+```{r colon}
+1:50
+10:1
+```
+
+### Repeating Values
+
+The `rep` function allows us to repeat a value(s).  The arguments `times` and `each` provide us with some control of how the repetition is performed.
+
+```{r rep}
+# Single values
+rep(1, times = 6)
+rep("z", times = 3)
+
+# Vectors
+vec1  # Reminder of what this is
+rep(vec1, times = 4)
+rep(vec1, each = 4)
+rep(vec1, times = c(5, 4, 6))
+
+# More advanced example
+n_subj <- 5
+n_visits <- 4
+SUBJID <- rep(1:n_subj, each = n_visits)
+SUBJID
+VISITNUM <- rep(1:n_visits, n_subj)
+VISITNUM
+```
+
+### Missing data
+
+In R, missing data is represented by `NA`.  The term `NA` is a reserved word in R.  Like the reserved logical terms `TRUE` and `FALSE`, `NA` must be written exactly as it is written here, i.e. in capitals and without quotation marks, regardless of whether the data in question is numeric, character, or logical.
+
+```{r missing}
+# Missing numeric
+mis_num <- c(1,2,NA,4)
+mis_num
+
+# Missing character
+mis_let <- c("G", NA, "K")
+mis_let
+
+# Missing logical
+mis_log <- c(mis_num > 5)
+mis_log
+```
+
+## EXERCISE {#vector}
+
+1. Load the tidyverse package
+2. Create a vector that stores the values 4, 9, 2, 1, 6, and 3
+    a. Add 1 to every element in your vector (easier than you may think)
+    b. Add a missing value to the end (i.e. the 7th position)
+    c. Add 1 to every element again and observe what happens with the missing value
+3. Create a vector containing the numbers 1 to 20, incremented by 1
+4. Create a sequence of 3 numbers between 18 and 65
+5. Repeat the word "GSK" 50 times
+
+**Extra**
+
+6. Create a vector with subject numbers 1, 2 and 3 where 1 is repeated 6 times, 2 is repeated 4 times, and 3 is repeated 5 times.
+
+```{r ex_ans_start, eval=FALSE, echo=FALSE}
+#| label: ex_ans_start
+#| eval: false
+#| echo: false
+
+# Exercise Answers: Data Types and Vectors
+
+# 1
+library(tidyverse)
+# 2
+my_vec <- c(4, 9, 2, 1, 6, 3)
+my_vec + 1
+my_vec2 <- c(my_vec, NA)
+my_vec2 + 1
+# 3
+1:20
+# 4
+seq(18, 65, length = 3)
+# 5
+rep("GSK", 50)
+# 6
+rep(1:3, times = c(6, 4, 5))
+```
+
+## Simulating Data
+
+In order to populate vectors and data frames (see next chapter) we can also simulate data.  This is not a simulation course but we will briefly look at some of the easy ways in which we can simulate data, either via known distributions or by sampling from existing data.
+
+### Distributions
+
+R has a number of statistical distributions "built in", a huge number more available through add-on packages.  The built-in distributions all follow a consistent naming convention and structure.  First of all each distribution has been given a short-form.  For example, the normal distribution has the short form, "norm".  A handful of common short forms are listed below:
+
+\newline
+
+```{r distributions, echo = FALSE, purl = FALSE, table.attr = "style='width:30%;'"}
+
+dists <- tibble::tibble(`Short Form` = c("norm", "pois", "binom", "f", "t", "unif", "weibull", "gamma", "chisq"),
+                `Distribution` = c("Normal", "Poisson", "Binomial", "F", 
+                                   "Student's t", "Uniform", "Weibull", "Gamma", "Chi-squared"))
+knitr::kable(dists)
+```
+
+\newline
+
+See `help("Distributions")` for more information on available distributions.
+
+\newline
+
+To each of the short forms we may apply one of four pre-fixes, `d`, `p`, `q`, `r`.  When appended to a short-form distribution, the prefixes respectively provide:
+
+\newline
+
+- `d` - the probability density function, PDF,  for given values
+- `p` - the cumulative distribution function, CDF, for given quantiles
+- `q` - the inverse distribution function for given probabilities
+- `r` - randomly generated numbers from the distribution for a given n
+
+\newline
+
+So for example if we wanted to know the PDF of a normal distribution between the values of -3 and 3 we would generate a sequence and then use a function, `dnorm` to find the densities.  For example,
+```{r ggplot}
+#| echo: FALSE
+#| eval:  TRUE
+
+library(ggplot2)
+```
+
+```{r dist_eg}
+# Values of interest 
+x <- seq(-3, 3, by = .01)
+PDF <- dnorm(x)
+
+# Now let's plot using ggplot2
+ggplot() + 
+  geom_line(aes(x = x, y = PDF))
+```
+
+### Sampling From a Distribution
+
+From a simulation perspective we are normally interested in sampling values from a known distribution.  This is very straightforward.  For example, if we want 200 numbers randomly sampled from a normal distribution we would write, `rnorm(200)`.  Which we might then plot as a histogram.
+
+```{r rnorm}
+# Values of interest 
+x <- rnorm(200)
+
+# Now let's plot using ggplot2
+ggplot() + 
+  geom_histogram(aes(x), bins = 20,
+                 colour = I("grey"), fill = I("lightblue"))
+```
+
+### Sampling from a Set of Values
+
+As well as sampling from distributions we may also sample from a discrete set of values using the `sample` function.  The  `sample` function requires us to provide a vector to sample from, a number of samples to take.  The function contains additional options for whether we wish to sample with replacement (`replace`) and/or whether we wish to give each value an equal chance of being sampled (`prob`).
+
+Here are a few examples,
+
+```{r sample}
+# Generate some subjects
+treatment <- c("GSK", "Other")
+
+# Sample values from this set, with replacement
+sample(treatment, 50, replace = TRUE)
+
+# Sample again but this time we want more 'Other' in our population,
+# rougly 4 'Other' for every 'GSK' entry
+sample(treatment, 50, replace = TRUE, prob=c(1,4))   
+```
+
+## An Introduction to Data Frames 
+
+There are actually several structures that can be used to store data in R.  The most common structure, and the one we will work with on this course, is called a `data.frame`.  Like a SAS dataset, a data frame is a collection of columns (vectors), each of which may have a different type (mode).
+
+\newline
+
+There are several built-in data frames, contained within the "datasets" package 
+
+```{R what_datasets, eval = FALSE}
+objects("package:datasets")
+```
+
+We can use the `head` and `tail` functions to view the first or last few rows of a data frame
+
+```{R datasets}
+# In-built airquality data
+head(airquality)
+tail(airquality)
+
+# Specifying a custom number of rows to display
+head(airquality, 1)
+```

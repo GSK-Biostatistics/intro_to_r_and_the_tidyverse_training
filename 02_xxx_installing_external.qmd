@@ -1,0 +1,5 @@
+We will need to install the required packages ourselves.  There are a few ways to do so but the simplest is to use the Packages tab in RStudio.  To install a package we click on the *Packages* tab and then click on the *Install* icon.  
+
+The *Install* icon gives us options to install locally, or from repositories such as CRAN.  We simply type the package name and click *Install*.   Always leave the 'dependencies' check-box checked as this also installs any other packages that your chosen package needs in order to work!
+
+![*Figure 1: Installing a Package*](./img/install.PNG)

@@ -1,0 +1,168 @@
+---
+params:
+  who: gsk
+---
+# Importing/Exporting Data
+
+Natively, R has very good support for many file formats.  For example, functions such as `read.csv` or the more generic `read.table` can be used to read in CSV files and other delimited text files.  The foreign package can also be used to read in SAS transport files.
+
+\newline
+
+In this section we look at tidyverse functions for importing/exporting data.  Although the tidyverse functions don't always offer a great deal more in terms of functionality they are generally faster and more consistent than their base R counterparts.
+
+
+## Importing Text Files
+
+The tidyverse functions that we will use for importing and exporting text files are contained in the readr package. Note that readr is loaded by default when loading tidyverse.
+
+```{r load_tidyr, message=FALSE, warning=FALSE}
+library(readr)
+
+# Alternatively
+library(tidyverse)
+```
+
+The readr package has many functions but the import ones all begin `read_*` and the export ones all begin `write_*`.
+
+## Reading in a CSV
+
+The `read_csv` function is a special case of the `read_delim` function, a function that allows us to read in text files with a variety of different delimiters and structures.  The `read_csv` function enables us to read in a CSV file.  As always, we must give the imported data a name, else it is simply printed to screen.  The named data is imported as a `tbl_df` data frame.  
+
+```{r read_csv, message=FALSE}
+# Read in and save as `theoph`
+# The "." represents the current working directory so this is a relative path
+theoph <- read_csv("./data/theoph.csv")
+```
+
+```{r read_csv_actual}
+# Now print
+theoph
+```
+
+### File Paths
+
+Note that we specified the file path using **forward slashes**, i.e. `"/"`.  The "backslash, `"\"`, is an escape key and has special meaning (or at least what comes after it has a meaning).  For example `"\n"` means 'return/enter', `"\t"` means 'tab' and confusingly `"\\"` means 'backslash'!  Basically, you must either replace all of the backslashes with forward slashes or add a second backslash at each location.
+
+
+
+## Reading in Data from SAS
+
+We can read both the ".XPT" (a.k.a. "SAS transport file") and ".SAS7BDAT" formats into R by making use of the haven package. The SAS transport file (version 5) is an open format and can be read in by making use of the haven `read_xpt` function. The ".SAS7BDAT" files can be read in by making use of the haven `read_sas` function.
+
+RStudio understands the concept of labels and the RStudio data viewer is arguably better than the one in PC SAS!!!
+
+There are other packages, e.g. foreign and SASXport, which have similar functionality when it comes to importing SAS transport files. However, we use haven for reasons of consistency and efficiency. 
+
+
+```{r read_sas1}
+# Load the package
+library(haven)
+```
+
+```{r read_sas2}
+# Read in the data (remembering file extension)
+dm <- read_sas("./data/dm.sas7bdat")
+```
+
+```{r read_sas3}
+# View the data
+dm    # or try View(dm)
+```
+
+## The Working Directory
+
+All R sessions have a working directory.  On Windows this is usually something like `"C:/Users/[mudid]/Documents"`.  This is the directory that R looks in by default when we attempt to import data.  Similarly, it's where R writes to by default.  It's also the default if sourcing other R scripts.  We can find out what our working directory is via the `getwd` function and list the files within it using the `list.files` function.
+
+```{r working_dir, eval = FALSE}
+# What is my current working directory?
+getwd()
+```
+
+```{r working_dir2, echo = FALSE, purl = FALSE}
+# What is my current working directory?
+file.path(getwd(), "data")
+```
+
+```{r working_dir3, eval = FALSE}
+# What files are in the working directory?
+list.files()
+```
+
+```{r working_dir4, echo = FALSE, purl = FALSE}
+# What files are in the working directory?
+list.files("data")
+```
+
+We can change/set the working directory using the `setwd` function.  The advantage of setting up a working directory is that we needn't specify full file paths every time we import/export data.  This also makes our code more transferable as our username isn't hard-coded into our scripts!
+
+```{r setwd, eval = FALSE}
+# Set my working directory to where some data are stored
+setwd("/mnt/code/gsk_R_training/data")
+```
+
+In the example below we import data that is located in our current working directory.  We can therefore simply specify the name of the file (including the extension) and ignore the path.
+
+```{r read_csv_wd1, eval = FALSE}
+dm <- read_sas("dm.sas7bdat")
+```
+
+`r if (params$who != "gsk") "::: {.content-hidden}"`
+
+{{< include 05_xxx_projects.qmd >}}
+
+`r if (params$who != "gsk") ":::"`
+
+## Data on Shared Drives
+
+It is generally considered good practice to maintain a single source of truth for our data.  Where possible we should avoid making local copies.  Instead, we can create an alias for a remote location, similar to the SAS 'libname' approach.  The simplest way to do this is to save the path to the data directory as an object and use the `file.path` function to specify the specific datasets we want to read in.  The `file.path` function concatenates text using `"/"`.
+
+
+```{r libname, eval = FALSE}
+# I have SAS files here:
+sdtm <- "/mnt/code/gsk_R_training/data"
+
+# Now I want to read in data
+dm <- read_sas( file.path(sdtm, "dm.sas7bdat") )
+```
+
+`r if (params$who != "gsk") "::: {.content-hidden}"`
+
+{{< include 05_yyy_backends.qmd >}}
+
+`r if (params$who != "gsk") ":::"`
+
+## EXERCISE {#import}
+
+1. Import the `theoph` data into R using a relative file path (i.e. one that starts "data/")
+    a. Check that it has imported correctly - how many rows and columns does it have?
+2. Import the `act` data into R
+    a. Check that it has imported correctly - how many rows and columns does it have?
+    
+```{r}
+#| label: ex_ans_import
+#| eval: false
+#| echo: false
+
+# Exercise Answers: Importing
+# 1
+theoph <- read_csv("theoph.csv")
+# 2
+act <- read_sas("act.sas7bdat")
+```
+
+## Exporting Data
+
+There is an experimental, `write_sas` function within haven.  However it is not currently possible to export data to the “.SAS7BDAT” format with any consistency. However we may export data by using the haven function `write_xpt` to the ".XPT" (a.k.a. "SAS transport file") format following the SAS V5 standard (acceptable for submission to regulatory agencies).
+
+
+In addition, we may export data to various delimited file formats ... using readr functions such as `write_delim` or `write_csv`.  The format of such functions is extremely consistent - the first argument is the name of the data (i.e. the R object name) and the second argument is the name of the file that we wish to write to.  Here is an example using `write_csv`.
+
+```{r write_csv, eval = FALSE}
+write_csv(dm, "dm.csv")
+```
+
+Other useful arguments to `write_csv` include `na`, which controls the way missing values are written to the output file (defaults to `"NA"`), and `append` which, when set to `TRUE` allows us to append to existing files rather than create new ones or overwrite existing files.
+
+```{r write_csv2, eval = FALSE}
+write_csv(dm, "dm_saslike.csv", na = ".")
+```

@@ -1,0 +1,96 @@
+<!-- NOTE TO TRAINERS: This is not intended to be taught if short on time -->
+## Factors and the forcats Package
+
+The `cut` function turns a continuous variable into a categorical variable by creating a "factor". Factors are essentially a code-decode paring where the code is an integer value from 1 to the number of levels, and the decode is a format that controls how these decodes are displayed.  We can turn any variable into a factor by using the factor function.  Factor variables are displayed as `<fctr>` when printing a data frame.
+
+```{r factor}
+# Extract the SEX column and convert to a factor
+SEX <- pull(dm, SEX)
+SEX <- factor(SEX)
+SEX
+```
+
+### The forcats Package
+
+Creating a factors is easy, but the real benefit comes from being able to manipulate the factor "levels" in order to either control the sort order or to combine levels.  All of the required functionality is contained within the forcats package.  We start by loading the package, which is installed with the tidyverse but which must always be loaded separately.
+
+```{r forcats}
+# Relabel F and M
+library(forcats)
+# What is in the package?
+objects("package:forcats")
+```
+
+### Reordering Levels
+
+Having created a factor we can use the `lvls_reorder` function to change the order of the factor levels.  In our earlier example we created a factor from the `SEX` column in `dm`.  By default, factors are ordered alphabetically and so females have the value 1 underneath and males have the value 2.  To use the `lvls_reorder` function we specify the name of the factor that we wish to re-order, then the order of the levels.
+
+```{r lvls_reorder}
+# What is the current order?
+SEX
+
+# Re-order females and males
+SEX <- lvls_reorder(SEX, c(2, 1))
+SEX
+
+# Now in the data, (where we can't see the order unless we sort)
+dm_new <- mutate(dm, SEX = lvls_reorder(SEX, c(2, 1)))
+arrange(dm_new, SEX)
+```
+
+Note that in order to use the `lvls_reorder` successfully we need to be certain of the current order of the levels.  As a more sophisticated alternative we can also reorder the levels of one variable based on the values of another using the `fct_reorder` function.  This is particularly useful for plotting.
+
+```{r fct_reorder}
+# Generate some fake count data of favourite colours
+colour_data <- tibble(Colour = c("red", "green", "blue"),
+                     Count = c(8, 28, 19))
+
+# Create a factor of the Colour column and order by the (descending) Count
+# I.e. highest count first
+new_colour_data <- mutate(
+  colour_data,
+  Colour_order = fct_reorder(Colour, Count, .desc = TRUE))
+
+# Plot the data using ggplot2
+ggplot(data = new_colour_data) +
+  geom_bar(aes(x = Colour_order, y = Count), stat = "identity")
+```
+
+### Recoding Factors (Changing the Labels)
+
+We can change the labels in a simple way using the `lvls_revalue` function.  To use the `lvls_revalue` function we provide the factor that we wish to re-label and a vector of new labels.  It is once again important that we know the current order of levels when using the `lvls_revalue` function.  To be more specific about the recoding we can use the `fct_recode` function.
+
+```{r recode}
+# Extract the data
+SEX <- pull(dm, SEX)
+SEX
+# Relabel F and M to Female and Male
+SEX_lab <- lvls_revalue(SEX, c("Female", "Male"))
+SEX_lab
+# Alternatively we may take this more robust approach
+SEX_lab <- fct_recode(SEX, Female = "F", Male = "M")
+SEX_lab
+```
+
+### Collapsing/Combining Levels
+
+The `fct_recode` can also be used to combine levels and re-classify a variable.  In the example below we combine the European nations in the `dm` data by recoding each to `"Europe"`.
+
+```{r condense}
+# Extratc COUNTRY coloumn
+COUNTRY <- pull(dm, COUNTRY)
+COUNTRY
+# Create Continent by combining countries
+Continent <- fct_recode(COUNTRY, 
+                        Europe = "UK", Europe = "FRA", 
+                        Europe = "GER", Europe = "IRE")
+Continent
+```
+
+Once again we have other options available to us when re-classifying a variable.  Here is the same example again but using the `fct_collapse` function.  This function allows us to provide a vector of labels to collapse down onto a new label.
+
+```{r condense2}
+# Alternatively
+Continent <- fct_collapse(COUNTRY, Europe = c("UK", "FRA", "GER", "IRE"))
+```
+

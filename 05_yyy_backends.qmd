@@ -1,0 +1,1 @@
+*Note: For details on connecting to common data repositories such as the HARP file share, LSAF, RDIP, GDrive and Denodo, see the [WARP Data Backends](https://warp-view.gsk.com/warp/warp-data-backends/) user guide* 

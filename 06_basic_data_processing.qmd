@@ -1,0 +1,335 @@
+# Data Handling
+
+One of the fundamental building blocks of the tidyverse is the dplyr package.  The dplyr package is now the primary package for data manipulation in R.  Each of the functions that we look at in this chapter take a data frame as the first input argument, process it in a very simple way and return a data frame as the output.  The dplyr package is loaded by default when we load the tidyverse package but we can also load it independently.
+
+```{r dplyr_load, message=FALSE, warning=FALSE}
+library(dplyr)
+
+# Alternatively
+# library(tidyverse)
+```
+
+In accordance with the tidyverse spirit of functions doing one thing and doing it well, there are separate functions for subsetting rows and for subsetting columns.  
+
+## Subsetting Rows: `filter`
+
+The `filter` function allows us to apply a logical subset to the rows of our data.  As with all the dplyr functions that we will use in this course, the filter function takes a data frame as the first argument and a logical statement as the second argument.  Typically, we base the logical statement on columns within our data frame.
+```{r read dm, warning=FALSE}
+#| echo: true
+library(ggplot2)
+dm <- haven::read_sas("data/dm.sas7bdat")
+act <- haven::read_sas("data/act.sas7bdat")
+vs <- haven::read_sas("data/vs.sas7bdat")
+```
+
+```{r filter}
+# Find subjects taking GSK drug.  Note the double-equals
+gsk_subj <- filter(dm, ARM == "GSK")
+gsk_subj
+```
+
+### Logic
+
+In the example above we used a double equals in order to ask the question, "is the ARM variable equal to 'GSK' (for each record)?"  In R a single equals assigns the value on the right to the parameter on the left.  We must therefore always use a double equals when asking the logical question, is x equal to y!!!
+
+\newline
+
+The table below lists some essential logical operations.
+
+\newline
+
+```{r logic, echo = FALSE, purl = FALSE}
+logic <- tibble(Code = c("==", "!=", ">", ">=", "<", "<=", "&", "|", "!", "%in%", "any", "all"),
+                Meaning = c("Equal to", "Not equal to", "Greater than", "Greater than or equal to",
+                            "Less than", "Less than or equal to", "And - for joining logical statements",
+                            "Or - for joining locical statements", 
+                            "Not - for switching TRUE and FALSE statements around",
+                            "One of - Can any of the values on the LHS of the %in% be found on the RHS?",
+                            "Summarises multiple logical statements into a single value - Are ANY of these values equal to TRUE?",
+                            "Summarises multiple logical statements into a single value - Are ALL of these values equal to TRUE?"))
+knitr::kable(logic)
+```
+
+\newline
+
+### Applying Multiple filter Operations
+
+The `filter` function let's us chain multiple logical questions together using commas.  The commas are equivalent to using an "and" operation.
+
+```{r filter2}
+# Find subjects taking GSK drug in USA
+gsk_subj_USA <- filter(dm, ARM == "GSK", COUNTRY == "USA")
+gsk_subj_USA
+# Or equivalently
+gsk_subj_USA <- filter(dm, ARM == "GSK" & COUNTRY == "USA")
+```
+
+
+
+The following example uses an "or" link.
+
+```{r filter3a}
+# Find females over 50 in France or Germany
+filter(dm, SEX=="F", AGE > 50, COUNTRY == "FRA" | COUNTRY == "GER")
+```
+
+Finally, here is an example using the `%in%` operator.  Although it looks a little ugly, this function is the same as an "in" in SQL or SAS.  In other words "are any of the values on the left hand side contained within the values on the right hand side"?
+
+```{r filter3b}
+# Find females over 50 in France or Germany
+filter(dm, SEX=="F", AGE > 50, COUNTRY %in% c("FRA", "GER"))
+```
+
+### Any and All
+
+The `any` and `all` functions condense any number of logical values into a single TRUE or FALSE value.  At this stage of the course they are not much use but we will look at them a little closer later on.
+
+```{r any_all}
+# Some logical values
+some_logic <- c(T, T, F)
+some_logic
+# Are any of these values TRUE?
+any(some_logic)
+# Excellent.  Are they all TRUE?
+all(some_logic)
+```
+
+## Extract Rows by Number: `slice`
+
+The `slice` function lets us choose records by row number.  It can be useful for looking at the first or last few records in a data frame.  In the second example below the utility function, `n`, is used to pick out the last few rows.  This utility is not a generic utility and can only be used within a handful of dplyr functions.
+
+```{r slice}
+# First 3 rows of dm
+slice(dm, 1:3)
+
+# Last 3 rows of dm (using the utility function, n())
+slice(dm, (n() - 2):n())
+```
+
+## Removing Duplicates: `distinct`
+
+We can often find ourselves in a situation where we end up with duplicate or partial duplicates, eg following a merge.  The `distinct` function is a useful utility that can help us to identify unique values and/or remove duplicates.
+
+```{r distinct}
+# Duplicate records
+dup_data <- tibble(USUBJID = rep(c("STD123456:000001", "STD123456:000002"), c(3, 5)),
+                   AGE = rep(c(32, 28), c(3, 5)))
+dup_data
+# Remove duplicate records
+distinct(dup_data)
+```
+
+We can also use distinct to find all the unique combinations of specific variables.  For example the unique combinations of 'COUNTRY' and 'ARM'.  By default, the function drops all of the other variables that we're not interested.  But we can also choose to keep them. In the example below, this retains the first record for each unique combination of 'COUNTRY' and 'ARM', which is not particularly useful.  But it could be used to identify baseline records for each unique subject.
+
+```{r unique_race_ethnic}
+# Find unique combinations
+distinct(dm, COUNTRY, ARM)
+# Find unique combinations and keep the first instance of each
+distinct(dm, COUNTRY, ARM, .keep_all = TRUE)
+```
+
+
+## Subsetting Columns: `select`
+
+For column-wise operations we use the `select` function.  Much like when writing SQL, we simply provide the function a data frame to select columns from and then a bunch of columns that we wish to select (or "keep").
+
+```{r select1b}
+# Our GSK, USA Subjects from earlier
+gsk_subj_USA
+# Now that we have GSK subjects in USA we don't need ARM or COUNTRY
+select(gsk_subj_USA, USUBJID, AGE, SEX)
+```
+
+We can also use the `select` function to drop columns by putting a minus sign in front of any columns that we provide.
+
+```{r select1a}
+# Now that we have GSK subjects in USA we don't need ARM or COUNTRY
+select(gsk_subj_USA, -ARM, -COUNTRY)
+```
+
+Obviously we cannot mix and match dropping and keeping variables.
+
+
+### Utility Functions in Select
+
+The `select` function comes with a number of built in utility functions (the `tidy-select` functions, `?dplyr_tidy_select`).  The functions are there to enable us to select columns more quickly, for example all of the columns that contain a particular word.  These functions can only be called from within `select` and a handful of other `tidyverse` functions.  They cannot be called directly.
+
+\newline
+
+- `starts_with`
+- `ends_with`
+- `contains`
+- `matches`
+- `one_of`
+- `everything`
+- ...
+
+\newline
+
+To use these utility functions we simply call them in place of a named column(s).  For example, here we select all columns that begin with the letters "ACT":
+
+```{r select_utility}
+select(act, starts_with("ACT"))
+```
+
+We can also use a `:` to select all columns between the column on the left of the `:` and the column on the right of the `:`.
+
+```{r select_utility2}
+select(dm, AGE:COUNTRY)
+```
+
+It is again important to note that although `:` can be used outside of the `select` function, the way we have used it to specify columns is unique to this use case.  In other words we can't write "A":"Z" or similar.
+
+## Column Order
+
+As well as subsetting columns, we can use `select` to move columns around (e.g. after a merge).  Here we use the `everything` helper to move the 'ARM' column to the left and then keep 'everything *else*' as it was.
+
+```{r select_move}
+select(dm, ARM, everything())
+```
+
+The `relocate` function is another relatively recent addition to dplyr that provides finer control when moving columns.  Arguments `.before` and `.after` let us specify exactly where one or more columns are to be located.
+
+```{r relocate}
+relocate(dm, ARM, .after = USUBJID)
+# Alternatively
+#relocate(dm, AGE:COUNTRY, .after = ARM)
+```
+
+## Sorting
+
+In general, tidyverse functions are named well and hence easy to remember.  Unfortunately, `sort` and `order` already exist as R functions and so in the tidyverse we work with `arrange`!  As with most of the tidyverse functions it is  very easy to use.  In this first example we use the `arrange` function to sort the demography data by age.
+
+```{r arrange}
+# Sort young to old
+arrange(dm, AGE)
+```
+
+For a descending sort we call the utility function, `desc`, around the variable that we're sorting by.
+
+```{r arrange_desc}
+# Sort old to young
+arrange(dm, desc(AGE))
+```
+
+We can sort by as many variables as we have in our data.  We can also sort by categorical variables, which are ordered alphabetically in the sort.
+
+```{r arrange_many}
+# Sort by multiple variables
+arrange(dm, desc(ARM), COUNTRY, desc(AGE))
+```
+
+Later we will see how we can manipulate the sort order for categorical variables using factors.
+
+\newline
+
+## EXERCISE {#subsetting}
+
+1. Using the `act` data, extract all data for subject 5
+2. Extract all screening and randomisation visits from the `act` data
+3. Select the `USUBJID`, `VISITNUM` and `VISIT` columns
+4. Remove the date (`QSDTC`) column
+5. Sort the data by `USUBJID` and descending `VISITNUM`
+
+
+```{r}
+#| label: ex_ans_subset
+#| eval: false
+#| echo: false
+
+# Exercise Answers: Subsetting
+# 1
+filter(act, USUBJID == "STD123456:000005")
+# 2
+filter(act, VISITNUM %in% c(10, 20))
+# 3
+select(act, USUBJID, contains("VIS"))
+# 4
+select(act, -QSDTC)
+# 5
+arrange(act, USUBJID, desc(VISITNUM))
+```
+
+## Creating New Columns: `mutate`
+
+The `mutate` function allows us to create new columns within our data.  We typically do so by manipulating other columns in the data but we can define our columns in any way we like.
+
+```{r mutate}
+# Create a new column that is the square of the height column
+mutate(vs, Height_sq = HEIGHT ^2)
+
+# Create a new flag variable with the value 1
+mutate(vs, flag = 1)
+```
+
+One nice property of the mutate function is that it allows us to immediately use columns that we create, much like SAS.
+
+```{r mutate_chain}
+mutate(vs, 
+       Height_m2 = (HEIGHT/100) ^2, 
+       BMI = WEIGHT / Height_m2)
+```
+
+In the above example we have used some very simple numerical transformations.  In the following sections we will look at some other useful functions for working with data.  Each of the functions that we see are designed to work with vectors (columns of data).  We can therefore call them all via the `mutate` function.  
+
+## Renaming Columns
+
+In the example below we rename the "COUNTRY" column, "LOCATION".  As we shall see later when creating new columns, the **new** name of the new column is placed to the **left** of the equals and the **old** name on the **right**.
+
+```{r rename}
+# Rename the COUNTRY column to LOCATION - New name on the left!!!
+rename(dm, LOCATION = COUNTRY)
+```
+
+Further columns can be renamed by using a comma to separate each pair of new and old names.
+
+```{r rename2}
+# Rename two columns - New name on the left!!!
+rename(dm, LOCATION = COUNTRY, TREATMENT = ARM)
+```
+
+## Creating Categories: `cut`
+
+The `cut` function allows us to create a discrete variable by partitioning a continuous one.  The first argument to the function is the continuous vector/variable that we wish to partition.  We must then either specify a number of cut points (and let R choose the cuts for us)  or provide a vector of specific cut points (including minimum and maximum values).  For example, here we divide the `AGE` variable into two groups, 18-50 and 50+.
+
+```{r cut}
+# Extract the AGE column as a vector (not required if using mutate!)
+AGE <- pull(dm, AGE)
+# Partition into two groups
+cut(AGE, c(18, 50, Inf))
+```
+
+By default, any data points lying on the boundary are included in the lower grouping.  This is controlled by an argument to the cut function, `right`.  If we want to include boundary values to be included in the higher grouping we set `right = FALSE`.
+
+```{r cut_right}
+# Include 50 years olds in the older group
+age_cat <- cut(AGE, c(18, 50, Inf), right = FALSE)
+age_cat
+```
+
+We can add nicer labels to our cut by using the labels argument.
+
+```{r cut_labels}
+around50 <- filter(dm, 48 <= AGE, AGE <= 52)
+mutate(around50, 
+       AgeCat1 = cut(AGE, c(18, 50, Inf), labels = c("<=50", ">50")),
+       AgeCat2 = cut(AGE, c(18, 50, Inf), labels = c("<50", ">=50"), 
+                     right = FALSE)) 
+```
+
+<!-- NOTE TO TRAINERS: These sections are not intended to be taught if short on time -->
+<!-- They are for reference only -->
+
+{{< include 06_xxx_factors.qmd >}}
+
+{{< include 06_yyy_stringr.qmd >}}
+
+{{< include 06_zzz_dates.qmd >}}
+
+<!-- ```{r child = "06_xxx_factors.Rmd"} -->
+<!-- ``` -->
+
+<!-- ```{r child = "06_yyy_stringr.Rmd"} -->
+<!-- ``` -->
+
+<!-- ```{r child = "06_zzz_dates.Rmd"} -->

@@ -1,0 +1,52 @@
+project:
+  type: book
+  output-dir: _book
+  resources: 
+    - linux_terminal.mp4
+    - side_loading.mp4
+  
+  
+book:
+  title: "Introduction to R and the tidyverse"
+  author: "Andy Nicholls"
+  date: 2024-07-15
+  repo-url: https://github.com/gsk-tech/intro_to_r_tidyverse_training
+  repo-actions: [none]
+  chapters:
+    - index.qmd
+    - 01_materials_external.qmd
+    - 02_r_rstudio.qmd
+    - 03_vectors.qmd
+    - 04_data_frames.qmd
+    - 05_importing_and_exporting_data.qmd
+    - 06_basic_data_processing.qmd
+    - 07_magrittr.qmd
+    - 08_summaries_aggregation.qmd
+    - 09_setting_merging.qmd
+    - 10_transposing.qmd
+    - 11_statistical_modelling.qmd  
+
+toc: true
+toc-location: left
+toc-float: true
+      
+navbar:
+  background: primary
+  search: true
+
+format: 
+  html:
+    embed-resources: false
+    theme: assets/documentstyle.scss
+    code-fold: false
+    code-summary: "Show More"
+    smooth-scroll: true
+    include-after-body: global-footnote.md
+
+sidebar: 
+  logo: assets/images/The_Signal.png
+    
+title-block-banner: true
+
+params:
+  who: external

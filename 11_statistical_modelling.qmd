@@ -1,0 +1,160 @@
+# Introduction to Statistical Modelling
+
+The core purpose of R is to provide a programming framework for statistical modelling.  Perhaps for this reason, the basics of statistical modelling have not been touched by the tidyverse.  As we shall see, however, the modelr and broom packages can help us better-process model output.
+
+## A Simple Linear Model
+
+All forms of model follow a similar specification in R so let's start with the simplest, the linear model.  This can be fitted using the `lm` function.  To demonstrate how `lm` works we first merge/join the demography and vitals data frame together to create a population dataset.
+```{r tidyverse load, message=FALSE, warning=FALSE}
+#| echo: false
+library(tidyverse)
+vs <- haven::read_sas("data/vs.sas7bdat")
+dm <- haven::read_sas("data/dm.sas7bdat")
+act_full <- haven::read_sas("data/actFull.sas7bdat")
+```
+
+```{r pop}
+pop <- inner_join(dm, vs, by = "USUBJID")
+pop
+```
+
+Now let's model weight as a function of height.  In order to do so we call the `lm` function and provide two arguments: the data and the model formula.  The model formula is specified using a tilde, `~`.  The dependent variable is placed to the left of the tilde and any independent (explanatory) variables are placed to the right. In the example below we save the model output with a name.  We must do so if we wish to use the results, for example to create plots of the residuals.
+
+```{r lm1}
+# Fit the model
+pop_lm <- lm(WEIGHT ~ HEIGHT, data = pop)
+# The default "print" for the model
+pop_lm
+```
+
+The example above fits a model of the form, `WEIGHT = intercept + alpha*HEIGHT`, where the intercept and alpha parameters are estimated by the model.
+
+### Adding Terms
+
+If we have more than one explanatory variable we use a plus, `+`, to add in the additional terms.
+
+```{r lm2}
+# Fit the model
+pop_lm2 <- lm(WEIGHT ~ HEIGHT + AGE, data = pop)
+pop_lm2
+```
+
+### Categorical Variables
+
+When modelling, R uses the data type to determine which variables are numeric and which are discrete / categorical.  This means that we need to ensure that the data are of the right type before fitting in the model.  If we have categorical data stored as numeric then we can use the factor function to convert it to categorical.  
+
+\newline
+
+When fitting categorical variables, the first level of the factor is set as the base and all other levels are compared against this level.  In order to change the order (and hence the base level) we can use a forcats function such as `fct_relevel`, which moves any given levels to the start of the queue.  For readability it is generally advisable to do this in the data, as opposed to within the modelling step.
+
+```{r lm3}
+#library(forcats)
+# Compare all countries against the US so change the order of levels in the data
+pop <- pop %>%
+  # Move USA to the front
+  mutate(COUNTRY = fct_relevel(COUNTRY, "USA"))
+# To see what has happened:
+ pop%>%pull(COUNTRY)
+# Fit the model - we now have a coefficient for all countries except USA
+pop_lm3 <- lm(WEIGHT ~ HEIGHT + AGE + COUNTRY , data = pop)
+pop_lm3
+```
+
+### Interaction Terms
+
+We can fit interaction terms using a colon, `:`.  If we also want to include the base terms that make up the interaction term we can instead use the shorthand, `*`.
+
+```{r lm_int}
+pop_lm_int <- lm(WEIGHT ~ HEIGHT + AGE + HEIGHT:AGE, data = pop)
+# Or equivalently
+pop_lm_int <- lm(WEIGHT ~ HEIGHT*AGE, data = pop)
+pop_lm_int
+```
+
+
+### Where the tidyverse Fits in
+
+Everything we've seen thus far is available "out of the box".  Most of what we're about to see is implemented via two tidyverse packages, modelr and broom.  The modelr package is one that allows us to more easily extract additional information from the model such as the Root Mean Square Error.  The package also contains a number of useful utilities for resampling/bootstrapping and for implementing k-fold cross validation.  Sadly, we don't have the time to cover these features on this course.  The broom package provides a set of helpful utilities for turning the standard R model output into data frames.  SAS users might compare the functionality to that of SAS' "ODS" feature.
+
+\newline
+
+In the following sections we use a combination of functions that are part of the base, stats, modelr and broom packages. It's generally not worth worrying about what function is contained in what package so the easiest thing to do is to load modelr and broom each time you begin modelling (base and stats are always loaded when you start R in interactive mode).  Both packages are installed as part of the tidyverse but not automatically loaded so we must do so manually.
+
+```{r modelr_broom, message=FALSE}
+# Load the packages
+library(modelr)
+library(broom)
+```
+
+### Checking the Model Fit
+
+Once we have fitted our model and saved it as an R object there are a number of different ways with which we can extract information.  First of all the `glance` function produces a data frame where each column is a different model fit statistic.
+
+```{r fit}
+glance(pop_lm)
+```
+
+### Checking Assumptions
+
+As well as looking at the fit we can check the model fit using the `augment` function.  The  `augment` function appends useful information such as the residuals and fitted values as columns to the original data.
+
+```{r augment}
+augment(pop_lm) %>%
+  head
+```
+
+If we give the augmented data a name, we can use it to graphically check our model assumptions. We would need to load {ggplot2} to create the plot, if it were not already loaded.
+
+```{r model_fit_graphics}
+# Augment our data and save it
+pop_data_modelled <- augment(pop_lm)
+
+
+# Create a plot of the studentised residuals against fitted values
+library(ggplot2)
+
+ggplot(pop_data_modelled) + 
+  geom_point(aes(x = .fitted, y = .std.resid)) +
+  geom_hline(yintercept=0, colour = "red")
+```
+
+### Extracting the Coefficients
+
+In order to extract the coefficients for each of the parameters, along with the respective standard errors and p-values we can use the `tidy` function from the broom package.  We simply provide the `tidy` function with the name of our model object and the function outputs a data frame containing the information we need.
+
+```{r coefs}
+tidy(pop_lm)
+```
+
+## EXERCISE {#ch11.3}
+
+1. Fit a linear model of the Change from Baseline (`ACTCHGBL`) in ACT Total Score by treatment (`ARM`), age (`AGE`) and visit (`VISITNUM`) using the `act_full` data (exclude screening, baseline and early withdrawal data before fitting the model).
+*HINT: these visits have VISITNUM values: of 10, 20 and 70.*
+2. Asses your model fit by plotting the studentised residuals against the fitted values. *HINT: use the following template `ggplot(NAME_OF_DATA) + geom_point(aes(x = NAME_OF_X_VARIABLE, y = NAME_OF_Y_VARIABLE))`*
+3. Programmatically find any significant (< 0.05) coefficients
+
+```{r ex_ans_modelling, echo = FALSE, eval = FALSE}
+#| label: ex_ans_modelling
+#| eval: false
+#| echo: false
+
+# Exercise Answers: Modelling
+# 1
+act_post_bl <- act_full %>% 
+  filter(20 < VISITNUM, VISITNUM < 70)
+act_mod <- lm(data = act_post_bl, ACTCHGBL ~ ARM + AGE + factor(VISITNUM))
+act_mod
+# 2
+act_mod_aug <- augment(act_mod)
+ggplot(act_mod_aug) + 
+  geom_point(aes(x = .fitted, y = .std.resid))
+# 3
+act_mod %>% 
+  tidy() %>%
+  filter(p.value < 0.05) 
+```
+
+<!-- NOTE TO TRAINERS: This section is not intended to be taught if short on time -->
+<!-- It is for reference only -->
+
+{{< include 11_xxx_other_models.qmd >}}

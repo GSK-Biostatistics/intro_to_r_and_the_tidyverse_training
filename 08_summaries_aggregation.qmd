@@ -1,0 +1,191 @@
+# Summaries and Aggregation
+
+## Summary Statistics: `summarise`
+
+As we might expect, R has a number of in-built functions that can be used to summarise data.  These summary functions tend to be very granular and work directly with vectors (columns) of data.  Typically we call these functions via the `summarise` function.  The `summarise` function works just like `mutate` except that rather than create a new column, it summarises over all values in the column.  We must therefore always provide `summarise` with functions that return a single value.  Like `transmute`, the `summarise` function only returns the summarised columns, all other columns are ignored.  As with `mutate` and `transmute` it helps to name the summarised data.
+```{r tidyverse load, message=FALSE, warning=FALSE}
+#| echo: false
+library(tidyverse)
+dm <- haven::read_sas("data/dm.sas7bdat")
+theoph <- read_csv("data/theoph.csv")
+```
+
+```{r stats_summary}
+dm %>% 
+  summarise(Mean_Age = mean(AGE), SD_Age = sd(AGE))
+```
+
+There are many statistical functions in R, mostly contained within the "base" and "stats" packages.  Generally the function purposes are self-evident. A common set of statistical summary functions is listed below:
+
+\newline
+
+- mean
+- median
+- sd
+- var
+- min
+- max
+- sum
+
+## Missing Values
+
+R is written in a way that forces us to think about missing values, which is a nice way of saying that they can be a pain to deal with:
+
+
+```{r missing_vals}
+some_vals <- c(1, NA, 3)
+mean(some_vals)
+median(some_vals)
+min(some_vals)
+```
+
+Thankfully, each of the statistical summary functions has an argument, `na.rm`, which when set to `TRUE` allows us to remove missing values.
+
+```{r missing_vals_fix}
+some_vals <- c(1, NA, 3)
+mean(some_vals, na.rm = TRUE)
+median(some_vals, na.rm = TRUE)
+min(some_vals, na.rm = TRUE)
+```
+
+### Summarising with `mutate`
+
+Note that we can use functions such as `mean` and `sd` with `mutate`  The effect is to summarise and then merge the result back on to the original data.
+
+```{r stats_summary_mut}
+dm %>% 
+  mutate(Mean_Age = mean(AGE), SD_Age = sd(AGE))
+```
+
+
+## By Operations: `group_by`
+
+R has always been able to calculate summary statistics for one variable *by* another but the creation of the dplyr package has enabled these "by" operations to take place within a consistent framework.  We achieve the desired effect via the `group_by` function.  But before we do any calculations, let's look at what this function does.
+
+
+```{r group_by}
+dm %>% 
+  group_by(ARM)
+```
+
+A quick glance at the result above might suggest that nothing has happened.  The data are not even sorted by the ARM variable.  What has happened is that an attribute has been added to the data.  Notice that in the printed result we see "`Groups:   ARM [2]`".  This tells us that the data are grouped by `ARM` and that the arm variable has 2 distinct (unique) values.
+
+\newline
+
+We can group by as many variables as we like.  It doesn't matter if they are continuous or discrete although clearly the latter makes more sense.
+
+
+```{r group_by_many}
+dm %>% 
+  group_by(COUNTRY, SEX)
+```
+
+## Summary Statistics Continued
+
+The main benefit of grouping by a variable(s) is so that we can summarise other variables by our grouping variable(s).  Once our data are grouped we simply call the `summarise` function and the behaviour adapts accordingly.
+
+```{r sum_stats_by}
+dm %>% 
+  group_by(ARM) %>%
+  summarise(N = n())
+```
+
+The result is always a data frame.  Adding more "by" variables simply results in more columns.
+
+```{r sum_stats_by2}
+dm %>% 
+  group_by(ARM, COUNTRY) %>%
+  summarise(N = n())
+```
+
+## Other Uses of Grouping
+
+Grouping our data has no effect on column operations such as `select` and `rename`.  It can, however, change the behaviour of functions such as `filter` and `slice`, which operate on rows.  For example, when we call slice on grouped data the count resets for each "by" variable.
+
+```{r by_slice}
+# Find the first PK measurement for each subject
+theoph %>% 
+  group_by(SUBJID) %>%
+  slice(1)
+
+# And the last
+theoph %>% 
+  group_by(SUBJID) %>%
+  slice(n())
+```
+
+In the exercises we will practice using a variety of functions with grouped data.  
+
+\newline
+
+## EXERCISE {#summarise}
+
+1. Calculate the maximum concentration for each subject in the `theoph` data
+2. Use `mutate` and the `act_long` data to calculate the ACT Total score (`ACTTOT`) for each subject-visit combination by summing over `QSSTRESN` and save the output as `act_basic`.
+    a. Remove the `QSTEST`, `QSORRES` and `QSSTRESN` variables
+    b. Ensure that each record contains a unique ACT Total score for the subject-visit combination. *HINT: Use `slice`*
+3. Derive baseline (Visit 2) ACT Total scores for each subject using the `act_basic` data from the previous exercise
+    a. Rename `ACTTOT` to `ACTBL`
+    b. Keep only the `USUBJID` and `ACTBL` columns
+4. Using the `act_full` data, for each treatment-visit combination calculate
+    a. The number of subjects
+    b. The mean and standard deviation of the ACT Total Score
+
+**Extra**
+
+5. Filter the `act_basic` data such that it contains only subjects with a missing Week 24 Total Score and impute week 24 scores using the WOCF (Worst Observation Carried Forward) method by carrying forward their worst (minimum) Total Score from all visits up to that point. *HINT: Use the `any` function to see if a subject has a Week 24 record, and then find the minimum Total Score to impute missing values.*
+
+```{r}
+#| label: ex_ans_group_by
+#| eval: false
+#| echo: false
+
+# Exercise Answers: Grouping
+# 1
+theoph %>% 
+  group_by(SUBJID) %>%
+  summarise(Cmax = max(CONC))
+# 2
+act_basic <- act_long %>%
+  group_by(USUBJID, VISITNUM, VISIT) %>%
+  mutate(ACTTOT = sum(QSSTRESN)) %>%
+  select(-QSTEST, -QSORRES, -QSSTRESN) %>%
+  slice(1)
+# 3
+act_basic %>%
+  group_by(USUBJID) %>%
+  filter(VISITNUM == 20) %>%
+  rename(ACTBL = ACTTOT) %>%
+  select(USUBJID, ACTBL)
+# 4
+act_full %>%
+  group_by(ARM, VISITNUM, VISIT) %>%
+  summarise(N=n(),
+            Mean = mean(ACTTOT),
+            SD = sd(ACTTOT))
+# 5
+act_basic %>%
+  group_by(USUBJID) %>%
+  filter(!any(VISITNUM == 60)) %>%
+  summarise(ACTTOT = min(ACTTOT),
+            WOCF = TRUE)
+
+```
+
+## Updating / Undoing a `group_by`
+
+It is important to note that by adding a grouping to our data we are making a permanent change to the attributes of our data.  This could cause unexpected behaviour further down the line if we "forgot" that our data were grouped.  It is easy to undo a grouping using the `ungroup` function.
+
+```{r ungroup}
+# Overwrite dm with a grouped version of dm
+dm <- dm %>% 
+  group_by(ARM, COUNTRY) 
+dm
+  
+# Remove the grouping
+dm <- dm %>%
+  ungroup()
+dm
+```
+
+In addition, each time we call the `group_by` function it overwrites the previous grouping.  So rather than always ungrouping our data we can just re-group in order to slice and dice our data in different ways.

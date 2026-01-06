@@ -1,0 +1,150 @@
+# Transposing data
+
+Another common task when working with data is the transposition from/to long/wide formats.  In the world of CDISC everything is in a long format.  However we often need our data in a wide format in order to model or plot it.  In the tidyverse, the tidyr package is required for restructuring our data.  The tidyr package has many functions but we will focus on just two, `pivot_longer` and `pivot_wider`.
+
+## The `pivot_longer` Function
+
+The `pivot_longer` function is use when we wish to go from a wide format to a long format.  Once again the first argument is the data, which we will pipe in for the examples.  We usually need to think long and hard about which variables we want to collapse, and which need to stay as they are...
+
+*[THINKING]*
+
+
+Once we're done thinking we must specify which variables we wish to stack together.  Selecting variables can be done using the c function to name specif columns, or by using the same `tidy_select` group of functions (`help(select_helpers)`) that are available to us when using the `select` function (e.g. `starts_with`, `contains`, etc.). We can also specify the variables that we don't want to stack together using a minus sign.  
+```{r tidyverse load, message=FALSE, warning=FALSE}
+#| echo: false
+library(tidyverse)
+vs <- haven::read_sas("data/vs.sas7bdat")
+dm <- haven::read_sas("data/dm.sas7bdat")
+act <- haven::read_sas("data/act.sas7bdat")
+act_full <- haven::read_sas("data/actFull.sas7bdat")
+```
+
+```{R pivot_longer}
+vs %>% 
+  pivot_longer(cols = c(HEIGHT,WEIGHT))
+# Alternatively
+# vs %>% 
+#   pivot_longer(cols = HEIGHT:WEIGHT)
+# Or else specify columns not to collapse using -
+# vs %>% 
+#   pivot_longer(cols = -USUBJID)
+```
+
+As we can see, the stacking operation has created two new columns to replace the ones that we stacked:
+
+* The `names` column contains the original column names
+* The `values` column stores the values 
+
+We can control the naming of these new columns using `names_to` and `values_to`.  The argument names pretty much speak for themselves.  But here is an example for which we label using CDISC terminology.
+
+```{R pivot_longer_names}
+# Make my vitals data CDISCy
+vs %>% 
+  pivot_longer(-USUBJID, names_to = "VSTESTCD", values_to = "VSORRES")
+```
+
+## The `pivot_wider` Function
+
+The `pivot_wider` function is used when we wish to go from a long format to a wide format.  Once again we pass in the data as the first argument.  As the converse of the `pivot_longer` function we specify a `names_*from*` and a `values_*from*` argument to identify the column that currently stores the names for our new columns (`names_from`), and the one that currently stores the values (`values_from`).  The remaining columns are unaffected.
+
+```{R pivot_wider}
+# Count the number of subjects in each treatment arm
+big_n <- dm %>%
+  group_by(ARM) %>%
+  summarise(N = n())
+big_n
+
+# Now transpose such that each treatment is in a separate column
+big_n %>%
+  pivot_wider(names_from = ARM, values_from = N)
+```
+
+
+## EXERCISE {#transpose}
+
+1. Create a data frame, `act_sum`, by transposing the individual ACT question scores in the `act` data frame in order to calculate the ACT Total Score (sum of the questions). 
+    a. First stack the scores together using pivot_longer().
+    b. Then calculate total `ACTTOT` for each subject and visit combination.
+The  resulting `act_sum` data frame should look like this:
+
+```{R, echo = FALSE, eval = TRUE, message = FALSE}
+options(dplyr.summarise.inform = FALSE)
+# Show what resulting data frame should look like
+act %>%
+    pivot_longer(ACT0101:ACT0105, names_to = "Question", values_to = "Score") %>%
+    group_by(USUBJID, VISITNUM, VISIT) %>%
+    summarise(ACTTOT = sum(Score)) %>% 
+    print(n=7)
+options(dplyr.summarise.inform = TRUE)
+```
+
+ 
+2. As in an earlier exercise, calculate summary statistics (n, Mean, Median, SD, Min and Max) by treatment and visit using the `act_full` data frame. 
+    a. Create a data frame, `act_stats`, by transposing the data such that the rows contain the summary statistics and the values for each treatment appear in a separate column. *Hint: first use pivot_longer() to create a stats and values column and then pivot_wider() to create a column for each treatment.*
+ The resulting `act_stats` data frame should look like this:
+
+```{R, echo = FALSE, eval = TRUE}
+options(dplyr.summarise.inform = FALSE)
+# Show what resulting data frame should look like
+act_stats <- act_full %>%
+  group_by(ARM, VISITNUM, VISIT) %>%
+  summarise(
+    n = n(),
+    Mean = mean(ACTTOT),
+    Median = median(ACTTOT),
+    SD = sd(ACTTOT),
+    Min = min(ACTTOT),
+    Max = max(ACTTOT)
+  )
+act_stats %>%
+  pivot_longer(n:Max, names_to = "Stat", values_to = "value") %>%
+  pivot_wider(names_from = ARM, values_from = value) %>%
+  print(n = 7)
+options(dplyr.summarise.inform = TRUE)
+```
+
+**Extra**
+
+3. Re-do question 2 but format the summary statistics such that the mean and median are given to 1 decimal place, the standard deviation to 2 decimal places and n, min and max are given as integers. *HINT: Use the `format` function*
+
+```{r}
+#| label: ex_ans_transp
+#| eval: false
+#| echo: false
+
+# Exercise Answers: Transposing
+# 1
+act_sum <- act %>%
+  pivot_longer(ACT0101:ACT0105,
+         names_to = "Question", values_to = "Score") %>%
+  group_by(USUBJID, VISITNUM, VISIT) %>%
+  summarise(ACTTOT = sum(Score))
+# 2
+act_stats <- act_full %>%
+  group_by(ARM, VISITNUM, VISIT) %>%
+  summarise(n = n(),
+            Mean = mean(ACTTOT),
+            Median = median(ACTTOT),
+            SD = sd(ACTTOT),
+            Min = min(ACTTOT),
+            Max = max(ACTTOT))
+act_stats %>%
+  pivot_longer(n:Max, names_to = "Stat", values_to = "value") %>%
+  pivot_wider(names_from = ARM, values_from = value)
+# 3
+
+act_stats <- act_full %>%
+  group_by(ARM, VISITNUM, VISIT) %>%
+  summarise(n = format(n(), nsmall=0), 
+            Mean = format(mean(ACTTOT), digits=1, nsmall=1),
+            Median = format(median(ACTTOT), digits=1, nsmall=1),
+            SD = format(sd(ACTTOT),digits=2, nsmall=2),
+            Min = format(min(ACTTOT), nsmall=0),
+            Max = format(max(ACTTOT), nsmall=0))
+
+act_stats %>%
+  pivot_longer(n:Max, names_to = "Stat", values_to = "value") %>%
+  pivot_wider(names_from = ARM, values_from = value)
+```
+
+

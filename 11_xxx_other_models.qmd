@@ -1,0 +1,91 @@
+
+## Other Types of Model
+
+Now that we have a basic understanding of a model object and how we can extract useful information from it, let's look at some of the other types of model that we might wish to fit in R.
+
+### Generalised Linear Models
+
+In order to fit generalised linear models we replace the `lm` function with the `glm` function.  By default the `glm` function fits a generalised linear model using the normal (gaussian) family and so it is equivalent to `lm`.  We can fit other distributions be changing the `family` argument to another distribution such as Poisson of binomial.
+
+```{r glm_bin}
+# Model response using week 24 data
+w24 <- act_full %>% 
+  filter(VISITNUM == 60)
+act_resp_mod <- glm(data = w24, ACTRESP ~  ARM + AGE , 
+                  family = "binomial")
+tidy(act_resp_mod)
+```
+
+### Mixed Model Repeated Measures (MMRM)
+
+Historically, it has been relatively tricky to use R to fit the kind of MMRM models that we typically use in Pharma.  A combination of packages could be used to achieve the desired results but subject matter expertise in both R and MMRM modelling was required!
+In 2022 the {mmrm} package was released.  This package was built by Statisticians from within the pharmaceutical industry with copyright shared between several leading pharmaceutical companies (see [https://openpharma.github.io/mmrm/latest-tag/](https://openpharma.github.io/mmrm/latest-tag/)).
+
+The {mmrm} package provides a namesake `mmrm` function that simplifies the MMRM model fit.  Model information can be extracted using {broom} in exactly the same way as we have seen for linear models and generalised linear models.
+
+```{r mmrm1}
+library(mmrm)
+
+# Model to be fitted to scheduled post-BL 'change from BL' data
+act_post_bl <- act_full %>% 
+  filter(20 < VISITNUM, VISITNUM < 70) %>% 
+  # Visit must be a factor, not character.  
+  # VISIT 3 will be baseline for comparisons as first factor level
+  mutate(visit_factor = factor(VISIT)) # careful of levels in general case!
+
+# Fit unstructured covariance model which assumes:
+# REML: `reml = TRUE`
+# Satterthwaite DoF: `control = mmrm_control()`
+mmrm_mod <- mmrm(
+  data = act_post_bl,
+  ACTCHGBL ~  ARM + visit_factor + us(visit_factor | USUBJID)
+)
+tidy(mmrm_mod)
+```
+
+Changing standard options is remarkably easy with the {mmrm} package.  For example switching between REML and ML estimation, or making a Kenward-Roger adjustment to degrees of freedom.
+
+```{r kr}
+mmrm_mod_kw <- mmrm(
+  data = act_post_bl,
+  ACTCHGBL ~  ARM + visit_factor + us(visit_factor | USUBJID),
+  method = "Kenward-Roger"
+)
+tidy(mmrm_mod_kw)
+```
+
+The package can be combined with the popular {emmeans} package in order to extract estimated marginal means (AKA "least-square means").
+
+```{r lsm}
+library(emmeans)
+# Pass the emmeans function the model object and the respective marginal means
+# In this case treatment by week (arm by visit)
+lsmeans_by_visit <- emmeans(mmrm_mod_kw, ~ ARM | visit_factor)
+
+# Equivalently:
+#lsmeans_by_visit <- emmeans(mmrm_mod_kw, "ARM", by= "visit_factor")
+# Pretty much equivalently (the attribute difference is beyond course scope)
+#lsmeans_by_visit <- lsmeans(mmrm_mod_kw, "ARM", by= "visit_factor")
+
+lsmeans_by_visit
+```
+
+### Survival Models
+
+In order to model survival data we load the survival package.  Although we must load the package each time we wish to use it, it is actually installed as part of the base distribution of R.  Survival modelling follows a similar pattern to what we have seen already.  The only difference is that instead of a single dependent variable we use the `Surv` function to combine a time variable and a censoring variable.
+
+\newline
+
+Here is an example of fitting a Cox Proportional Hazards model using the in-built `lung` data.
+
+```{r survival}
+library(survival)
+
+# Some example data from the survival package:
+head(lung)   #see help('lung') for further information about the dataset
+
+# Fit the model
+cox_mod <- coxph(Surv(time, status) ~ ph.ecog + age, data=lung)
+tidy(cox_mod)
+```
+

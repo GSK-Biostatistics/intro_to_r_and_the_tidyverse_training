@@ -1,0 +1,69 @@
+<!-- NOTE TO TRAINERS: This is not intended to be taught if short on time -->
+## Working with Dates and the lubridate Package
+
+The lubridate package is another of the tidyverse packages and provides a number of useful functions for working with dates and times, supplementing other functions that were already built into R before the tidyverse came along.  As with forcats and stringr the lubridate package is installed as part of the tidyverse but we have to load it separately.  Unlike forcats and stringr, however, functions in lubridate don't have a prefix.
+
+```{r lubridate}
+library(lubridate)
+objects("package:lubridate")
+```
+
+### Date Conversion
+
+As with other software, R stores date data as numeric data and applies a format over the top so that the dates are human-readable.  For the underlying numbers R follows the unix convention whereby time starts on 1st January 1970 (day 0).  The character format is always the international date standard format, "yyyy-mm-dd".  To make use of the date functionality we often need to convert our dates from character to date format.  It is worth noting, however, that functions such as `read_sas` can recognise date types and convert automatically.
+
+\newline
+
+In the spirit of functions having a single, simple purpose a significant proportion of the functions in the lubridate package simply convert various character date and/or time formats into a date/time format.  For dates we must choose from a number of functions of the form, `dmy` (day-month-year).  The choice of which depends on what order our day, month and year are provided in.  The functions are all reasonably intelligent and can handle a variety of separators (e.g. "/" or "-"); numeric and character specification of month; and both 2 and 4 digit years.  Some examples are provided below.
+
+```{r lubridate_convert}
+# Some different ways of displaying the same date
+a_date_europe <- "15-11-17"
+a_date_US <- "11-15-17"
+a_date_GSK <- "15-Nov-17"
+a_date_programming_standard <- "2017-11-15"
+
+# Some lubridate functions for converting each of thes dates
+dmy(a_date_europe)
+mdy(a_date_US)
+dmy(a_date_GSK)
+ymd(a_date_programming_standard)
+```
+
+The lubridate package has a similar set of functions for working with times and date-time.  Some further examples are provided below.
+
+```{r lubridate_convert_time}
+# A time
+lunch_time <- "12:00:00"
+hms(lunch_time)
+# A date-time
+new_year_party_start <- "31-12-2017 21:30:00"
+dmy_hms(new_year_party_start, tz = "UTC")
+```
+
+### Date/time Utilities
+
+Once we have converted our date/time into the appropriate format we can make use of a number of utility functions in order to process the dates.  A few examples are provided below.
+
+```{r lubridate_use}
+# Today is a
+weekdays(today())
+# When can I leave?
+today() + hours(3)
+# DBF is today, how long until SAC?
+DBF <- today()
+SAC <- DBF + weeks(5)
+SAC
+# How many days until Christmas?
+difftime(ymd("2017-12-25"), today()) 
+```
+
+## Transmute
+
+All of the functions that we've seen in recent sections can be used with the `mutate` function.  They can also be used with a counterpart of mutate, `transmute`.  The difference between `mutate` and `transmute` is that when we use `transmute`, the newly created columns are kept but the old ones are dropped.  Occasionally this can be useful if summarising a large number of variables into a total score or similar.
+
+```{r transmute}
+transmute(vs, 
+          Height_m2 = (HEIGHT/100) ^2, 
+          BMI = WEIGHT / Height_m2)
+```

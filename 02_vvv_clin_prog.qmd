@@ -1,0 +1,5 @@
+**RStudio Desktop vs RStudio Server:** RStudio Desktop should not be used for regulatory work. In addition, installing and using RStudio Desktop on GSK laptops should be avoided due to the lack of support available for troubleshooting problems with installation, configuration and functionality. RStudio on the GSK servers is the recommended platform for using R at GSK.
+
+### Current/future uses in Clinical Development
+
+Please refer to the [R for Clinical Reporting Hub](https://warp-view.gsk.com/r-for-clinical-reporting/hub/qmd/Guidance.html) for the latest recommendations on how Clinical Programmers and Statisticians can use R in Biostatistics.

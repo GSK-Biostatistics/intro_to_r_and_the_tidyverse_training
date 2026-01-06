@@ -1,0 +1,157 @@
+# Setting and Merging
+
+## Setting: `bind_rows`
+
+We can combine similarly structured data frames using the `bind_rows` function. This is equivalent to a "set" operation in SAS.
+
+```{r tidyverse load, message=FALSE, warning=FALSE}
+#| echo: false
+library(tidyverse)
+dm <- haven::read_sas("data/dm.sas7bdat")
+vs <- haven::read_sas("data/vs.sas7bdat")
+```
+
+```{R bind_rows}
+# Generate two data frames
+interim <- crossing(SUBJID = 1:3, VISITNUM = 1:2)
+post_interim <- crossing(SUBJID = 4:5, VISITNUM = 1:2)
+
+# What do they look like?
+interim
+post_interim
+
+# Combine (set) the data frames
+final_data <- bind_rows(interim, post_interim)
+final_data
+```
+
+The `bind_rows` is relatively intelligent in that the columns do not need to match between the two data frames that we wish to combine. If columns appear in a different order, the order of the first data frame is used for the final output.
+
+\newline
+
+In the following example a baseline record is combined with a post-baseline record. The post-baseline record does not contain a "BASE" column but this appears in the final data with a missing value.
+
+```{R bind_rows2}
+# Generate two data frames
+baseline <- tibble(SUBJID = 1, VISITNUM = 1, BASE= 10, AVAL = 10)
+post_bl <- tibble(SUBJID = 1, VISITNUM = 2, AVAL= 11)
+
+bind_rows(baseline, post_bl)
+```
+
+## Binding Columns bind_cols
+
+For columns an equivalent function, `bind_cols` exists. So long as two data frames have the same number of rows we can use `bind_cols` to join them together. In the following example we *should* merge by USUBJID but let's see what happens if we just stick the data together.
+
+```{R bind_cols}
+# Simply stick the demography and vitals data together
+# Scary stuff! But it works since both have the same subjects in the same order
+bind_cols(dm, vs)
+```
+
+In this case it worked, although we might wish to remove the `USUBJID1` column after checking that all values are equal to those in the `USUBJID` column. The `bind_cols` function is useful for simulation but with real data a merge is usually more appropriate.
+
+## Merging (Joining)
+
+The tidyverse terminology generally follows SQL where possible. We therefore talk about "joining" as opposed to "merging". As is often the case in the tidyverse, different types of join are achieved by using different join functions. Here is a list of the current join functions:
+
+
+```{R join_funcs, echo = FALSE, purl = FALSE}
+"_join$" %>% 
+  apropos %>% 
+  str_c(collapse = "\n") %>% 
+  cat
+```
+
+The `*_join` functions optimise the join for us so as long as we're not performing a many-to-many merge no prior sorting is required. We need only specify which data frames we wish to join and which variables we wish to join by. In the following example we join together the demographics and vital signs data. Each of the join functions follows the same format of arguments: the first two arguments are the two data frames to join, the third argument is the `by` argument. This third argument requires a character vector of columns that we wish to join by.
+
+```{R join1}
+full_join(dm, vs, by = "USUBJID")
+```
+
+In the previous example we performed a full join. Observe what happens if we call this function on datasets with mismatching subject IDs.
+
+```{R join2}
+dm_head <- dm %>% head(10) %>% select(-RACE, -ETHNIC) %>% slice(-1)
+vs_missing <- vs %>% slice(1, 2, 4, 6, 9, 10)
+dm_head
+vs_missing
+
+# Join together
+full_join(dm_head, vs_missing, by = "USUBJID")
+```
+
+All subjects are included but for the subjects with missing vitals the `HEIGHT` and `WEIGHT` values are shown as missing, as well as the `AGE`, `SEX`, `COUNTRY` and `ARM` values for the first subject in `dm` data.
+
+## Left, Right and Inner Joins
+
+If we perform a left join, only subjects present in `dm_head` are displayed with accompanying data joined from `vs_missing`.
+
+```{R left_join}
+left_join(dm_head, vs_missing, by = "USUBJID")
+```
+
+If we specify a right join, then only subjects that appear in `vs_missing` are joined on from `dm_head`, as seen below.
+
+```{R right_join}
+right_join(dm_head, vs_missing, by = "USUBJID")
+```
+
+An inner join only returns complete records where data are present in both data frames for a particular subject.
+
+```{R inner_join}
+inner_join(dm_head, vs_missing, by = "USUBJID")
+```
+
+## Semi Joins and Anti Joins
+
+In cases such as the one above, where subjects appear in one dataset but not the other the `semi_join` and `anti_join` functions can be useful. The `semi_join` function returns all records in the first data frame that *would* be merged if a left/inner join were performed.
+
+The anti_join function is effectively the converse to the semi_join and returns all the records that would not be merged.
+
+```{R semi_join}
+# Show the records in dm that would be merged if performing an inner/left join
+semi_join(dm_head, vs_missing, by = "USUBJID")
+
+# Show the records in dm that would NOT be merged if performing an inner/left join
+anti_join(dm_head, vs_missing, by = "USUBJID")
+```
+
+\newline
+
+## EXERCISE {#merge}
+
+1.  Merge the randomisation dates (contained within the `sl` data) onto the `act` data
+2.  Now merge on the demography and vitals information and save this as `act_main`
+
+**Extra**
+
+3.  As in an earlier exercise, find subjects that have a missing Week 24 record and calculate the Worst Observation Carried Forward for these subjects. The resulting data should have a single row for each subject where `VISITNUM` and `VISIT` have been set to `60` and `"VISIT 6 (WEEK 24)"` respectively. An additional column should be labelled WOCF and be set to `TRUE` for these records. Bind these records back on to the main data.
+
+```{r}
+#| label: ex_ans_joins
+#| eval: false
+#| echo: false
+
+# Exercise Answers: Setting and Merging
+# 1
+full_join(act, sl, by = "USUBJID")
+# 2
+act_main <- dm %>%
+  full_join(vs, by = "USUBJID") %>%
+  full_join(act, by = "USUBJID") %>%
+  full_join(sl, by = "USUBJID") 
+# 3
+wocf <- act_main %>% 
+  group_by(USUBJID) %>%
+  filter(!any(VISITNUM == 60)) %>%
+  arrange(ACTTOT) %>%
+  slice(1) %>%
+  mutate(VISITNUM = 60,
+         VISIT = "VISIT 6 (WEEK 24)",
+         VISITNew = "Week 24",
+         WOCF = TRUE)
+act_main <- act_main %>%
+  bind_rows(wocf) %>%
+  arrange(USUBJID, VISITNUM)
+```
