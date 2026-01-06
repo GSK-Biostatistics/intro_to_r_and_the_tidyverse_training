@@ -1,16 +1,12 @@
 project:
   type: book
   output-dir: _book
-  resources: 
-    - linux_terminal.mp4
-    - side_loading.mp4
-  
   
 book:
   title: "Introduction to R and the tidyverse"
   author: "Andy Nicholls"
-  date: 2024-07-15
-  repo-url: https://github.com/gsk-tech/intro_to_r_tidyverse_training
+  date: 2026-01-06
+  repo-url: https://github.com/GSK-Biostatistics/intro_to_r_and_the_tidyverse_training
   repo-actions: [none]
   chapters:
     - index.qmd
