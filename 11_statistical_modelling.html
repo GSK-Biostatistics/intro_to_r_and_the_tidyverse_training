@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>11&nbsp; Introduction to Statistical Modelling – Introduction to R and the tidyverse</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./10_transposing.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-6df1da3304e12c820926f47be4e172ea.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./11_statistical_modelling.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Introduction to Statistical Modelling</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Introduction to Statistical Modelling</span></h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to R and the tidyverse</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/GSK-Biostatistics/intro_to_r_and_the_tidyverse_training" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome!</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_materials_external.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Course Materials</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_r_rstudio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to R and RStudio</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_vectors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data Types and Vectors</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_data_frames.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Welcome to the tidyverse!</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_importing_and_exporting_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Importing/Exporting Data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_basic_data_processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Data Handling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_magrittr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Piping</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_summaries_aggregation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Summaries and Aggregation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_setting_merging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Setting and Merging</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_transposing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Transposing data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_statistical_modelling.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Introduction to Statistical Modelling</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#a-simple-linear-model" id="toc-a-simple-linear-model" class="nav-link active" data-scroll-target="#a-simple-linear-model"><span class="header-section-number">11.1</span> A Simple Linear Model</a>
+  <ul class="collapse">
+  <li><a href="#adding-terms" id="toc-adding-terms" class="nav-link" data-scroll-target="#adding-terms"><span class="header-section-number">11.1.1</span> Adding Terms</a></li>
+  <li><a href="#categorical-variables" id="toc-categorical-variables" class="nav-link" data-scroll-target="#categorical-variables"><span class="header-section-number">11.1.2</span> Categorical Variables</a></li>
+  <li><a href="#interaction-terms" id="toc-interaction-terms" class="nav-link" data-scroll-target="#interaction-terms"><span class="header-section-number">11.1.3</span> Interaction Terms</a></li>
+  <li><a href="#where-the-tidyverse-fits-in" id="toc-where-the-tidyverse-fits-in" class="nav-link" data-scroll-target="#where-the-tidyverse-fits-in"><span class="header-section-number">11.1.4</span> Where the tidyverse Fits in</a></li>
+  <li><a href="#checking-the-model-fit" id="toc-checking-the-model-fit" class="nav-link" data-scroll-target="#checking-the-model-fit"><span class="header-section-number">11.1.5</span> Checking the Model Fit</a></li>
+  <li><a href="#checking-assumptions" id="toc-checking-assumptions" class="nav-link" data-scroll-target="#checking-assumptions"><span class="header-section-number">11.1.6</span> Checking Assumptions</a></li>
+  <li><a href="#extracting-the-coefficients" id="toc-extracting-the-coefficients" class="nav-link" data-scroll-target="#extracting-the-coefficients"><span class="header-section-number">11.1.7</span> Extracting the Coefficients</a></li>
+  </ul></li>
+  <li><a href="#ch11.3" id="toc-ch11.3" class="nav-link" data-scroll-target="#ch11.3"><span class="header-section-number">11.2</span> EXERCISE</a></li>
+  <li><a href="#other-types-of-model" id="toc-other-types-of-model" class="nav-link" data-scroll-target="#other-types-of-model"><span class="header-section-number">11.3</span> Other Types of Model</a>
+  <ul class="collapse">
+  <li><a href="#generalised-linear-models" id="toc-generalised-linear-models" class="nav-link" data-scroll-target="#generalised-linear-models"><span class="header-section-number">11.3.1</span> Generalised Linear Models</a></li>
+  <li><a href="#mixed-model-repeated-measures-mmrm" id="toc-mixed-model-repeated-measures-mmrm" class="nav-link" data-scroll-target="#mixed-model-repeated-measures-mmrm"><span class="header-section-number">11.3.2</span> Mixed Model Repeated Measures (MMRM)</a></li>
+  <li><a href="#survival-models" id="toc-survival-models" class="nav-link" data-scroll-target="#survival-models"><span class="header-section-number">11.3.3</span> Survival Models</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul></ul></div></nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>The core purpose of R is to provide a programming framework for statistical modelling. Perhaps for this reason, the basics of statistical modelling have not been touched by the tidyverse. As we shall see, however, the modelr and broom packages can help us better-process model output.</p>
+<section id="a-simple-linear-model" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="a-simple-linear-model"><span class="header-section-number">11.1</span> A Simple Linear Model</h2>
+<p>All forms of model follow a similar specification in R so let’s start with the simplest, the linear model. This can be fitted using the <code>lm</code> function. To demonstrate how <code>lm</code> works we first merge/join the demography and vitals data frame together to create a population dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(dm, vs, <span class="at">by =</span> <span class="st">"USUBJID"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>pop</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 9
+   USUBJID            AGE SEX   COUNTRY RACE          ETHNIC ARM   HEIGHT WEIGHT
+   &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;         &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+ 1 STD123456:000001    32 F     UK      BLACK OR AFR… NOT H… Comp…    165   88  
+ 2 STD123456:000002    28 M     FRA     WHITE         NOT H… Comp…    179  100  
+ 3 STD123456:000003    55 M     USA     BLACK OR AFR… NOT H… Comp…    182   81  
+ 4 STD123456:000004    35 F     GER     WHITE         HISPA… Comp…    166   91  
+ 5 STD123456:000005    30 F     IRE     WHITE         NOT H… Comp…    169   73.6
+ 6 STD123456:000006    22 F     GER     WHITE         NOT H… Comp…    164   66  
+ 7 STD123456:000007    59 F     USA     WHITE         NOT H… Comp…    157  107  
+ 8 STD123456:000008    53 M     GER     WHITE         NOT H… GSK      189  101  
+ 9 STD123456:000009    60 F     USA     WHITE         NOT H… GSK      155   54.1
+10 STD123456:000010    48 M     USA     WHITE         NOT H… Comp…    171   88  
+# ℹ 20 more rows</code></pre>
+</div>
+</div>
+<p>Now let’s model weight as a function of height. In order to do so we call the <code>lm</code> function and provide two arguments: the data and the model formula. The model formula is specified using a tilde, <code>~</code>. The dependent variable is placed to the left of the tilde and any independent (explanatory) variables are placed to the right. In the example below we save the model output with a name. We must do so if we wish to use the results, for example to create plots of the residuals.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the model</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>pop_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(WEIGHT <span class="sc">~</span> HEIGHT, <span class="at">data =</span> pop)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># The default "print" for the model</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>pop_lm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = WEIGHT ~ HEIGHT, data = pop)
+
+Coefficients:
+(Intercept)       HEIGHT  
+   -27.9264       0.6618  </code></pre>
+</div>
+</div>
+<p>The example above fits a model of the form, <code>WEIGHT = intercept + alpha*HEIGHT</code>, where the intercept and alpha parameters are estimated by the model.</p>
+<section id="adding-terms" class="level3" data-number="11.1.1">
+<h3 data-number="11.1.1" class="anchored" data-anchor-id="adding-terms"><span class="header-section-number">11.1.1</span> Adding Terms</h3>
+<p>If we have more than one explanatory variable we use a plus, <code>+</code>, to add in the additional terms.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the model</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>pop_lm2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(WEIGHT <span class="sc">~</span> HEIGHT <span class="sc">+</span> AGE, <span class="at">data =</span> pop)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>pop_lm2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = WEIGHT ~ HEIGHT + AGE, data = pop)
+
+Coefficients:
+(Intercept)       HEIGHT          AGE  
+   -47.5819       0.6798       0.3302  </code></pre>
+</div>
+</div>
+</section>
+<section id="categorical-variables" class="level3" data-number="11.1.2">
+<h3 data-number="11.1.2" class="anchored" data-anchor-id="categorical-variables"><span class="header-section-number">11.1.2</span> Categorical Variables</h3>
+<p>When modelling, R uses the data type to determine which variables are numeric and which are discrete / categorical. This means that we need to ensure that the data are of the right type before fitting in the model. If we have categorical data stored as numeric then we can use the factor function to convert it to categorical.</p>
+<p>When fitting categorical variables, the first level of the factor is set as the base and all other levels are compared against this level. In order to change the order (and hence the base level) we can use a forcats function such as <code>fct_relevel</code>, which moves any given levels to the start of the queue. For readability it is generally advisable to do this in the data, as opposed to within the modelling step.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#library(forcats)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare all countries against the US so change the order of levels in the data</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> pop <span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Move USA to the front</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">COUNTRY =</span> <span class="fu">fct_relevel</span>(COUNTRY, <span class="st">"USA"</span>))</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># To see what has happened:</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a> pop<span class="sc">%&gt;%</span><span class="fu">pull</span>(COUNTRY)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] UK  FRA USA GER IRE GER USA GER USA USA USA FRA IRE USA FRA USA FRA IRE USA
+[20] FRA GER GER IRE FRA USA FRA IRE IRE UK  USA
+Levels: USA FRA GER IRE UK</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the model - we now have a coefficient for all countries except USA</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>pop_lm3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(WEIGHT <span class="sc">~</span> HEIGHT <span class="sc">+</span> AGE <span class="sc">+</span> COUNTRY , <span class="at">data =</span> pop)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>pop_lm3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = WEIGHT ~ HEIGHT + AGE + COUNTRY, data = pop)
+
+Coefficients:
+(Intercept)       HEIGHT          AGE   COUNTRYFRA   COUNTRYGER   COUNTRYIRE  
+   -61.4822       0.6999       0.4014      14.9240       3.7707       8.4995  
+  COUNTRYUK  
+    16.8185  </code></pre>
+</div>
+</div>
+</section>
+<section id="interaction-terms" class="level3" data-number="11.1.3">
+<h3 data-number="11.1.3" class="anchored" data-anchor-id="interaction-terms"><span class="header-section-number">11.1.3</span> Interaction Terms</h3>
+<p>We can fit interaction terms using a colon, <code>:</code>. If we also want to include the base terms that make up the interaction term we can instead use the shorthand, <code>*</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pop_lm_int <span class="ot">&lt;-</span> <span class="fu">lm</span>(WEIGHT <span class="sc">~</span> HEIGHT <span class="sc">+</span> AGE <span class="sc">+</span> HEIGHT<span class="sc">:</span>AGE, <span class="at">data =</span> pop)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Or equivalently</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>pop_lm_int <span class="ot">&lt;-</span> <span class="fu">lm</span>(WEIGHT <span class="sc">~</span> HEIGHT<span class="sc">*</span>AGE, <span class="at">data =</span> pop)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>pop_lm_int</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = WEIGHT ~ HEIGHT * AGE, data = pop)
+
+Coefficients:
+(Intercept)       HEIGHT          AGE   HEIGHT:AGE  
+  -291.6603       2.1181       4.8607      -0.0267  </code></pre>
+</div>
+</div>
+</section>
+<section id="where-the-tidyverse-fits-in" class="level3" data-number="11.1.4">
+<h3 data-number="11.1.4" class="anchored" data-anchor-id="where-the-tidyverse-fits-in"><span class="header-section-number">11.1.4</span> Where the tidyverse Fits in</h3>
+<p>Everything we’ve seen thus far is available “out of the box”. Most of what we’re about to see is implemented via two tidyverse packages, modelr and broom. The modelr package is one that allows us to more easily extract additional information from the model such as the Root Mean Square Error. The package also contains a number of useful utilities for resampling/bootstrapping and for implementing k-fold cross validation. Sadly, we don’t have the time to cover these features on this course. The broom package provides a set of helpful utilities for turning the standard R model output into data frames. SAS users might compare the functionality to that of SAS’ “ODS” feature.</p>
+<p>In the following sections we use a combination of functions that are part of the base, stats, modelr and broom packages. It’s generally not worth worrying about what function is contained in what package so the easiest thing to do is to load modelr and broom each time you begin modelling (base and stats are always loaded when you start R in interactive mode). Both packages are installed as part of the tidyverse but not automatically loaded so we must do so manually.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the packages</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modelr)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'broom' was built under R version 4.4.3</code></pre>
+</div>
+</div>
+</section>
+<section id="checking-the-model-fit" class="level3" data-number="11.1.5">
+<h3 data-number="11.1.5" class="anchored" data-anchor-id="checking-the-model-fit"><span class="header-section-number">11.1.5</span> Checking the Model Fit</h3>
+<p>Once we have fitted our model and saved it as an R object there are a number of different ways with which we can extract information. First of all the <code>glance</code> function produces a data frame where each column is a different model fit statistic.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(pop_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 12
+  r.squared adj.r.squared sigma statistic p.value    df logLik   AIC   BIC
+      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     0.186         0.157  15.7      6.38  0.0175     1  -124.  254.  259.
+# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="checking-assumptions" class="level3" data-number="11.1.6">
+<h3 data-number="11.1.6" class="anchored" data-anchor-id="checking-assumptions"><span class="header-section-number">11.1.6</span> Checking Assumptions</h3>
+<p>As well as looking at the fit we can check the model fit using the <code>augment</code> function. The <code>augment</code> function appends useful information such as the residuals and fitted values as columns to the original data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">augment</span>(pop_lm) <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  head</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 8
+  WEIGHT HEIGHT .fitted .resid   .hat .sigma .cooksd .std.resid
+   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;
+1   88      165    81.3   6.72 0.0360   16.0 0.00354      0.435
+2  100      179    90.5   9.46 0.0663   15.9 0.0138       0.622
+3   81      182    92.5 -11.5  0.0870   15.8 0.0281      -0.767
+4   91      166    81.9   9.06 0.0346   15.9 0.00616      0.586
+5   73.6    169    83.9 -10.3  0.0336   15.9 0.00775     -0.668
+6   66      164    80.6 -14.6  0.0380   15.8 0.0177      -0.948</code></pre>
+</div>
+</div>
+<p>If we give the augmented data a name, we can use it to graphically check our model assumptions. We would need to load {ggplot2} to create the plot, if it were not already loaded.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Augment our data and save it</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>pop_data_modelled <span class="ot">&lt;-</span> <span class="fu">augment</span>(pop_lm)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a plot of the studentised residuals against fitted values</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pop_data_modelled) <span class="sc">+</span> </span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> .fitted, <span class="at">y =</span> .std.resid)) <span class="sc">+</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="dv">0</span>, <span class="at">colour =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="11_statistical_modelling_files/figure-html/model_fit_graphics-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="extracting-the-coefficients" class="level3" data-number="11.1.7">
+<h3 data-number="11.1.7" class="anchored" data-anchor-id="extracting-the-coefficients"><span class="header-section-number">11.1.7</span> Extracting the Coefficients</h3>
+<p>In order to extract the coefficients for each of the parameters, along with the respective standard errors and p-values we can use the <code>tidy</code> function from the broom package. We simply provide the <code>tidy</code> function with the name of our model object and the function outputs a data frame containing the information we need.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(pop_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  term        estimate std.error statistic p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+1 (Intercept)  -27.9      44.1      -0.633  0.532 
+2 HEIGHT         0.662     0.262     2.53   0.0175</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="ch11.3" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="ch11.3"><span class="header-section-number">11.2</span> EXERCISE</h2>
+<ol type="1">
+<li>Fit a linear model of the Change from Baseline (<code>ACTCHGBL</code>) in ACT Total Score by treatment (<code>ARM</code>), age (<code>AGE</code>) and visit (<code>VISITNUM</code>) using the <code>act_full</code> data (exclude screening, baseline and early withdrawal data before fitting the model). <em>HINT: these visits have VISITNUM values: of 10, 20 and 70.</em></li>
+<li>Asses your model fit by plotting the studentised residuals against the fitted values. <em>HINT: use the following template <code>ggplot(NAME_OF_DATA) + geom_point(aes(x = NAME_OF_X_VARIABLE, y = NAME_OF_Y_VARIABLE))</code></em></li>
+<li>Programmatically find any significant (&lt; 0.05) coefficients</li>
+</ol>
+<!-- NOTE TO TRAINERS: This section is not intended to be taught if short on time -->
+<!-- It is for reference only -->
+</section>
+<section id="other-types-of-model" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="other-types-of-model"><span class="header-section-number">11.3</span> Other Types of Model</h2>
+<p>Now that we have a basic understanding of a model object and how we can extract useful information from it, let’s look at some of the other types of model that we might wish to fit in R.</p>
+<section id="generalised-linear-models" class="level3" data-number="11.3.1">
+<h3 data-number="11.3.1" class="anchored" data-anchor-id="generalised-linear-models"><span class="header-section-number">11.3.1</span> Generalised Linear Models</h3>
+<p>In order to fit generalised linear models we replace the <code>lm</code> function with the <code>glm</code> function. By default the <code>glm</code> function fits a generalised linear model using the normal (gaussian) family and so it is equivalent to <code>lm</code>. We can fit other distributions be changing the <code>family</code> argument to another distribution such as Poisson of binomial.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model response using week 24 data</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>w24 <span class="ot">&lt;-</span> act_full <span class="sc">%&gt;%</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(VISITNUM <span class="sc">==</span> <span class="dv">60</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>act_resp_mod <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="at">data =</span> w24, ACTRESP <span class="sc">~</span>  ARM <span class="sc">+</span> AGE , </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">family =</span> <span class="st">"binomial"</span>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(act_resp_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 5
+  term        estimate std.error statistic p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+1 (Intercept)   1.66      1.79       0.930   0.352
+2 ARMGSK        1.69      1.20       1.41    0.158
+3 AGE          -0.0190    0.0328    -0.580   0.562</code></pre>
+</div>
+</div>
+</section>
+<section id="mixed-model-repeated-measures-mmrm" class="level3" data-number="11.3.2">
+<h3 data-number="11.3.2" class="anchored" data-anchor-id="mixed-model-repeated-measures-mmrm"><span class="header-section-number">11.3.2</span> Mixed Model Repeated Measures (MMRM)</h3>
+<p>Historically, it has been relatively tricky to use R to fit the kind of MMRM models that we typically use in Pharma. A combination of packages could be used to achieve the desired results but subject matter expertise in both R and MMRM modelling was required! In 2022 the {mmrm} package was released. This package was built by Statisticians from within the pharmaceutical industry with copyright shared between several leading pharmaceutical companies (see <a href="https://openpharma.github.io/mmrm/latest-tag/">https://openpharma.github.io/mmrm/latest-tag/</a>).</p>
+<p>The {mmrm} package provides a namesake <code>mmrm</code> function that simplifies the MMRM model fit. Model information can be extracted using {broom} in exactly the same way as we have seen for linear models and generalised linear models.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mmrm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'mmrm' was built under R version 4.4.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model to be fitted to scheduled post-BL 'change from BL' data</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>act_post_bl <span class="ot">&lt;-</span> act_full <span class="sc">%&gt;%</span> </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="dv">20</span> <span class="sc">&lt;</span> VISITNUM, VISITNUM <span class="sc">&lt;</span> <span class="dv">70</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Visit must be a factor, not character.  </span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># VISIT 3 will be baseline for comparisons as first factor level</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">visit_factor =</span> <span class="fu">factor</span>(VISIT)) <span class="co"># careful of levels in general case!</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit unstructured covariance model which assumes:</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="co"># REML: `reml = TRUE`</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Satterthwaite DoF: `control = mmrm_control()`</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>mmrm_mod <span class="ot">&lt;-</span> <span class="fu">mmrm</span>(</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> act_post_bl,</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>  ACTCHGBL <span class="sc">~</span>  ARM <span class="sc">+</span> visit_factor <span class="sc">+</span> <span class="fu">us</span>(visit_factor <span class="sc">|</span> USUBJID)</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(mmrm_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 6
+  term                                estimate std.error    df statistic p.value
+  &lt;chr&gt;                                  &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+1 (Intercept)                            2.18      0.744  30.7     2.92  0.00645
+2 ARMGSK                                 1.23      1.10   27.5     1.12  0.274  
+3 visit_factorVISIT 4 (WEEK 12)         -0.947     0.841  25.4    -1.13  0.270  
+4 visit_factorVISIT 5 (PHONE CALL 2 …   -0.407     0.708  25.3    -0.575 0.570  
+5 visit_factorVISIT 6 (WEEK 24)          1.15      0.917  26.0     1.25  0.222  </code></pre>
+</div>
+</div>
+<p>Changing standard options is remarkably easy with the {mmrm} package. For example switching between REML and ML estimation, or making a Kenward-Roger adjustment to degrees of freedom.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>mmrm_mod_kw <span class="ot">&lt;-</span> <span class="fu">mmrm</span>(</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> act_post_bl,</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  ACTCHGBL <span class="sc">~</span>  ARM <span class="sc">+</span> visit_factor <span class="sc">+</span> <span class="fu">us</span>(visit_factor <span class="sc">|</span> USUBJID),</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"Kenward-Roger"</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(mmrm_mod_kw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 6
+  term                                estimate std.error    df statistic p.value
+  &lt;chr&gt;                                  &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+1 (Intercept)                            2.18      0.760  30.7     2.86  0.00749
+2 ARMGSK                                 1.23      1.20   27.5     1.03  0.314  
+3 visit_factorVISIT 4 (WEEK 12)         -0.947     0.808  25.4    -1.17  0.252  
+4 visit_factorVISIT 5 (PHONE CALL 2 …   -0.407     0.680  25.3    -0.599 0.554  
+5 visit_factorVISIT 6 (WEEK 24)          1.15      0.868  26.0     1.32  0.198  </code></pre>
+</div>
+</div>
+<p>The package can be combined with the popular {emmeans} package in order to extract estimated marginal means (AKA “least-square means”).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(emmeans)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>mmrm() registered as emmeans extension</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Welcome to emmeans.
+Caution: You lose important information if you filter this package's results.
+See '? untidy'</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pass the emmeans function the model object and the respective marginal means</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="co"># In this case treatment by week (arm by visit)</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>lsmeans_by_visit <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(mmrm_mod_kw, <span class="sc">~</span> ARM <span class="sc">|</span> visit_factor)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Equivalently:</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="co">#lsmeans_by_visit &lt;- emmeans(mmrm_mod_kw, "ARM", by= "visit_factor")</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Pretty much equivalently (the attribute difference is beyond course scope)</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="co">#lsmeans_by_visit &lt;- lsmeans(mmrm_mod_kw, "ARM", by= "visit_factor")</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>lsmeans_by_visit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>visit_factor = VISIT 3 (PHONE CALL 1 WEEK 6):
+ ARM        emmean    SE   df lower.CL upper.CL
+ Comparator   2.18 0.760 30.7    0.625     3.73
+ GSK          3.40 0.930 30.8    1.507     5.30
+
+visit_factor = VISIT 4 (WEEK 12):
+ ARM        emmean    SE   df lower.CL upper.CL
+ Comparator   1.23 0.993 31.3   -0.797     3.25
+ GSK          2.46 1.120 33.8    0.187     4.73
+
+visit_factor = VISIT 5 (PHONE CALL 2 WEEK 18):
+ ARM        emmean    SE   df lower.CL upper.CL
+ Comparator   1.77 0.933 33.7   -0.128     3.66
+ GSK          3.00 1.070 35.2    0.831     5.16
+
+visit_factor = VISIT 6 (WEEK 24):
+ ARM        emmean    SE   df lower.CL upper.CL
+ Comparator   3.32 0.949 32.7    1.390     5.25
+ GSK          4.55 1.070 34.5    2.381     6.72
+
+Confidence level used: 0.95 </code></pre>
+</div>
+</div>
+</section>
+<section id="survival-models" class="level3" data-number="11.3.3">
+<h3 data-number="11.3.3" class="anchored" data-anchor-id="survival-models"><span class="header-section-number">11.3.3</span> Survival Models</h3>
+<p>In order to model survival data we load the survival package. Although we must load the package each time we wish to use it, it is actually installed as part of the base distribution of R. Survival modelling follows a similar pattern to what we have seen already. The only difference is that instead of a single dependent variable we use the <code>Surv</code> function to combine a time variable and a censoring variable.</p>
+<p>Here is an example of fitting a Cox Proportional Hazards model using the in-built <code>lung</code> data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'survival' was built under R version 4.4.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Some example data from the survival package:</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(lung)   <span class="co">#see help('lung') for further information about the dataset</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  inst time status age sex ph.ecog ph.karno pat.karno meal.cal wt.loss
+1    3  306      2  74   1       1       90       100     1175      NA
+2    3  455      2  68   1       0       90        90     1225      15
+3    3 1010      1  56   1       0       90        90       NA      15
+4    5  210      2  57   1       1       90        60     1150      11
+5    1  883      2  60   1       0      100        90       NA       0
+6   12 1022      1  74   1       1       50        80      513       0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the model</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>cox_mod <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> ph.ecog <span class="sc">+</span> age, <span class="at">data=</span>lung)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(cox_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  term    estimate std.error statistic  p.value
+  &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 ph.ecog   0.443    0.116        3.83 0.000129
+2 age       0.0113   0.00932      1.21 0.226   </code></pre>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<div class="global-footnote">
+
+If you notice an issue, have suggestions for improvements, or want to view the source code, you can find it on <a href="https://github.com/GSK-Biostatistics/intro_to_r_and_the_tidyverse_training" target="_blank">GitHub</a>.
+
+</div>
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./10_transposing.html" class="pagination-link" aria-label="Transposing data">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Transposing data</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul></ul></div></div></div></footer><script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

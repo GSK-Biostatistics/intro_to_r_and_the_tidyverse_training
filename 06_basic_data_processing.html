@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>6&nbsp; Data Handling – Introduction to R and the tidyverse</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./07_magrittr.html" rel="next">
+<link href="./05_importing_and_exporting_data.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-6df1da3304e12c820926f47be4e172ea.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./06_basic_data_processing.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Data Handling</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Data Handling</span></h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to R and the tidyverse</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/GSK-Biostatistics/intro_to_r_and_the_tidyverse_training" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome!</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_materials_external.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Course Materials</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_r_rstudio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to R and RStudio</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_vectors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data Types and Vectors</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_data_frames.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Welcome to the tidyverse!</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_importing_and_exporting_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Importing/Exporting Data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_basic_data_processing.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Data Handling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_magrittr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Piping</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_summaries_aggregation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Summaries and Aggregation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_setting_merging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Setting and Merging</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_transposing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Transposing data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_statistical_modelling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Introduction to Statistical Modelling</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#subsetting-rows-filter" id="toc-subsetting-rows-filter" class="nav-link active" data-scroll-target="#subsetting-rows-filter"><span class="header-section-number">6.1</span> Subsetting Rows: <code>filter</code></a>
+  <ul class="collapse">
+  <li><a href="#logic" id="toc-logic" class="nav-link" data-scroll-target="#logic"><span class="header-section-number">6.1.1</span> Logic</a></li>
+  <li><a href="#applying-multiple-filter-operations" id="toc-applying-multiple-filter-operations" class="nav-link" data-scroll-target="#applying-multiple-filter-operations"><span class="header-section-number">6.1.2</span> Applying Multiple filter Operations</a></li>
+  <li><a href="#any-and-all" id="toc-any-and-all" class="nav-link" data-scroll-target="#any-and-all"><span class="header-section-number">6.1.3</span> Any and All</a></li>
+  </ul></li>
+  <li><a href="#extract-rows-by-number-slice" id="toc-extract-rows-by-number-slice" class="nav-link" data-scroll-target="#extract-rows-by-number-slice"><span class="header-section-number">6.2</span> Extract Rows by Number: <code>slice</code></a></li>
+  <li><a href="#removing-duplicates-distinct" id="toc-removing-duplicates-distinct" class="nav-link" data-scroll-target="#removing-duplicates-distinct"><span class="header-section-number">6.3</span> Removing Duplicates: <code>distinct</code></a></li>
+  <li><a href="#subsetting-columns-select" id="toc-subsetting-columns-select" class="nav-link" data-scroll-target="#subsetting-columns-select"><span class="header-section-number">6.4</span> Subsetting Columns: <code>select</code></a>
+  <ul class="collapse">
+  <li><a href="#utility-functions-in-select" id="toc-utility-functions-in-select" class="nav-link" data-scroll-target="#utility-functions-in-select"><span class="header-section-number">6.4.1</span> Utility Functions in Select</a></li>
+  </ul></li>
+  <li><a href="#column-order" id="toc-column-order" class="nav-link" data-scroll-target="#column-order"><span class="header-section-number">6.5</span> Column Order</a></li>
+  <li><a href="#sorting" id="toc-sorting" class="nav-link" data-scroll-target="#sorting"><span class="header-section-number">6.6</span> Sorting</a></li>
+  <li><a href="#subsetting" id="toc-subsetting" class="nav-link" data-scroll-target="#subsetting"><span class="header-section-number">6.7</span> EXERCISE</a></li>
+  <li><a href="#creating-new-columns-mutate" id="toc-creating-new-columns-mutate" class="nav-link" data-scroll-target="#creating-new-columns-mutate"><span class="header-section-number">6.8</span> Creating New Columns: <code>mutate</code></a></li>
+  <li><a href="#renaming-columns" id="toc-renaming-columns" class="nav-link" data-scroll-target="#renaming-columns"><span class="header-section-number">6.9</span> Renaming Columns</a></li>
+  <li><a href="#creating-categories-cut" id="toc-creating-categories-cut" class="nav-link" data-scroll-target="#creating-categories-cut"><span class="header-section-number">6.10</span> Creating Categories: <code>cut</code></a></li>
+  <li><a href="#factors-and-the-forcats-package" id="toc-factors-and-the-forcats-package" class="nav-link" data-scroll-target="#factors-and-the-forcats-package"><span class="header-section-number">6.11</span> Factors and the forcats Package</a>
+  <ul class="collapse">
+  <li><a href="#the-forcats-package" id="toc-the-forcats-package" class="nav-link" data-scroll-target="#the-forcats-package"><span class="header-section-number">6.11.1</span> The forcats Package</a></li>
+  <li><a href="#reordering-levels" id="toc-reordering-levels" class="nav-link" data-scroll-target="#reordering-levels"><span class="header-section-number">6.11.2</span> Reordering Levels</a></li>
+  <li><a href="#recoding-factors-changing-the-labels" id="toc-recoding-factors-changing-the-labels" class="nav-link" data-scroll-target="#recoding-factors-changing-the-labels"><span class="header-section-number">6.11.3</span> Recoding Factors (Changing the Labels)</a></li>
+  <li><a href="#collapsingcombining-levels" id="toc-collapsingcombining-levels" class="nav-link" data-scroll-target="#collapsingcombining-levels"><span class="header-section-number">6.11.4</span> Collapsing/Combining Levels</a></li>
+  </ul></li>
+  <li><a href="#string-manipulation-with-the-stringr-package" id="toc-string-manipulation-with-the-stringr-package" class="nav-link" data-scroll-target="#string-manipulation-with-the-stringr-package"><span class="header-section-number">6.12</span> String Manipulation with the stringr Package</a>
+  <ul class="collapse">
+  <li><a href="#string-length" id="toc-string-length" class="nav-link" data-scroll-target="#string-length"><span class="header-section-number">6.12.1</span> String Length</a></li>
+  <li><a href="#adding-white-space-formatting" id="toc-adding-white-space-formatting" class="nav-link" data-scroll-target="#adding-white-space-formatting"><span class="header-section-number">6.12.2</span> Adding White Space: Formatting</a></li>
+  <li><a href="#removal-of-white-space" id="toc-removal-of-white-space" class="nav-link" data-scroll-target="#removal-of-white-space"><span class="header-section-number">6.12.3</span> Removal of White Space</a></li>
+  <li><a href="#concatenation" id="toc-concatenation" class="nav-link" data-scroll-target="#concatenation"><span class="header-section-number">6.12.4</span> Concatenation</a></li>
+  <li><a href="#paragraphs" id="toc-paragraphs" class="nav-link" data-scroll-target="#paragraphs"><span class="header-section-number">6.12.5</span> Paragraphs</a></li>
+  <li><a href="#finding-patterns" id="toc-finding-patterns" class="nav-link" data-scroll-target="#finding-patterns"><span class="header-section-number">6.12.6</span> Finding Patterns</a></li>
+  <li><a href="#replacing-values" id="toc-replacing-values" class="nav-link" data-scroll-target="#replacing-values"><span class="header-section-number">6.12.7</span> Replacing Values</a></li>
+  </ul></li>
+  <li><a href="#mutate" id="toc-mutate" class="nav-link" data-scroll-target="#mutate"><span class="header-section-number">6.13</span> EXERCISE</a></li>
+  <li><a href="#working-with-dates-and-the-lubridate-package" id="toc-working-with-dates-and-the-lubridate-package" class="nav-link" data-scroll-target="#working-with-dates-and-the-lubridate-package"><span class="header-section-number">6.14</span> Working with Dates and the lubridate Package</a>
+  <ul class="collapse">
+  <li><a href="#date-conversion" id="toc-date-conversion" class="nav-link" data-scroll-target="#date-conversion"><span class="header-section-number">6.14.1</span> Date Conversion</a></li>
+  <li><a href="#datetime-utilities" id="toc-datetime-utilities" class="nav-link" data-scroll-target="#datetime-utilities"><span class="header-section-number">6.14.2</span> Date/time Utilities</a></li>
+  </ul></li>
+  <li><a href="#transmute" id="toc-transmute" class="nav-link" data-scroll-target="#transmute"><span class="header-section-number">6.15</span> Transmute</a></li>
+  </ul>
+<div class="toc-actions"><ul></ul></div></nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>One of the fundamental building blocks of the tidyverse is the dplyr package. The dplyr package is now the primary package for data manipulation in R. Each of the functions that we look at in this chapter take a data frame as the first input argument, process it in a very simple way and return a data frame as the output. The dplyr package is loaded by default when we load the tidyverse package but we can also load it independently.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternatively</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># library(tidyverse)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In accordance with the tidyverse spirit of functions doing one thing and doing it well, there are separate functions for subsetting rows and for subsetting columns.</p>
+<section id="subsetting-rows-filter" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="subsetting-rows-filter"><span class="header-section-number">6.1</span> Subsetting Rows: <code>filter</code></h2>
+<p>The <code>filter</code> function allows us to apply a logical subset to the rows of our data. As with all the dplyr functions that we will use in this course, the filter function takes a data frame as the first argument and a logical statement as the second argument. Typically, we base the logical statement on columns within our data frame.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dm <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_sas</span>(<span class="st">"data/dm.sas7bdat"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>act <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_sas</span>(<span class="st">"data/act.sas7bdat"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>vs <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_sas</span>(<span class="st">"data/vs.sas7bdat"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find subjects taking GSK drug.  Note the double-equals</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>gsk_subj <span class="ot">&lt;-</span> <span class="fu">filter</span>(dm, ARM <span class="sc">==</span> <span class="st">"GSK"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>gsk_subj</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 7
+   USUBJID            AGE SEX   COUNTRY RACE                      ETHNIC   ARM  
+   &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;                     &lt;chr&gt;    &lt;chr&gt;
+ 1 STD123456:000008    53 M     GER     WHITE                     NOT HIS… GSK  
+ 2 STD123456:000009    60 F     USA     WHITE                     NOT HIS… GSK  
+ 3 STD123456:000011    66 F     USA     WHITE                     NOT HIS… GSK  
+ 4 STD123456:000012    26 M     FRA     BLACK OR AFRICAN AMERICAN NOT HIS… GSK  
+ 5 STD123456:000013    51 F     IRE     WHITE                     HISPANI… GSK  
+ 6 STD123456:000015    59 F     FRA     WHITE                     HISPANI… GSK  
+ 7 STD123456:000017    28 F     FRA     WHITE                     NOT HIS… GSK  
+ 8 STD123456:000019    48 F     USA     WHITE                     NOT HIS… GSK  
+ 9 STD123456:000022    46 M     GER     WHITE                     NOT HIS… GSK  
+10 STD123456:000025    48 F     USA     WHITE                     NOT HIS… GSK  
+11 STD123456:000026    71 F     FRA     WHITE                     NOT HIS… GSK  
+12 STD123456:000028    67 M     IRE     WHITE                     HISPANI… GSK  </code></pre>
+</div>
+</div>
+<section id="logic" class="level3" data-number="6.1.1">
+<h3 data-number="6.1.1" class="anchored" data-anchor-id="logic"><span class="header-section-number">6.1.1</span> Logic</h3>
+<p>In the example above we used a double equals in order to ask the question, “is the ARM variable equal to ‘GSK’ (for each record)?” In R a single equals assigns the value on the right to the parameter on the left. We must therefore always use a double equals when asking the logical question, is x equal to y!!!</p>
+<p>The table below lists some essential logical operations.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 93%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Code</th>
+<th style="text-align: left;">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">==</td>
+<td style="text-align: left;">Equal to</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">!=</td>
+<td style="text-align: left;">Not equal to</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">&gt;</td>
+<td style="text-align: left;">Greater than</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">&gt;=</td>
+<td style="text-align: left;">Greater than or equal to</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">&lt;</td>
+<td style="text-align: left;">Less than</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">&lt;=</td>
+<td style="text-align: left;">Less than or equal to</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">&amp;</td>
+<td style="text-align: left;">And - for joining logical statements</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">|</td>
+<td style="text-align: left;">Or - for joining locical statements</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">!</td>
+<td style="text-align: left;">Not - for switching TRUE and FALSE statements around</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">%in%</td>
+<td style="text-align: left;">One of - Can any of the values on the LHS of the %in% be found on the RHS?</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">any</td>
+<td style="text-align: left;">Summarises multiple logical statements into a single value - Are ANY of these values equal to TRUE?</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">all</td>
+<td style="text-align: left;">Summarises multiple logical statements into a single value - Are ALL of these values equal to TRUE?</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="applying-multiple-filter-operations" class="level3" data-number="6.1.2">
+<h3 data-number="6.1.2" class="anchored" data-anchor-id="applying-multiple-filter-operations"><span class="header-section-number">6.1.2</span> Applying Multiple filter Operations</h3>
+<p>The <code>filter</code> function let’s us chain multiple logical questions together using commas. The commas are equivalent to using an “and” operation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find subjects taking GSK drug in USA</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>gsk_subj_USA <span class="ot">&lt;-</span> <span class="fu">filter</span>(dm, ARM <span class="sc">==</span> <span class="st">"GSK"</span>, COUNTRY <span class="sc">==</span> <span class="st">"USA"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>gsk_subj_USA</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 7
+  USUBJID            AGE SEX   COUNTRY RACE  ETHNIC                 ARM  
+  &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;                  &lt;chr&gt;
+1 STD123456:000009    60 F     USA     WHITE NOT HISPANIC OR LATINO GSK  
+2 STD123456:000011    66 F     USA     WHITE NOT HISPANIC OR LATINO GSK  
+3 STD123456:000019    48 F     USA     WHITE NOT HISPANIC OR LATINO GSK  
+4 STD123456:000025    48 F     USA     WHITE NOT HISPANIC OR LATINO GSK  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Or equivalently</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>gsk_subj_USA <span class="ot">&lt;-</span> <span class="fu">filter</span>(dm, ARM <span class="sc">==</span> <span class="st">"GSK"</span> <span class="sc">&amp;</span> COUNTRY <span class="sc">==</span> <span class="st">"USA"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The following example uses an “or” link.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find females over 50 in France or Germany</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(dm, SEX<span class="sc">==</span><span class="st">"F"</span>, AGE <span class="sc">&gt;</span> <span class="dv">50</span>, COUNTRY <span class="sc">==</span> <span class="st">"FRA"</span> <span class="sc">|</span> COUNTRY <span class="sc">==</span> <span class="st">"GER"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 7
+  USUBJID            AGE SEX   COUNTRY RACE  ETHNIC                 ARM  
+  &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;                  &lt;chr&gt;
+1 STD123456:000015    59 F     FRA     WHITE HISPANIC OR LATINO     GSK  
+2 STD123456:000026    71 F     FRA     WHITE NOT HISPANIC OR LATINO GSK  </code></pre>
+</div>
+</div>
+<p>Finally, here is an example using the <code>%in%</code> operator. Although it looks a little ugly, this function is the same as an “in” in SQL or SAS. In other words “are any of the values on the left hand side contained within the values on the right hand side”?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find females over 50 in France or Germany</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(dm, SEX<span class="sc">==</span><span class="st">"F"</span>, AGE <span class="sc">&gt;</span> <span class="dv">50</span>, COUNTRY <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"FRA"</span>, <span class="st">"GER"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 7
+  USUBJID            AGE SEX   COUNTRY RACE  ETHNIC                 ARM  
+  &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;                  &lt;chr&gt;
+1 STD123456:000015    59 F     FRA     WHITE HISPANIC OR LATINO     GSK  
+2 STD123456:000026    71 F     FRA     WHITE NOT HISPANIC OR LATINO GSK  </code></pre>
+</div>
+</div>
+</section>
+<section id="any-and-all" class="level3" data-number="6.1.3">
+<h3 data-number="6.1.3" class="anchored" data-anchor-id="any-and-all"><span class="header-section-number">6.1.3</span> Any and All</h3>
+<p>The <code>any</code> and <code>all</code> functions condense any number of logical values into a single TRUE or FALSE value. At this stage of the course they are not much use but we will look at them a little closer later on.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Some logical values</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>some_logic <span class="ot">&lt;-</span> <span class="fu">c</span>(T, T, F)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>some_logic</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  TRUE  TRUE FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Are any of these values TRUE?</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">any</span>(some_logic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Excellent.  Are they all TRUE?</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span>(some_logic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="extract-rows-by-number-slice" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="extract-rows-by-number-slice"><span class="header-section-number">6.2</span> Extract Rows by Number: <code>slice</code></h2>
+<p>The <code>slice</code> function lets us choose records by row number. It can be useful for looking at the first or last few records in a data frame. In the second example below the utility function, <code>n</code>, is used to pick out the last few rows. This utility is not a generic utility and can only be used within a handful of dplyr functions.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># First 3 rows of dm</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">slice</span>(dm, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 7
+  USUBJID            AGE SEX   COUNTRY RACE                      ETHNIC    ARM  
+  &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;                     &lt;chr&gt;     &lt;chr&gt;
+1 STD123456:000001    32 F     UK      BLACK OR AFRICAN AMERICAN NOT HISP… Comp…
+2 STD123456:000002    28 M     FRA     WHITE                     NOT HISP… Comp…
+3 STD123456:000003    55 M     USA     BLACK OR AFRICAN AMERICAN NOT HISP… Comp…</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Last 3 rows of dm (using the utility function, n())</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">slice</span>(dm, (<span class="fu">n</span>() <span class="sc">-</span> <span class="dv">2</span>)<span class="sc">:</span><span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 7
+  USUBJID            AGE SEX   COUNTRY RACE  ETHNIC                 ARM       
+  &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;                  &lt;chr&gt;     
+1 STD123456:000028    67 M     IRE     WHITE HISPANIC OR LATINO     GSK       
+2 STD123456:000029    68 F     UK      WHITE NOT HISPANIC OR LATINO Comparator
+3 STD123456:000030    71 M     USA     WHITE NOT HISPANIC OR LATINO Comparator</code></pre>
+</div>
+</div>
+</section>
+<section id="removing-duplicates-distinct" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="removing-duplicates-distinct"><span class="header-section-number">6.3</span> Removing Duplicates: <code>distinct</code></h2>
+<p>We can often find ourselves in a situation where we end up with duplicate or partial duplicates, eg following a merge. The <code>distinct</code> function is a useful utility that can help us to identify unique values and/or remove duplicates.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Duplicate records</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>dup_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">USUBJID =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"STD123456:000001"</span>, <span class="st">"STD123456:000002"</span>), <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">5</span>)),</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">AGE =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">32</span>, <span class="dv">28</span>), <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">5</span>)))</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>dup_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 8 × 2
+  USUBJID            AGE
+  &lt;chr&gt;            &lt;dbl&gt;
+1 STD123456:000001    32
+2 STD123456:000001    32
+3 STD123456:000001    32
+4 STD123456:000002    28
+5 STD123456:000002    28
+6 STD123456:000002    28
+7 STD123456:000002    28
+8 STD123456:000002    28</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove duplicate records</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">distinct</span>(dup_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  USUBJID            AGE
+  &lt;chr&gt;            &lt;dbl&gt;
+1 STD123456:000001    32
+2 STD123456:000002    28</code></pre>
+</div>
+</div>
+<p>We can also use distinct to find all the unique combinations of specific variables. For example the unique combinations of ‘COUNTRY’ and ‘ARM’. By default, the function drops all of the other variables that we’re not interested. But we can also choose to keep them. In the example below, this retains the first record for each unique combination of ‘COUNTRY’ and ‘ARM’, which is not particularly useful. But it could be used to identify baseline records for each unique subject.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find unique combinations</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">distinct</span>(dm, COUNTRY, ARM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 2
+  COUNTRY ARM       
+  &lt;chr&gt;   &lt;chr&gt;     
+1 UK      Comparator
+2 FRA     Comparator
+3 USA     Comparator
+4 GER     Comparator
+5 IRE     Comparator
+6 GER     GSK       
+7 USA     GSK       
+8 FRA     GSK       
+9 IRE     GSK       </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find unique combinations and keep the first instance of each</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">distinct</span>(dm, COUNTRY, ARM, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 7
+  USUBJID            AGE SEX   COUNTRY RACE                      ETHNIC    ARM  
+  &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;                     &lt;chr&gt;     &lt;chr&gt;
+1 STD123456:000001    32 F     UK      BLACK OR AFRICAN AMERICAN NOT HISP… Comp…
+2 STD123456:000002    28 M     FRA     WHITE                     NOT HISP… Comp…
+3 STD123456:000003    55 M     USA     BLACK OR AFRICAN AMERICAN NOT HISP… Comp…
+4 STD123456:000004    35 F     GER     WHITE                     HISPANIC… Comp…
+5 STD123456:000005    30 F     IRE     WHITE                     NOT HISP… Comp…
+6 STD123456:000008    53 M     GER     WHITE                     NOT HISP… GSK  
+7 STD123456:000009    60 F     USA     WHITE                     NOT HISP… GSK  
+8 STD123456:000012    26 M     FRA     BLACK OR AFRICAN AMERICAN NOT HISP… GSK  
+9 STD123456:000013    51 F     IRE     WHITE                     HISPANIC… GSK  </code></pre>
+</div>
+</div>
+</section>
+<section id="subsetting-columns-select" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="subsetting-columns-select"><span class="header-section-number">6.4</span> Subsetting Columns: <code>select</code></h2>
+<p>For column-wise operations we use the <code>select</code> function. Much like when writing SQL, we simply provide the function a data frame to select columns from and then a bunch of columns that we wish to select (or “keep”).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Our GSK, USA Subjects from earlier</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>gsk_subj_USA</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 7
+  USUBJID            AGE SEX   COUNTRY RACE  ETHNIC                 ARM  
+  &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;                  &lt;chr&gt;
+1 STD123456:000009    60 F     USA     WHITE NOT HISPANIC OR LATINO GSK  
+2 STD123456:000011    66 F     USA     WHITE NOT HISPANIC OR LATINO GSK  
+3 STD123456:000019    48 F     USA     WHITE NOT HISPANIC OR LATINO GSK  
+4 STD123456:000025    48 F     USA     WHITE NOT HISPANIC OR LATINO GSK  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now that we have GSK subjects in USA we don't need ARM or COUNTRY</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(gsk_subj_USA, USUBJID, AGE, SEX)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 3
+  USUBJID            AGE SEX  
+  &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;
+1 STD123456:000009    60 F    
+2 STD123456:000011    66 F    
+3 STD123456:000019    48 F    
+4 STD123456:000025    48 F    </code></pre>
+</div>
+</div>
+<p>We can also use the <code>select</code> function to drop columns by putting a minus sign in front of any columns that we provide.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now that we have GSK subjects in USA we don't need ARM or COUNTRY</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(gsk_subj_USA, <span class="sc">-</span>ARM, <span class="sc">-</span>COUNTRY)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 5
+  USUBJID            AGE SEX   RACE  ETHNIC                
+  &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;                 
+1 STD123456:000009    60 F     WHITE NOT HISPANIC OR LATINO
+2 STD123456:000011    66 F     WHITE NOT HISPANIC OR LATINO
+3 STD123456:000019    48 F     WHITE NOT HISPANIC OR LATINO
+4 STD123456:000025    48 F     WHITE NOT HISPANIC OR LATINO</code></pre>
+</div>
+</div>
+<p>Obviously we cannot mix and match dropping and keeping variables.</p>
+<section id="utility-functions-in-select" class="level3" data-number="6.4.1">
+<h3 data-number="6.4.1" class="anchored" data-anchor-id="utility-functions-in-select"><span class="header-section-number">6.4.1</span> Utility Functions in Select</h3>
+<p>The <code>select</code> function comes with a number of built in utility functions (the <code>tidy-select</code> functions, <code>?dplyr_tidy_select</code>). The functions are there to enable us to select columns more quickly, for example all of the columns that contain a particular word. These functions can only be called from within <code>select</code> and a handful of other <code>tidyverse</code> functions. They cannot be called directly.</p>
+<ul>
+<li><code>starts_with</code></li>
+<li><code>ends_with</code></li>
+<li><code>contains</code></li>
+<li><code>matches</code></li>
+<li><code>one_of</code></li>
+<li><code>everything</code></li>
+<li>…</li>
+</ul>
+<p>To use these utility functions we simply call them in place of a named column(s). For example, here we select all columns that begin with the letters “ACT”:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(act, <span class="fu">starts_with</span>(<span class="st">"ACT"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 165 × 5
+   ACT0101 ACT0102 ACT0103 ACT0104 ACT0105
+     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+ 1       5       2       3       3       3
+ 2       5       2       3       3       3
+ 3       3       4       3       2       1
+ 4       3       3       4       3       2
+ 5       3       5       1       2       3
+ 6       3       5       3       3       3
+ 7       3       3       3       3       3
+ 8       3       3       3       3       3
+ 9       3       3       3       4       4
+10       4       4       4       4       4
+# ℹ 155 more rows</code></pre>
+</div>
+</div>
+<p>We can also use a <code>:</code> to select all columns between the column on the left of the <code>:</code> and the column on the right of the <code>:</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(dm, AGE<span class="sc">:</span>COUNTRY)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 3
+     AGE SEX   COUNTRY
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  
+ 1    32 F     UK     
+ 2    28 M     FRA    
+ 3    55 M     USA    
+ 4    35 F     GER    
+ 5    30 F     IRE    
+ 6    22 F     GER    
+ 7    59 F     USA    
+ 8    53 M     GER    
+ 9    60 F     USA    
+10    48 M     USA    
+# ℹ 20 more rows</code></pre>
+</div>
+</div>
+<p>It is again important to note that although <code>:</code> can be used outside of the <code>select</code> function, the way we have used it to specify columns is unique to this use case. In other words we can’t write “A”:“Z” or similar.</p>
+</section>
+</section>
+<section id="column-order" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="column-order"><span class="header-section-number">6.5</span> Column Order</h2>
+<p>As well as subsetting columns, we can use <code>select</code> to move columns around (e.g.&nbsp;after a merge). Here we use the <code>everything</code> helper to move the ‘ARM’ column to the left and then keep ‘everything <em>else</em>’ as it was.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(dm, ARM, <span class="fu">everything</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 7
+   ARM        USUBJID            AGE SEX   COUNTRY RACE                   ETHNIC
+   &lt;chr&gt;      &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;                  &lt;chr&gt; 
+ 1 Comparator STD123456:000001    32 F     UK      BLACK OR AFRICAN AMER… NOT H…
+ 2 Comparator STD123456:000002    28 M     FRA     WHITE                  NOT H…
+ 3 Comparator STD123456:000003    55 M     USA     BLACK OR AFRICAN AMER… NOT H…
+ 4 Comparator STD123456:000004    35 F     GER     WHITE                  HISPA…
+ 5 Comparator STD123456:000005    30 F     IRE     WHITE                  NOT H…
+ 6 Comparator STD123456:000006    22 F     GER     WHITE                  NOT H…
+ 7 Comparator STD123456:000007    59 F     USA     WHITE                  NOT H…
+ 8 GSK        STD123456:000008    53 M     GER     WHITE                  NOT H…
+ 9 GSK        STD123456:000009    60 F     USA     WHITE                  NOT H…
+10 Comparator STD123456:000010    48 M     USA     WHITE                  NOT H…
+# ℹ 20 more rows</code></pre>
+</div>
+</div>
+<p>The <code>relocate</code> function is another relatively recent addition to dplyr that provides finer control when moving columns. Arguments <code>.before</code> and <code>.after</code> let us specify exactly where one or more columns are to be located.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">relocate</span>(dm, ARM, <span class="at">.after =</span> USUBJID)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 7
+   USUBJID          ARM          AGE SEX   COUNTRY RACE                   ETHNIC
+   &lt;chr&gt;            &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;                  &lt;chr&gt; 
+ 1 STD123456:000001 Comparator    32 F     UK      BLACK OR AFRICAN AMER… NOT H…
+ 2 STD123456:000002 Comparator    28 M     FRA     WHITE                  NOT H…
+ 3 STD123456:000003 Comparator    55 M     USA     BLACK OR AFRICAN AMER… NOT H…
+ 4 STD123456:000004 Comparator    35 F     GER     WHITE                  HISPA…
+ 5 STD123456:000005 Comparator    30 F     IRE     WHITE                  NOT H…
+ 6 STD123456:000006 Comparator    22 F     GER     WHITE                  NOT H…
+ 7 STD123456:000007 Comparator    59 F     USA     WHITE                  NOT H…
+ 8 STD123456:000008 GSK           53 M     GER     WHITE                  NOT H…
+ 9 STD123456:000009 GSK           60 F     USA     WHITE                  NOT H…
+10 STD123456:000010 Comparator    48 M     USA     WHITE                  NOT H…
+# ℹ 20 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternatively</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="co">#relocate(dm, AGE:COUNTRY, .after = ARM)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="sorting" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="sorting"><span class="header-section-number">6.6</span> Sorting</h2>
+<p>In general, tidyverse functions are named well and hence easy to remember. Unfortunately, <code>sort</code> and <code>order</code> already exist as R functions and so in the tidyverse we work with <code>arrange</code>! As with most of the tidyverse functions it is very easy to use. In this first example we use the <code>arrange</code> function to sort the demography data by age.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort young to old</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(dm, AGE)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 7
+   USUBJID            AGE SEX   COUNTRY RACE                      ETHNIC   ARM  
+   &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;                     &lt;chr&gt;    &lt;chr&gt;
+ 1 STD123456:000006    22 F     GER     WHITE                     NOT HIS… Comp…
+ 2 STD123456:000012    26 M     FRA     BLACK OR AFRICAN AMERICAN NOT HIS… GSK  
+ 3 STD123456:000002    28 M     FRA     WHITE                     NOT HIS… Comp…
+ 4 STD123456:000017    28 F     FRA     WHITE                     NOT HIS… GSK  
+ 5 STD123456:000023    28 F     IRE     BLACK OR AFRICAN AMERICAN NOT HIS… Comp…
+ 6 STD123456:000005    30 F     IRE     WHITE                     NOT HIS… Comp…
+ 7 STD123456:000001    32 F     UK      BLACK OR AFRICAN AMERICAN NOT HIS… Comp…
+ 8 STD123456:000004    35 F     GER     WHITE                     HISPANI… Comp…
+ 9 STD123456:000022    46 M     GER     WHITE                     NOT HIS… GSK  
+10 STD123456:000010    48 M     USA     WHITE                     NOT HIS… Comp…
+# ℹ 20 more rows</code></pre>
+</div>
+</div>
+<p>For a descending sort we call the utility function, <code>desc</code>, around the variable that we’re sorting by.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort old to young</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(dm, <span class="fu">desc</span>(AGE))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 7
+   USUBJID            AGE SEX   COUNTRY RACE                      ETHNIC   ARM  
+   &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;                     &lt;chr&gt;    &lt;chr&gt;
+ 1 STD123456:000026    71 F     FRA     WHITE                     NOT HIS… GSK  
+ 2 STD123456:000030    71 M     USA     WHITE                     NOT HIS… Comp…
+ 3 STD123456:000018    69 F     IRE     WHITE                     NOT HIS… Comp…
+ 4 STD123456:000029    68 F     UK      WHITE                     NOT HIS… Comp…
+ 5 STD123456:000027    67 F     IRE     ASIAN                     NOT HIS… Comp…
+ 6 STD123456:000028    67 M     IRE     WHITE                     HISPANI… GSK  
+ 7 STD123456:000011    66 F     USA     WHITE                     NOT HIS… GSK  
+ 8 STD123456:000020    64 M     FRA     BLACK OR AFRICAN AMERICAN NOT HIS… Comp…
+ 9 STD123456:000009    60 F     USA     WHITE                     NOT HIS… GSK  
+10 STD123456:000007    59 F     USA     WHITE                     NOT HIS… Comp…
+# ℹ 20 more rows</code></pre>
+</div>
+</div>
+<p>We can sort by as many variables as we have in our data. We can also sort by categorical variables, which are ordered alphabetically in the sort.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort by multiple variables</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(dm, <span class="fu">desc</span>(ARM), COUNTRY, <span class="fu">desc</span>(AGE))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 7
+   USUBJID            AGE SEX   COUNTRY RACE                      ETHNIC   ARM  
+   &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;                     &lt;chr&gt;    &lt;chr&gt;
+ 1 STD123456:000026    71 F     FRA     WHITE                     NOT HIS… GSK  
+ 2 STD123456:000015    59 F     FRA     WHITE                     HISPANI… GSK  
+ 3 STD123456:000017    28 F     FRA     WHITE                     NOT HIS… GSK  
+ 4 STD123456:000012    26 M     FRA     BLACK OR AFRICAN AMERICAN NOT HIS… GSK  
+ 5 STD123456:000008    53 M     GER     WHITE                     NOT HIS… GSK  
+ 6 STD123456:000022    46 M     GER     WHITE                     NOT HIS… GSK  
+ 7 STD123456:000028    67 M     IRE     WHITE                     HISPANI… GSK  
+ 8 STD123456:000013    51 F     IRE     WHITE                     HISPANI… GSK  
+ 9 STD123456:000011    66 F     USA     WHITE                     NOT HIS… GSK  
+10 STD123456:000009    60 F     USA     WHITE                     NOT HIS… GSK  
+# ℹ 20 more rows</code></pre>
+</div>
+</div>
+<p>Later we will see how we can manipulate the sort order for categorical variables using factors.</p>
+</section>
+<section id="subsetting" class="level2" data-number="6.7">
+<h2 data-number="6.7" class="anchored" data-anchor-id="subsetting"><span class="header-section-number">6.7</span> EXERCISE</h2>
+<ol type="1">
+<li>Using the <code>act</code> data, extract all data for subject 5</li>
+<li>Extract all screening and randomisation visits from the <code>act</code> data</li>
+<li>Select the <code>USUBJID</code>, <code>VISITNUM</code> and <code>VISIT</code> columns</li>
+<li>Remove the date (<code>QSDTC</code>) column</li>
+<li>Sort the data by <code>USUBJID</code> and descending <code>VISITNUM</code></li>
+</ol>
+</section>
+<section id="creating-new-columns-mutate" class="level2" data-number="6.8">
+<h2 data-number="6.8" class="anchored" data-anchor-id="creating-new-columns-mutate"><span class="header-section-number">6.8</span> Creating New Columns: <code>mutate</code></h2>
+<p>The <code>mutate</code> function allows us to create new columns within our data. We typically do so by manipulating other columns in the data but we can define our columns in any way we like.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new column that is the square of the height column</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(vs, <span class="at">Height_sq =</span> HEIGHT <span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 4
+   USUBJID          HEIGHT WEIGHT Height_sq
+   &lt;chr&gt;             &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;
+ 1 STD123456:000001    165   88       27225
+ 2 STD123456:000002    179  100       32041
+ 3 STD123456:000003    182   81       33124
+ 4 STD123456:000004    166   91       27556
+ 5 STD123456:000005    169   73.6     28561
+ 6 STD123456:000006    164   66       26896
+ 7 STD123456:000007    157  107       24649
+ 8 STD123456:000008    189  101       35721
+ 9 STD123456:000009    155   54.1     24025
+10 STD123456:000010    171   88       29241
+# ℹ 20 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new flag variable with the value 1</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(vs, <span class="at">flag =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 4
+   USUBJID          HEIGHT WEIGHT  flag
+   &lt;chr&gt;             &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+ 1 STD123456:000001    165   88       1
+ 2 STD123456:000002    179  100       1
+ 3 STD123456:000003    182   81       1
+ 4 STD123456:000004    166   91       1
+ 5 STD123456:000005    169   73.6     1
+ 6 STD123456:000006    164   66       1
+ 7 STD123456:000007    157  107       1
+ 8 STD123456:000008    189  101       1
+ 9 STD123456:000009    155   54.1     1
+10 STD123456:000010    171   88       1
+# ℹ 20 more rows</code></pre>
+</div>
+</div>
+<p>One nice property of the mutate function is that it allows us to immediately use columns that we create, much like SAS.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(vs, </span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">Height_m2 =</span> (HEIGHT<span class="sc">/</span><span class="dv">100</span>) <span class="sc">^</span><span class="dv">2</span>, </span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">BMI =</span> WEIGHT <span class="sc">/</span> Height_m2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 5
+   USUBJID          HEIGHT WEIGHT Height_m2   BMI
+   &lt;chr&gt;             &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;
+ 1 STD123456:000001    165   88        2.72  32.3
+ 2 STD123456:000002    179  100        3.20  31.2
+ 3 STD123456:000003    182   81        3.31  24.5
+ 4 STD123456:000004    166   91        2.76  33.0
+ 5 STD123456:000005    169   73.6      2.86  25.8
+ 6 STD123456:000006    164   66        2.69  24.5
+ 7 STD123456:000007    157  107        2.46  43.4
+ 8 STD123456:000008    189  101        3.57  28.3
+ 9 STD123456:000009    155   54.1      2.40  22.5
+10 STD123456:000010    171   88        2.92  30.1
+# ℹ 20 more rows</code></pre>
+</div>
+</div>
+<p>In the above example we have used some very simple numerical transformations. In the following sections we will look at some other useful functions for working with data. Each of the functions that we see are designed to work with vectors (columns of data). We can therefore call them all via the <code>mutate</code> function.</p>
+</section>
+<section id="renaming-columns" class="level2" data-number="6.9">
+<h2 data-number="6.9" class="anchored" data-anchor-id="renaming-columns"><span class="header-section-number">6.9</span> Renaming Columns</h2>
+<p>In the example below we rename the “COUNTRY” column, “LOCATION”. As we shall see later when creating new columns, the <strong>new</strong> name of the new column is placed to the <strong>left</strong> of the equals and the <strong>old</strong> name on the <strong>right</strong>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename the COUNTRY column to LOCATION - New name on the left!!!</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rename</span>(dm, <span class="at">LOCATION =</span> COUNTRY)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 7
+   USUBJID            AGE SEX   LOCATION RACE                      ETHNIC  ARM  
+   &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;                     &lt;chr&gt;   &lt;chr&gt;
+ 1 STD123456:000001    32 F     UK       BLACK OR AFRICAN AMERICAN NOT HI… Comp…
+ 2 STD123456:000002    28 M     FRA      WHITE                     NOT HI… Comp…
+ 3 STD123456:000003    55 M     USA      BLACK OR AFRICAN AMERICAN NOT HI… Comp…
+ 4 STD123456:000004    35 F     GER      WHITE                     HISPAN… Comp…
+ 5 STD123456:000005    30 F     IRE      WHITE                     NOT HI… Comp…
+ 6 STD123456:000006    22 F     GER      WHITE                     NOT HI… Comp…
+ 7 STD123456:000007    59 F     USA      WHITE                     NOT HI… Comp…
+ 8 STD123456:000008    53 M     GER      WHITE                     NOT HI… GSK  
+ 9 STD123456:000009    60 F     USA      WHITE                     NOT HI… GSK  
+10 STD123456:000010    48 M     USA      WHITE                     NOT HI… Comp…
+# ℹ 20 more rows</code></pre>
+</div>
+</div>
+<p>Further columns can be renamed by using a comma to separate each pair of new and old names.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename two columns - New name on the left!!!</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rename</span>(dm, <span class="at">LOCATION =</span> COUNTRY, <span class="at">TREATMENT =</span> ARM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 7
+   USUBJID            AGE SEX   LOCATION RACE                   ETHNIC TREATMENT
+   &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;                  &lt;chr&gt;  &lt;chr&gt;    
+ 1 STD123456:000001    32 F     UK       BLACK OR AFRICAN AMER… NOT H… Comparat…
+ 2 STD123456:000002    28 M     FRA      WHITE                  NOT H… Comparat…
+ 3 STD123456:000003    55 M     USA      BLACK OR AFRICAN AMER… NOT H… Comparat…
+ 4 STD123456:000004    35 F     GER      WHITE                  HISPA… Comparat…
+ 5 STD123456:000005    30 F     IRE      WHITE                  NOT H… Comparat…
+ 6 STD123456:000006    22 F     GER      WHITE                  NOT H… Comparat…
+ 7 STD123456:000007    59 F     USA      WHITE                  NOT H… Comparat…
+ 8 STD123456:000008    53 M     GER      WHITE                  NOT H… GSK      
+ 9 STD123456:000009    60 F     USA      WHITE                  NOT H… GSK      
+10 STD123456:000010    48 M     USA      WHITE                  NOT H… Comparat…
+# ℹ 20 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="creating-categories-cut" class="level2" data-number="6.10">
+<h2 data-number="6.10" class="anchored" data-anchor-id="creating-categories-cut"><span class="header-section-number">6.10</span> Creating Categories: <code>cut</code></h2>
+<p>The <code>cut</code> function allows us to create a discrete variable by partitioning a continuous one. The first argument to the function is the continuous vector/variable that we wish to partition. We must then either specify a number of cut points (and let R choose the cuts for us) or provide a vector of specific cut points (including minimum and maximum values). For example, here we divide the <code>AGE</code> variable into two groups, 18-50 and 50+.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the AGE column as a vector (not required if using mutate!)</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>AGE <span class="ot">&lt;-</span> <span class="fu">pull</span>(dm, AGE)</span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Partition into two groups</span></span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cut</span>(AGE, <span class="fu">c</span>(<span class="dv">18</span>, <span class="dv">50</span>, <span class="cn">Inf</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] (18,50]  (18,50]  (50,Inf] (18,50]  (18,50]  (18,50]  (50,Inf] (50,Inf]
+ [9] (50,Inf] (18,50]  (50,Inf] (18,50]  (50,Inf] (18,50]  (50,Inf] (50,Inf]
+[17] (18,50]  (50,Inf] (18,50]  (50,Inf] (50,Inf] (18,50]  (18,50]  (18,50] 
+[25] (18,50]  (50,Inf] (50,Inf] (50,Inf] (50,Inf] (50,Inf]
+Levels: (18,50] (50,Inf]</code></pre>
+</div>
+</div>
+<p>By default, any data points lying on the boundary are included in the lower grouping. This is controlled by an argument to the cut function, <code>right</code>. If we want to include boundary values to be included in the higher grouping we set <code>right = FALSE</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Include 50 years olds in the older group</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>age_cat <span class="ot">&lt;-</span> <span class="fu">cut</span>(AGE, <span class="fu">c</span>(<span class="dv">18</span>, <span class="dv">50</span>, <span class="cn">Inf</span>), <span class="at">right =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>age_cat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] [18,50)  [18,50)  [50,Inf) [18,50)  [18,50)  [18,50)  [50,Inf) [50,Inf)
+ [9] [50,Inf) [18,50)  [50,Inf) [18,50)  [50,Inf) [18,50)  [50,Inf) [50,Inf)
+[17] [18,50)  [50,Inf) [18,50)  [50,Inf) [50,Inf) [18,50)  [18,50)  [50,Inf)
+[25] [18,50)  [50,Inf) [50,Inf) [50,Inf) [50,Inf) [50,Inf)
+Levels: [18,50) [50,Inf)</code></pre>
+</div>
+</div>
+<p>We can add nicer labels to our cut by using the labels argument.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>around50 <span class="ot">&lt;-</span> <span class="fu">filter</span>(dm, <span class="dv">48</span> <span class="sc">&lt;=</span> AGE, AGE <span class="sc">&lt;=</span> <span class="dv">52</span>)</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(around50, </span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">AgeCat1 =</span> <span class="fu">cut</span>(AGE, <span class="fu">c</span>(<span class="dv">18</span>, <span class="dv">50</span>, <span class="cn">Inf</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"&lt;=50"</span>, <span class="st">"&gt;50"</span>)),</span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">AgeCat2 =</span> <span class="fu">cut</span>(AGE, <span class="fu">c</span>(<span class="dv">18</span>, <span class="dv">50</span>, <span class="cn">Inf</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"&lt;50"</span>, <span class="st">"&gt;=50"</span>), </span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">right =</span> <span class="cn">FALSE</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 9
+  USUBJID            AGE SEX   COUNTRY RACE  ETHNIC        ARM   AgeCat1 AgeCat2
+  &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt; &lt;fct&gt;   &lt;fct&gt;  
+1 STD123456:000010    48 M     USA     WHITE NOT HISPANIC… Comp… &lt;=50    &lt;50    
+2 STD123456:000013    51 F     IRE     WHITE HISPANIC OR … GSK   &gt;50     &gt;=50   
+3 STD123456:000014    48 F     USA     WHITE HISPANIC OR … Comp… &lt;=50    &lt;50    
+4 STD123456:000019    48 F     USA     WHITE NOT HISPANIC… GSK   &lt;=50    &lt;50    
+5 STD123456:000024    50 F     FRA     WHITE NOT HISPANIC… Comp… &lt;=50    &gt;=50   
+6 STD123456:000025    48 F     USA     WHITE NOT HISPANIC… GSK   &lt;=50    &lt;50    </code></pre>
+</div>
+</div>
+<!-- NOTE TO TRAINERS: These sections are not intended to be taught if short on time -->
+<!-- They are for reference only -->
+<!-- NOTE TO TRAINERS: This is not intended to be taught if short on time -->
+</section>
+<section id="factors-and-the-forcats-package" class="level2" data-number="6.11">
+<h2 data-number="6.11" class="anchored" data-anchor-id="factors-and-the-forcats-package"><span class="header-section-number">6.11</span> Factors and the forcats Package</h2>
+<p>The <code>cut</code> function turns a continuous variable into a categorical variable by creating a “factor”. Factors are essentially a code-decode paring where the code is an integer value from 1 to the number of levels, and the decode is a format that controls how these decodes are displayed. We can turn any variable into a factor by using the factor function. Factor variables are displayed as <code>&lt;fctr&gt;</code> when printing a data frame.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the SEX column and convert to a factor</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>SEX <span class="ot">&lt;-</span> <span class="fu">pull</span>(dm, SEX)</span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>SEX <span class="ot">&lt;-</span> <span class="fu">factor</span>(SEX)</span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>SEX</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] F M M F F F F M F M F M F F F F F F F M M M F F F F F M F M
+Levels: F M</code></pre>
+</div>
+</div>
+<section id="the-forcats-package" class="level3" data-number="6.11.1">
+<h3 data-number="6.11.1" class="anchored" data-anchor-id="the-forcats-package"><span class="header-section-number">6.11.1</span> The forcats Package</h3>
+<p>Creating a factors is easy, but the real benefit comes from being able to manipulate the factor “levels” in order to either control the sort order or to combine levels. All of the required functionality is contained within the forcats package. We start by loading the package, which is installed with the tidyverse but which must always be loaded separately.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Relabel F and M</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forcats)</span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a><span class="co"># What is in the package?</span></span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a><span class="fu">objects</span>(<span class="st">"package:forcats"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "%&gt;%"                   "as_factor"             "fct"                  
+ [4] "fct_anon"              "fct_c"                 "fct_collapse"         
+ [7] "fct_count"             "fct_cross"             "fct_drop"             
+[10] "fct_expand"            "fct_explicit_na"       "fct_infreq"           
+[13] "fct_inorder"           "fct_inseq"             "fct_lump"             
+[16] "fct_lump_lowfreq"      "fct_lump_min"          "fct_lump_n"           
+[19] "fct_lump_prop"         "fct_match"             "fct_na_level_to_value"
+[22] "fct_na_value_to_level" "fct_other"             "fct_recode"           
+[25] "fct_relabel"           "fct_relevel"           "fct_reorder"          
+[28] "fct_reorder2"          "fct_rev"               "fct_shift"            
+[31] "fct_shuffle"           "fct_unify"             "fct_unique"           
+[34] "first2"                "gss_cat"               "last2"                
+[37] "lvls_expand"           "lvls_reorder"          "lvls_revalue"         
+[40] "lvls_union"           </code></pre>
+</div>
+</div>
+</section>
+<section id="reordering-levels" class="level3" data-number="6.11.2">
+<h3 data-number="6.11.2" class="anchored" data-anchor-id="reordering-levels"><span class="header-section-number">6.11.2</span> Reordering Levels</h3>
+<p>Having created a factor we can use the <code>lvls_reorder</code> function to change the order of the factor levels. In our earlier example we created a factor from the <code>SEX</code> column in <code>dm</code>. By default, factors are ordered alphabetically and so females have the value 1 underneath and males have the value 2. To use the <code>lvls_reorder</code> function we specify the name of the factor that we wish to re-order, then the order of the levels.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="co"># What is the current order?</span></span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>SEX</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] F M M F F F F M F M F M F F F F F F F M M M F F F F F M F M
+Levels: F M</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Re-order females and males</span></span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>SEX <span class="ot">&lt;-</span> <span class="fu">lvls_reorder</span>(SEX, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>))</span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>SEX</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] F M M F F F F M F M F M F F F F F F F M M M F F F F F M F M
+Levels: M F</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now in the data, (where we can't see the order unless we sort)</span></span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>dm_new <span class="ot">&lt;-</span> <span class="fu">mutate</span>(dm, <span class="at">SEX =</span> <span class="fu">lvls_reorder</span>(SEX, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>)))</span>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(dm_new, SEX)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 7
+   USUBJID            AGE SEX   COUNTRY RACE                      ETHNIC   ARM  
+   &lt;chr&gt;            &lt;dbl&gt; &lt;fct&gt; &lt;chr&gt;   &lt;chr&gt;                     &lt;chr&gt;    &lt;chr&gt;
+ 1 STD123456:000002    28 M     FRA     WHITE                     NOT HIS… Comp…
+ 2 STD123456:000003    55 M     USA     BLACK OR AFRICAN AMERICAN NOT HIS… Comp…
+ 3 STD123456:000008    53 M     GER     WHITE                     NOT HIS… GSK  
+ 4 STD123456:000010    48 M     USA     WHITE                     NOT HIS… Comp…
+ 5 STD123456:000012    26 M     FRA     BLACK OR AFRICAN AMERICAN NOT HIS… GSK  
+ 6 STD123456:000020    64 M     FRA     BLACK OR AFRICAN AMERICAN NOT HIS… Comp…
+ 7 STD123456:000021    55 M     GER     ASIAN                     NOT HIS… Comp…
+ 8 STD123456:000022    46 M     GER     WHITE                     NOT HIS… GSK  
+ 9 STD123456:000028    67 M     IRE     WHITE                     HISPANI… GSK  
+10 STD123456:000030    71 M     USA     WHITE                     NOT HIS… Comp…
+# ℹ 20 more rows</code></pre>
+</div>
+</div>
+<p>Note that in order to use the <code>lvls_reorder</code> successfully we need to be certain of the current order of the levels. As a more sophisticated alternative we can also reorder the levels of one variable based on the values of another using the <code>fct_reorder</code> function. This is particularly useful for plotting.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate some fake count data of favourite colours</span></span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>colour_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Colour =</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"green"</span>, <span class="st">"blue"</span>),</span>
+<span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">Count =</span> <span class="fu">c</span>(<span class="dv">8</span>, <span class="dv">28</span>, <span class="dv">19</span>))</span>
+<span id="cb77-4"><a href="#cb77-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb77-5"><a href="#cb77-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a factor of the Colour column and order by the (descending) Count</span></span>
+<span id="cb77-6"><a href="#cb77-6" aria-hidden="true" tabindex="-1"></a><span class="co"># I.e. highest count first</span></span>
+<span id="cb77-7"><a href="#cb77-7" aria-hidden="true" tabindex="-1"></a>new_colour_data <span class="ot">&lt;-</span> <span class="fu">mutate</span>(</span>
+<span id="cb77-8"><a href="#cb77-8" aria-hidden="true" tabindex="-1"></a>  colour_data,</span>
+<span id="cb77-9"><a href="#cb77-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">Colour_order =</span> <span class="fu">fct_reorder</span>(Colour, Count, <span class="at">.desc =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb77-10"><a href="#cb77-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb77-11"><a href="#cb77-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the data using ggplot2</span></span>
+<span id="cb77-12"><a href="#cb77-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> new_colour_data) <span class="sc">+</span></span>
+<span id="cb77-13"><a href="#cb77-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> Colour_order, <span class="at">y =</span> Count), <span class="at">stat =</span> <span class="st">"identity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="06_basic_data_processing_files/figure-html/fct_reorder-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="recoding-factors-changing-the-labels" class="level3" data-number="6.11.3">
+<h3 data-number="6.11.3" class="anchored" data-anchor-id="recoding-factors-changing-the-labels"><span class="header-section-number">6.11.3</span> Recoding Factors (Changing the Labels)</h3>
+<p>We can change the labels in a simple way using the <code>lvls_revalue</code> function. To use the <code>lvls_revalue</code> function we provide the factor that we wish to re-label and a vector of new labels. It is once again important that we know the current order of levels when using the <code>lvls_revalue</code> function. To be more specific about the recoding we can use the <code>fct_recode</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the data</span></span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>SEX <span class="ot">&lt;-</span> <span class="fu">pull</span>(dm, SEX)</span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a>SEX</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "F" "M" "M" "F" "F" "F" "F" "M" "F" "M" "F" "M" "F" "F" "F" "F" "F" "F" "F"
+[20] "M" "M" "M" "F" "F" "F" "F" "F" "M" "F" "M"
+attr(,"label")
+[1] "Sex"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Relabel F and M to Female and Male</span></span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>SEX_lab <span class="ot">&lt;-</span> <span class="fu">lvls_revalue</span>(SEX, <span class="fu">c</span>(<span class="st">"Female"</span>, <span class="st">"Male"</span>))</span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a>SEX_lab</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] Female Male   Male   Female Female Female Female Male   Female Male  
+[11] Female Male   Female Female Female Female Female Female Female Male  
+[21] Male   Male   Female Female Female Female Female Male   Female Male  
+Levels: Female Male</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternatively we may take this more robust approach</span></span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>SEX_lab <span class="ot">&lt;-</span> <span class="fu">fct_recode</span>(SEX, <span class="at">Female =</span> <span class="st">"F"</span>, <span class="at">Male =</span> <span class="st">"M"</span>)</span>
+<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a>SEX_lab</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] Female Male   Male   Female Female Female Female Male   Female Male  
+[11] Female Male   Female Female Female Female Female Female Female Male  
+[21] Male   Male   Female Female Female Female Female Male   Female Male  
+Levels: Female Male</code></pre>
+</div>
+</div>
+</section>
+<section id="collapsingcombining-levels" class="level3" data-number="6.11.4">
+<h3 data-number="6.11.4" class="anchored" data-anchor-id="collapsingcombining-levels"><span class="header-section-number">6.11.4</span> Collapsing/Combining Levels</h3>
+<p>The <code>fct_recode</code> can also be used to combine levels and re-classify a variable. In the example below we combine the European nations in the <code>dm</code> data by recoding each to <code>"Europe"</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extratc COUNTRY coloumn</span></span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>COUNTRY <span class="ot">&lt;-</span> <span class="fu">pull</span>(dm, COUNTRY)</span>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a>COUNTRY</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "UK"  "FRA" "USA" "GER" "IRE" "GER" "USA" "GER" "USA" "USA" "USA" "FRA"
+[13] "IRE" "USA" "FRA" "USA" "FRA" "IRE" "USA" "FRA" "GER" "GER" "IRE" "FRA"
+[25] "USA" "FRA" "IRE" "IRE" "UK"  "USA"
+attr(,"label")
+[1] "Country"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create Continent by combining countries</span></span>
+<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a>Continent <span class="ot">&lt;-</span> <span class="fu">fct_recode</span>(COUNTRY, </span>
+<span id="cb86-3"><a href="#cb86-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">Europe =</span> <span class="st">"UK"</span>, <span class="at">Europe =</span> <span class="st">"FRA"</span>, </span>
+<span id="cb86-4"><a href="#cb86-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">Europe =</span> <span class="st">"GER"</span>, <span class="at">Europe =</span> <span class="st">"IRE"</span>)</span>
+<span id="cb86-5"><a href="#cb86-5" aria-hidden="true" tabindex="-1"></a>Continent</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] Europe Europe USA    Europe Europe Europe USA    Europe USA    USA   
+[11] USA    Europe Europe USA    Europe USA    Europe Europe USA    Europe
+[21] Europe Europe Europe Europe USA    Europe Europe Europe Europe USA   
+Levels: Europe USA</code></pre>
+</div>
+</div>
+<p>Once again we have other options available to us when re-classifying a variable. Here is the same example again but using the <code>fct_collapse</code> function. This function allows us to provide a vector of labels to collapse down onto a new label.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternatively</span></span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a>Continent <span class="ot">&lt;-</span> <span class="fu">fct_collapse</span>(COUNTRY, <span class="at">Europe =</span> <span class="fu">c</span>(<span class="st">"UK"</span>, <span class="st">"FRA"</span>, <span class="st">"GER"</span>, <span class="st">"IRE"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<!-- NOTE TO TRAINERS: This is not intended to be taught if short on time -->
+</section>
+</section>
+<section id="string-manipulation-with-the-stringr-package" class="level2" data-number="6.12">
+<h2 data-number="6.12" class="anchored" data-anchor-id="string-manipulation-with-the-stringr-package"><span class="header-section-number">6.12</span> String Manipulation with the stringr Package</h2>
+<p>The stringr package, which is part of the tidyverse, provides a whole heap of functions for working with text string. Almost all of the functions in the stringr package (and all of the functions that we look at in this section) begin with the prefix “<code>str_</code>”. Each function takes the text that we’re interested in doing something with as the first argument.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the Package</span></span>
+<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a><span class="co"># What's inside?</span></span>
+<span id="cb89-4"><a href="#cb89-4" aria-hidden="true" tabindex="-1"></a><span class="fu">objects</span>(<span class="st">"package:stringr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "%&gt;%"               "boundary"          "coll"             
+ [4] "fixed"             "fruit"             "invert_match"     
+ [7] "regex"             "sentences"         "str_c"            
+[10] "str_conv"          "str_count"         "str_detect"       
+[13] "str_dup"           "str_ends"          "str_equal"        
+[16] "str_escape"        "str_extract"       "str_extract_all"  
+[19] "str_flatten"       "str_flatten_comma" "str_glue"         
+[22] "str_glue_data"     "str_interp"        "str_length"       
+[25] "str_like"          "str_locate"        "str_locate_all"   
+[28] "str_match"         "str_match_all"     "str_order"        
+[31] "str_pad"           "str_rank"          "str_remove"       
+[34] "str_remove_all"    "str_replace"       "str_replace_all"  
+[37] "str_replace_na"    "str_sort"          "str_split"        
+[40] "str_split_1"       "str_split_fixed"   "str_split_i"      
+[43] "str_squish"        "str_starts"        "str_sub"          
+[46] "str_sub_all"       "str_sub&lt;-"         "str_subset"       
+[49] "str_to_lower"      "str_to_sentence"   "str_to_title"     
+[52] "str_to_upper"      "str_trim"          "str_trunc"        
+[55] "str_unique"        "str_view"          "str_view_all"     
+[58] "str_which"         "str_width"         "str_wrap"         
+[61] "word"              "words"            </code></pre>
+</div>
+</div>
+<section id="string-length" class="level3" data-number="6.12.1">
+<h3 data-number="6.12.1" class="anchored" data-anchor-id="string-length"><span class="header-section-number">6.12.1</span> String Length</h3>
+<p>Let’s look at a few of the most useful functions, starting with <code>str_length</code> which simply tells us how long a string is. For the examples we work with vectors directly but in practice these functions will most likely be called via the <code>mutate</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_length</span>(<span class="st">"GSK"</span>)  <span class="co"># equivalenetly `nchar("GSK")`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3</code></pre>
+</div>
+</div>
+</section>
+<section id="adding-white-space-formatting" class="level3" data-number="6.12.2">
+<h3 data-number="6.12.2" class="anchored" data-anchor-id="adding-white-space-formatting"><span class="header-section-number">6.12.2</span> Adding White Space: Formatting</h3>
+<p>When producing production outputs we often have to work with white space. The <code>str_pad</code> function adds white space to the left, right or both sides of the given text string depending on what we pass to the <code>side</code> argument. By default the space is added to the left. We add space providing a number, which represents the desired length of each string in the vector.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Some values that we wish to right align</span></span>
+<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a>aes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">7</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb93-3"><a href="#cb93-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb93-4"><a href="#cb93-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add some padding to the left in order to right align the text</span></span>
+<span id="cb93-5"><a href="#cb93-5" aria-hidden="true" tabindex="-1"></a>ae_pad <span class="ot">&lt;-</span> <span class="fu">str_pad</span>(aes, <span class="dv">2</span>)</span>
+<span id="cb93-6"><a href="#cb93-6" aria-hidden="true" tabindex="-1"></a>ae_pad</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "15" "10" " 7" " 2" " 1" " 1"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Or left align for some reason</span></span>
+<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_pad</span>(aes, <span class="dv">3</span>, <span class="at">side=</span><span class="st">"right"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "15 " "10 " "7  " "2  " "1  " "1  "</code></pre>
+</div>
+</div>
+</section>
+<section id="removal-of-white-space" class="level3" data-number="6.12.3">
+<h3 data-number="6.12.3" class="anchored" data-anchor-id="removal-of-white-space"><span class="header-section-number">6.12.3</span> Removal of White Space</h3>
+<p>White space can be useful for formatting but often it just gets in the way, for example of concatenation (see below). As easily as we can add it, we can take it away. We use <code>str_trim</code> (the opposite of <code>str_pad</code>) to remove unwanted space at either end of the string.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get rid of the white space that we just added</span></span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_trim</span>(ae_pad)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "15" "10" "7"  "2"  "1"  "1" </code></pre>
+</div>
+</div>
+</section>
+<section id="concatenation" class="level3" data-number="6.12.4">
+<h3 data-number="6.12.4" class="anchored" data-anchor-id="concatenation"><span class="header-section-number">6.12.4</span> Concatenation</h3>
+<p>The <code>str_c</code> functions allows us to combine/concatenate string. We simply provide the function with vectors or single pieces of string that we wish to use for the concatenation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate percentages and right-align</span></span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a>ae_perc <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="dv">100</span><span class="sc">*</span>aes <span class="sc">/</span> <span class="dv">30</span>)</span>
+<span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a>ae_perc_pad <span class="ot">&lt;-</span> <span class="fu">str_pad</span>(ae_perc, <span class="dv">2</span>)</span>
+<span id="cb99-4"><a href="#cb99-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb99-5"><a href="#cb99-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Joing the padded data together for nicely formatted results</span></span>
+<span id="cb99-6"><a href="#cb99-6" aria-hidden="true" tabindex="-1"></a><span class="fu">str_c</span>(ae_pad, <span class="st">" ("</span>, ae_perc_pad, <span class="st">"%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "15 (50%)" "10 (33%)" " 7 (23%)" " 2 ( 7%)" " 1 ( 3%)" " 1 ( 3%)"</code></pre>
+</div>
+</div>
+</section>
+<section id="paragraphs" class="level3" data-number="6.12.5">
+<h3 data-number="6.12.5" class="anchored" data-anchor-id="paragraphs"><span class="header-section-number">6.12.5</span> Paragraphs</h3>
+<p>When trying to fit lots of text into a confined space it can be useful to wrap when it exceeds some predefined length. The <code>str_wrap</code> function achieves this by strategically placing the return escape, <code>"\n"</code>, within the given text.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a paragraph of text</span></span>
+<span id="cb101-2"><a href="#cb101-2" aria-hidden="true" tabindex="-1"></a>some_text <span class="ot">&lt;-</span> <span class="st">"When working in a late phase pharmaceutical environment, it is common to have long titles.  But alas, we must fit these long titles within the limited space offered by the L10 format that we use.  Sad face."</span></span>
+<span id="cb101-3"><a href="#cb101-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-4"><a href="#cb101-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Insert returns in so that it fits within some pre-specified width.</span></span>
+<span id="cb101-5"><a href="#cb101-5" aria-hidden="true" tabindex="-1"></a><span class="fu">str_wrap</span>(some_text, <span class="dv">108</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "When working in a late phase pharmaceutical environment, it is common to have long titles. But alas, we must\nfit these long titles within the limited space offered by the L10 format that we use. Sad face."</code></pre>
+</div>
+</div>
+</section>
+<section id="finding-patterns" class="level3" data-number="6.12.6">
+<h3 data-number="6.12.6" class="anchored" data-anchor-id="finding-patterns"><span class="header-section-number">6.12.6</span> Finding Patterns</h3>
+<p>The stringr package also contains a number of functions that build upon R’s regular expression capabilities. The string functions are similar to others that exist in R but are much more consistent in terms of the order of variables (the string that we’re querying is always the first argument).</p>
+<p>In the example below we simulate some asthma treatments and find those containing a “LABA” component using the <code>str_detect</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create some asthma treatments</span></span>
+<span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a>treats <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"ICS"</span>, <span class="st">"ICS/LABA"</span>), <span class="dv">10</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb103-3"><a href="#cb103-3" aria-hidden="true" tabindex="-1"></a>treats</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "ICS/LABA" "ICS/LABA" "ICS/LABA" "ICS/LABA" "ICS"      "ICS/LABA"
+ [7] "ICS/LABA" "ICS/LABA" "ICS"      "ICS"     </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find subjects with LABA component</span></span>
+<span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_detect</span>(treats, <span class="st">"LABA"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1]  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE FALSE</code></pre>
+</div>
+</div>
+</section>
+<section id="replacing-values" class="level3" data-number="6.12.7">
+<h3 data-number="6.12.7" class="anchored" data-anchor-id="replacing-values"><span class="header-section-number">6.12.7</span> Replacing Values</h3>
+<p>Once we’ve found a string pattern we may wish to replace it with something else. The <code>str_replace</code> function allows us to replace one piece of string with another. In order to do so we provide three arguments: the string; the text that we want to find; the text that we want to replace it with when we find it.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a>study_conclusion <span class="ot">&lt;-</span> <span class="st">"The p-value was less than 0.05"</span></span>
+<span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_replace</span>(study_conclusion, <span class="st">"less than"</span>, <span class="st">"greater than"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "The p-value was greater than 0.05"</code></pre>
+</div>
+</div>
+<p>Once we know what we’re doing we can use the <code>str_replace</code> function to do clever things like replace white space in the middle of a text string.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a>messy_text <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"How did    I   end  up with  so   much white           space?"</span>)</span>
+<span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a><span class="co"># "\\s+" searches for cases with any length of white space</span></span>
+<span id="cb109-3"><a href="#cb109-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str_replace_all</span>(messy_text, <span class="at">pattern=</span><span class="st">"</span><span class="sc">\\</span><span class="st">s+"</span>, <span class="st">" "</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "How did I end up with so much white space?"</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="mutate" class="level2" data-number="6.13">
+<h2 data-number="6.13" class="anchored" data-anchor-id="mutate"><span class="header-section-number">6.13</span> EXERCISE</h2>
+<ol type="1">
+<li><p>Create a new column, <code>ACTTOT</code>, which is the sum of the 5 ACT items in the <code>act</code> data</p></li>
+<li><p>Create a column, <code>ACTRESP</code>, which partitions <code>ACTTOT</code> into “controlled” if ACTTOT &gt;= 20 or “uncontrolled” otherwise.</p></li>
+<li><p>Create a new variable, <code>VISITNew</code>, by formatting the <code>VISITNUM</code> column so that it displays “Screening”, “Randomisation”, “Early Withdrawal” or the appropriate week of the trial, e.g.&nbsp;“Week 6”. <em>HINT: Use the <code>fct_recode</code> function from the forcats package.</em></p></li>
+<li><p>Create a flag that identifies whether or not it’s a phone visit. <em>HINT: Use the <code>str_detect</code> or <code>str_starts</code> function from the stringr package within <code>if_else</code>.</em></p></li>
+<li><p>Filter the <code>act</code> data to find QSDT dates starting with “2012”. <em>HINT: Use the <code>str_detect</code>, or <code>str_starts</code> function from the stringr package.</em></p></li>
+<li><p>Create a vector of subject IDs (<code>SUBJID</code>) from 1 to 20. Turn this into a suitable USUBJID format for study “GSK456789” (i.e.&nbsp;“GSK456789:000001” etc.) <em>HINT: Use the appropriate function from the stringr package.</em></p></li>
+</ol>
+<!-- NOTE TO TRAINERS: This is not intended to be taught if short on time -->
+</section>
+<section id="working-with-dates-and-the-lubridate-package" class="level2" data-number="6.14">
+<h2 data-number="6.14" class="anchored" data-anchor-id="working-with-dates-and-the-lubridate-package"><span class="header-section-number">6.14</span> Working with Dates and the lubridate Package</h2>
+<p>The lubridate package is another of the tidyverse packages and provides a number of useful functions for working with dates and times, supplementing other functions that were already built into R before the tidyverse came along. As with forcats and stringr the lubridate package is installed as part of the tidyverse but we have to load it separately. Unlike forcats and stringr, however, functions in lubridate don’t have a prefix.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'lubridate' was built under R version 4.4.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'lubridate'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    date, intersect, setdiff, union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="fu">objects</span>(<span class="st">"package:lubridate"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] "%--%"              "%m-%"              "%m+%"             
+  [4] "%within%"          "add_with_rollback" "am"               
+  [7] "Arith"             "as.difftime"       "as.duration"      
+ [10] "as.interval"       "as.period"         "as_date"          
+ [13] "as_datetime"       "ceiling_date"      "Compare"          
+ [16] "cyclic_encoding"   "date"              "Date"             
+ [19] "date_decimal"      "date&lt;-"            "day"              
+ [22] "day&lt;-"             "days"              "days_in_month"    
+ [25] "ddays"             "decimal_date"      "dhours"           
+ [28] "dmicroseconds"     "dmilliseconds"     "dminutes"         
+ [31] "dmonths"           "dmy"               "dmy_h"            
+ [34] "dmy_hm"            "dmy_hms"           "dnanoseconds"     
+ [37] "dpicoseconds"      "dseconds"          "dst"              
+ [40] "duration"          "dweeks"            "dyears"           
+ [43] "dym"               "epiweek"           "epiyear"          
+ [46] "fast_strptime"     "fit_to_timeline"   "floor_date"       
+ [49] "force_tz"          "force_tzs"         "format_ISO8601"   
+ [52] "guess_formats"     "hm"                "hms"              
+ [55] "hour"              "hour&lt;-"            "hours"            
+ [58] "int_aligns"        "int_diff"          "int_end"          
+ [61] "int_end&lt;-"         "int_flip"          "int_length"       
+ [64] "int_overlaps"      "int_shift"         "int_standardize"  
+ [67] "int_start"         "int_start&lt;-"       "intersect"        
+ [70] "interval"          "is.Date"           "is.difftime"      
+ [73] "is.duration"       "is.instant"        "is.interval"      
+ [76] "is.period"         "is.POSIXct"        "is.POSIXlt"       
+ [79] "is.POSIXt"         "is.timepoint"      "is.timespan"      
+ [82] "isoweek"           "isoyear"           "lakers"           
+ [85] "leap_year"         "local_time"        "make_date"        
+ [88] "make_datetime"     "make_difftime"     "mday"             
+ [91] "mday&lt;-"            "mdy"               "mdy_h"            
+ [94] "mdy_hm"            "mdy_hms"           "microseconds"     
+ [97] "milliseconds"      "minute"            "minute&lt;-"         
+[100] "minutes"           "month"             "month&lt;-"          
+[103] "ms"                "my"                "myd"              
+[106] "NA_Date_"          "NA_POSIXct_"       "nanoseconds"      
+[109] "now"               "origin"            "parse_date_time"  
+[112] "parse_date_time2"  "period"            "period_to_seconds"
+[115] "picoseconds"       "pm"                "POSIXct"          
+[118] "pretty_dates"      "qday"              "qday&lt;-"           
+[121] "quarter"           "reclass_date"      "reclass_timespan" 
+[124] "rollback"          "rollbackward"      "rollforward"      
+[127] "round_date"        "second"            "second&lt;-"         
+[130] "seconds"           "seconds_to_period" "semester"         
+[133] "setdiff"           "show"              "stamp"            
+[136] "stamp_date"        "stamp_time"        "time_length"      
+[139] "today"             "tz"                "tz&lt;-"             
+[142] "union"             "wday"              "wday&lt;-"           
+[145] "week"              "week&lt;-"            "weeks"            
+[148] "with_tz"           "yday"              "yday&lt;-"           
+[151] "ydm"               "ydm_h"             "ydm_hm"           
+[154] "ydm_hms"           "year"              "year&lt;-"           
+[157] "years"             "ym"                "ymd"              
+[160] "ymd_h"             "ymd_hm"            "ymd_hms"          
+[163] "yq"               </code></pre>
+</div>
+</div>
+<section id="date-conversion" class="level3" data-number="6.14.1">
+<h3 data-number="6.14.1" class="anchored" data-anchor-id="date-conversion"><span class="header-section-number">6.14.1</span> Date Conversion</h3>
+<p>As with other software, R stores date data as numeric data and applies a format over the top so that the dates are human-readable. For the underlying numbers R follows the unix convention whereby time starts on 1st January 1970 (day 0). The character format is always the international date standard format, “yyyy-mm-dd”. To make use of the date functionality we often need to convert our dates from character to date format. It is worth noting, however, that functions such as <code>read_sas</code> can recognise date types and convert automatically.</p>
+<p>In the spirit of functions having a single, simple purpose a significant proportion of the functions in the lubridate package simply convert various character date and/or time formats into a date/time format. For dates we must choose from a number of functions of the form, <code>dmy</code> (day-month-year). The choice of which depends on what order our day, month and year are provided in. The functions are all reasonably intelligent and can handle a variety of separators (e.g.&nbsp;“/” or “-”); numeric and character specification of month; and both 2 and 4 digit years. Some examples are provided below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Some different ways of displaying the same date</span></span>
+<span id="cb117-2"><a href="#cb117-2" aria-hidden="true" tabindex="-1"></a>a_date_europe <span class="ot">&lt;-</span> <span class="st">"15-11-17"</span></span>
+<span id="cb117-3"><a href="#cb117-3" aria-hidden="true" tabindex="-1"></a>a_date_US <span class="ot">&lt;-</span> <span class="st">"11-15-17"</span></span>
+<span id="cb117-4"><a href="#cb117-4" aria-hidden="true" tabindex="-1"></a>a_date_GSK <span class="ot">&lt;-</span> <span class="st">"15-Nov-17"</span></span>
+<span id="cb117-5"><a href="#cb117-5" aria-hidden="true" tabindex="-1"></a>a_date_programming_standard <span class="ot">&lt;-</span> <span class="st">"2017-11-15"</span></span>
+<span id="cb117-6"><a href="#cb117-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb117-7"><a href="#cb117-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Some lubridate functions for converting each of thes dates</span></span>
+<span id="cb117-8"><a href="#cb117-8" aria-hidden="true" tabindex="-1"></a><span class="fu">dmy</span>(a_date_europe)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2017-11-15"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb119"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mdy</span>(a_date_US)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2017-11-15"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb121"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dmy</span>(a_date_GSK)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2017-11-15"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb123"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ymd</span>(a_date_programming_standard)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2017-11-15"</code></pre>
+</div>
+</div>
+<p>The lubridate package has a similar set of functions for working with times and date-time. Some further examples are provided below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb125"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb125-1"><a href="#cb125-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A time</span></span>
+<span id="cb125-2"><a href="#cb125-2" aria-hidden="true" tabindex="-1"></a>lunch_time <span class="ot">&lt;-</span> <span class="st">"12:00:00"</span></span>
+<span id="cb125-3"><a href="#cb125-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hms</span>(lunch_time)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "12H 0M 0S"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb127"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A date-time</span></span>
+<span id="cb127-2"><a href="#cb127-2" aria-hidden="true" tabindex="-1"></a>new_year_party_start <span class="ot">&lt;-</span> <span class="st">"31-12-2017 21:30:00"</span></span>
+<span id="cb127-3"><a href="#cb127-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dmy_hms</span>(new_year_party_start, <span class="at">tz =</span> <span class="st">"UTC"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2017-12-31 21:30:00 UTC"</code></pre>
+</div>
+</div>
+</section>
+<section id="datetime-utilities" class="level3" data-number="6.14.2">
+<h3 data-number="6.14.2" class="anchored" data-anchor-id="datetime-utilities"><span class="header-section-number">6.14.2</span> Date/time Utilities</h3>
+<p>Once we have converted our date/time into the appropriate format we can make use of a number of utility functions in order to process the dates. A few examples are provided below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb129"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb129-1"><a href="#cb129-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Today is a</span></span>
+<span id="cb129-2"><a href="#cb129-2" aria-hidden="true" tabindex="-1"></a><span class="fu">weekdays</span>(<span class="fu">today</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Wednesday"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb131"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb131-1"><a href="#cb131-1" aria-hidden="true" tabindex="-1"></a><span class="co"># When can I leave?</span></span>
+<span id="cb131-2"><a href="#cb131-2" aria-hidden="true" tabindex="-1"></a><span class="fu">today</span>() <span class="sc">+</span> <span class="fu">hours</span>(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-01-07 03:00:00 UTC"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb133"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb133-1"><a href="#cb133-1" aria-hidden="true" tabindex="-1"></a><span class="co"># DBF is today, how long until SAC?</span></span>
+<span id="cb133-2"><a href="#cb133-2" aria-hidden="true" tabindex="-1"></a>DBF <span class="ot">&lt;-</span> <span class="fu">today</span>()</span>
+<span id="cb133-3"><a href="#cb133-3" aria-hidden="true" tabindex="-1"></a>SAC <span class="ot">&lt;-</span> DBF <span class="sc">+</span> <span class="fu">weeks</span>(<span class="dv">5</span>)</span>
+<span id="cb133-4"><a href="#cb133-4" aria-hidden="true" tabindex="-1"></a>SAC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-02-11"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb135"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb135-1"><a href="#cb135-1" aria-hidden="true" tabindex="-1"></a><span class="co"># How many days until Christmas?</span></span>
+<span id="cb135-2"><a href="#cb135-2" aria-hidden="true" tabindex="-1"></a><span class="fu">difftime</span>(<span class="fu">ymd</span>(<span class="st">"2017-12-25"</span>), <span class="fu">today</span>()) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Time difference of -2935 days</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="transmute" class="level2" data-number="6.15">
+<h2 data-number="6.15" class="anchored" data-anchor-id="transmute"><span class="header-section-number">6.15</span> Transmute</h2>
+<p>All of the functions that we’ve seen in recent sections can be used with the <code>mutate</code> function. They can also be used with a counterpart of mutate, <code>transmute</code>. The difference between <code>mutate</code> and <code>transmute</code> is that when we use <code>transmute</code>, the newly created columns are kept but the old ones are dropped. Occasionally this can be useful if summarising a large number of variables into a total score or similar.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb137"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb137-1"><a href="#cb137-1" aria-hidden="true" tabindex="-1"></a><span class="fu">transmute</span>(vs, </span>
+<span id="cb137-2"><a href="#cb137-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">Height_m2 =</span> (HEIGHT<span class="sc">/</span><span class="dv">100</span>) <span class="sc">^</span><span class="dv">2</span>, </span>
+<span id="cb137-3"><a href="#cb137-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">BMI =</span> WEIGHT <span class="sc">/</span> Height_m2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 2
+   Height_m2   BMI
+       &lt;dbl&gt; &lt;dbl&gt;
+ 1      2.72  32.3
+ 2      3.20  31.2
+ 3      3.31  24.5
+ 4      2.76  33.0
+ 5      2.86  25.8
+ 6      2.69  24.5
+ 7      2.46  43.4
+ 8      3.57  28.3
+ 9      2.40  22.5
+10      2.92  30.1
+# ℹ 20 more rows</code></pre>
+</div>
+</div>
+<!-- ```{r child = "06_xxx_factors.Rmd"} -->
+<!-- ``` -->
+<!-- ```{r child = "06_yyy_stringr.Rmd"} -->
+<!-- ``` -->
+<!-- ```{r child = "06_zzz_dates.Rmd"} -->
+
+
+</section>
+
+</main> <!-- /main -->
+<div class="global-footnote">
+
+If you notice an issue, have suggestions for improvements, or want to view the source code, you can find it on <a href="https://github.com/GSK-Biostatistics/intro_to_r_and_the_tidyverse_training" target="_blank">GitHub</a>.
+
+</div>
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./05_importing_and_exporting_data.html" class="pagination-link" aria-label="Importing/Exporting Data">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Importing/Exporting Data</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./07_magrittr.html" class="pagination-link" aria-label="Piping">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Piping</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul></ul></div></div></div></footer><script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

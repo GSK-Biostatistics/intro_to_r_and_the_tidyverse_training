@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>2&nbsp; Introduction to R and RStudio – Introduction to R and the tidyverse</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./03_vectors.html" rel="next">
+<link href="./01_materials_external.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-6df1da3304e12c820926f47be4e172ea.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./02_r_rstudio.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to R and RStudio</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to R and RStudio</span></h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to R and the tidyverse</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/GSK-Biostatistics/intro_to_r_and_the_tidyverse_training" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome!</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_materials_external.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Course Materials</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_r_rstudio.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to R and RStudio</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_vectors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data Types and Vectors</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_data_frames.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Welcome to the tidyverse!</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_importing_and_exporting_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Importing/Exporting Data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_basic_data_processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Data Handling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_magrittr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Piping</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_summaries_aggregation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Summaries and Aggregation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_setting_merging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Setting and Merging</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_transposing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Transposing data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_statistical_modelling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Introduction to Statistical Modelling</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#ownership-of-r" id="toc-ownership-of-r" class="nav-link active" data-scroll-target="#ownership-of-r"><span class="header-section-number">2.1</span> Ownership of R</a>
+  <ul class="collapse">
+  <li><a href="#a-note-on-using-r-for-regulatory-work" id="toc-a-note-on-using-r-for-regulatory-work" class="nav-link" data-scroll-target="#a-note-on-using-r-for-regulatory-work"><span class="header-section-number">2.1.1</span> A Note on Using R for Regulatory Work</a></li>
+  </ul></li>
+  <li><a href="#working-in-rstudio" id="toc-working-in-rstudio" class="nav-link" data-scroll-target="#working-in-rstudio"><span class="header-section-number">2.2</span> Working in RStudio</a></li>
+  <li><a href="#simple-arithmetic-using-the-console" id="toc-simple-arithmetic-using-the-console" class="nav-link" data-scroll-target="#simple-arithmetic-using-the-console"><span class="header-section-number">2.3</span> Simple arithmetic using the Console</a></li>
+  <li><a href="#creating-objects" id="toc-creating-objects" class="nav-link" data-scroll-target="#creating-objects"><span class="header-section-number">2.4</span> Creating Objects</a>
+  <ul class="collapse">
+  <li><a href="#naming-conventions" id="toc-naming-conventions" class="nav-link" data-scroll-target="#naming-conventions"><span class="header-section-number">2.4.1</span> Naming Conventions</a></li>
+  <li><a href="#using-objects" id="toc-using-objects" class="nav-link" data-scroll-target="#using-objects"><span class="header-section-number">2.4.2</span> Using Objects</a></li>
+  </ul></li>
+  <li><a href="#our-first-r-script" id="toc-our-first-r-script" class="nav-link" data-scroll-target="#our-first-r-script"><span class="header-section-number">2.5</span> Our first R Script</a>
+  <ul class="collapse">
+  <li><a href="#the-script-editor" id="toc-the-script-editor" class="nav-link" data-scroll-target="#the-script-editor"><span class="header-section-number">2.5.1</span> The Script Editor</a></li>
+  <li><a href="#functions-and-help" id="toc-functions-and-help" class="nav-link" data-scroll-target="#functions-and-help"><span class="header-section-number">2.5.2</span> Functions and Help</a></li>
+  <li><a href="#clearing-history-console-environment" id="toc-clearing-history-console-environment" class="nav-link" data-scroll-target="#clearing-history-console-environment"><span class="header-section-number">2.5.3</span> Clearing History, Console, Environment</a></li>
+  <li><a href="#restarting-or-terminating-our-session" id="toc-restarting-or-terminating-our-session" class="nav-link" data-scroll-target="#restarting-or-terminating-our-session"><span class="header-section-number">2.5.4</span> Restarting or Terminating our Session</a></li>
+  <li><a href="#a-paneful-tour" id="toc-a-paneful-tour" class="nav-link" data-scroll-target="#a-paneful-tour"><span class="header-section-number">2.5.5</span> A Paneful Tour</a></li>
+  </ul></li>
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages"><span class="header-section-number">2.6</span> Packages</a>
+  <ul class="collapse">
+  <li><a href="#loading-packages" id="toc-loading-packages" class="nav-link" data-scroll-target="#loading-packages"><span class="header-section-number">2.6.1</span> Loading Packages</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul></ul></div></nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<!-- <br> -->
+<!-- <br> -->
+<!-- <br> -->
+<!-- <br> -->
+<!-- At the end of Chapter 2 students will be able to:   -->
+<!-- 1. Understand the uses of R for Regulatory Work -->
+<!-- 2. Navigate the four panes of the RStudio IDE -->
+<!-- 3. Install and Load R Packages -->
+<!-- 4. Create Sessions and Projects in RStudio -->
+<section id="ownership-of-r" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="ownership-of-r"><span class="header-section-number">2.1</span> Ownership of R</h2>
+<p>R is free and open source under a GPL-2 license. This means that you can download it at home and, if you want, see how it has been written. It also means that you get a “ABSOLUTELY NO WARRANTY” message every time you load up R. But don’t let that put you off!</p>
+<p><img src="./img/r_ownership.PNG" class="border"></p>
+<section id="a-note-on-using-r-for-regulatory-work" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="a-note-on-using-r-for-regulatory-work"><span class="header-section-number">2.1.1</span> A Note on Using R for Regulatory Work</h3>
+<p>Despite common opinion, there is no reason why R cannot be used for regulatory work. It is true that the FDA require the use SAS transport files for a submission, however these are not a proprietary format and you can produce them using R. And even this requirement could disappear in the future in favour of a more open format such as XML.</p>
+<p>R is widely used at the FDA (there are several presentations available online from people at the FDA stating this). The R Foundation have also released an official document outlining their understanding of how R can be used in a regulated clinical trial environment: <a href="https://www.r-project.org/doc/R-FDA.pdf">https://www.r-project.org/doc/R-FDA.pdf</a>. However, R is still not commonly used for submission work, and hence for clinical analysis.</p>
+<p>Whenever discussing the use of R in a regulatory environment always remember that there is a clear distinction between: the base R language, that has been built up over several years and widely tested by the R community; and the publically available R packages, which anyone can develop (and may, or may not, do what they are supposed to).</p>
+<p>To learn more about how the industry is addressing this question, it is worth visiting the “R Validation Hub”, <a href="https://www.pharmar.org">www.pharmar.org</a>. The Hub is an industry-wide effort to agree upon some basic principles regarding the use of R in a regulatory setting.</p>
+<p>The R Validation Hub have produced a <a href="https://www.pharmar.org/white-paper/">white paper</a> entitled, “A Risk-based Approach for Assessing R package Accuracy within a Validated Infrastructure”.</p>
+</section>
+</section>
+<section id="working-in-rstudio" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="working-in-rstudio"><span class="header-section-number">2.2</span> Working in RStudio</h2>
+<p>Let’s start off by watching a short video from RStudio showcasing their IDE. Don’t worry, there will be a deep-dive into each part that the presenter goes over and even more!</p>
+<iframe width="760" height="515" src="https://fast.wistia.net/embed/iframe/520zbd3tij?videoFoam=true" frameborder="0" allowfullscreen="">
+</iframe>
+<p>Notice how the presenter covered the four different panes of RStudio. We are going to follow almost the same method.</p>
+<ol type="1">
+<li>Explore the Console by doing some Simple Arithmetic</li>
+<li>Write our first R script by using the Scripting Editor.</li>
+<li>Discuss objects while looking at the Environment Pane</li>
+<li>Look at a function and its parameters in the Help Tab.</li>
+</ol>
+<p>There are more Tabs within each Pane. We will cover the remaining tabs at the end of this Chapter using our Script to do another walkthrough. The RStudio IDE is powerful, but can be overwhelming so start small and expand your abilities as you code.</p>
+</section>
+<section id="simple-arithmetic-using-the-console" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="simple-arithmetic-using-the-console"><span class="header-section-number">2.3</span> Simple arithmetic using the Console</h2>
+<p>Like most scripting languages R provides us with a console for direct interaction. In other words we can directly ask R questions without the need for scripts. This course contains many simple, “one line” examples that we will execute directly in the console.</p>
+<p>Let’s enter a few R statements into the Console and use the return key to execute it. Results are displayed right under the statement entered.</p>
+<ul>
+<li>3 + 4</li>
+<li>3 - 4</li>
+<li>5 * 8</li>
+</ul>
+<p>Please, type the above statements into the console, pressing the return key after each one and see that it matches up with the below image. Take a note on how R indicates that something is an output.</p>
+<p><img src="./img/console1.png" class="img-fluid"></p>
+</section>
+<section id="creating-objects" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="creating-objects"><span class="header-section-number">2.4</span> Creating Objects</h2>
+<p>So far we have simply printed output to the console. We can also store any objects and use them later on. The convention in the R community is to use <code>&lt;-</code> to assign and store objects, however <code>=</code> may also be used.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># Methods of assigning/storing values</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> x <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> y <span class="ot">=</span> <span class="dv">6</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> z <span class="ot">&lt;-</span> <span class="st">"GSK"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Objects are created in our global environment, similar to the ‘work’ area in SAS. We can always see a list of created objects in the ‘Environment’ tab with a little information about their structure. Additionally, you can use the <code>str</code> function to learn more about an object’s structure, or simply type it’s name in the console to print it out.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./img/env.PNG" class="img-fluid figure-img"></p>
+<figcaption><em>Figure 3: Global Environment</em></figcaption>
+</figure>
+</div>
+<p>To produce a list of these objects in the console we can call either of the in-built functions <code>ls()</code> or <code>objects()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># Things I have created</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> <span class="fu">objects</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "act"      "act_full" "act_long" "dm"       "params"   "sl"      
+ [7] "theoph"   "vs"       "x"        "y"        "z"       </code></pre>
+</div>
+</div>
+<p>The broom symbol in the environments tab allows us to delete all objects that we have created. Alternatively we can do so programatically.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># Remove all objects from workspace</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> <span class="fu">rm</span>(<span class="at">list=</span><span class="fu">ls</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="naming-conventions" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="naming-conventions"><span class="header-section-number">2.4.1</span> Naming Conventions</h3>
+<p>At this point it is worth stressing that R is case sensitive and so “x” and “X” are not the same! Names can be as long as we like and use any combination of upper case, lower case, numerics, underscores and dots. However, they may not start with a number or underscore. Today, most R users either use <code>camelCase</code> or <code>snake_case</code> to separate out words when naming objects. At GSK we have opted to use the <a href="https://style.tidyverse.org/">tidyverse style guide</a>, which advocates <code>snake_case</code>.</p>
+</section>
+<section id="using-objects" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="using-objects"><span class="header-section-number">2.4.2</span> Using Objects</h3>
+<p>To use the objects we just reference them in exactly the same way that we created them.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># Use values that have been previously stored</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> x <span class="sc">+</span> y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 11</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># Now let's do something silly to get a really helpful error message!</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> x <span class="sc">+</span> z</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in x + z: non-numeric argument to binary operator</code></pre>
+</div>
+</div>
+<p>Data types cannot usually be combined so it is important to recognise the basic types of data (and error messages) that exist in R.</p>
+</section>
+</section>
+<section id="our-first-r-script" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="our-first-r-script"><span class="header-section-number">2.5</span> Our first R Script</h2>
+<p>Let’s create our first R script, by navigating to the top-left corner. First, we click the green plus sign and select R Script. There are several other ways to create a new script, one of which is <code>Crtl+Shift+N</code>, or using <code>File</code> &gt; <code>New File</code> &gt; <code>R Script</code>.</p>
+<p><img src="./img/first_script.png" class="img-fluid"></p>
+<section id="the-script-editor" class="level3" data-number="2.5.1">
+<h3 data-number="2.5.1" class="anchored" data-anchor-id="the-script-editor"><span class="header-section-number">2.5.1</span> The Script Editor</h3>
+<p>The script editor is very much like the SAS script editor, or any other script editor for that matter. Syntax highlighting improves readability and there is a first line layer of code recognition which can identify common scripting errors such as a bracket or quotation mark that hasn’t been opened/closed.</p>
+<p><img src="./img/rwarning.PNG" class="img-fluid"></p>
+<p>Other default features of the editor include automatic indentation, closing of brackets, color-coded brackets, and quotations and auto-completion of code. All of these features can be modified or switched off via the</p>
+<p>Code menu: <em>Tools &gt; Global Options &gt; Code</em>.</p>
+<p><img src="./img/1_code_options.PNG" class="img-fluid"></p>
+<p>To execute the code that we write in the script editor we can either click on the <em>Run</em> button at the top of the window or use <em>Ctrl + Enter</em> on the keyboard. By default, code is executed line by line depending on where the cursor is located. To run sections of code (or the entire script) we must highlight the code that we want to run. Alternatively, we can run the entire script by saving and clicking the <em>Source</em> button.</p>
+<p>Now, let’s work on our first script. First, let’s save our <code>Unititled</code> file as <code>my_first_R_script.R</code> in the folder <code>/Home/gsk_R_training</code></p>
+<p>In this brief walk through we will create and summarise some data. We will learn <strong>a lot</strong> more about what exactly is happening later in the course.</p>
+<p>Now, let’s create some dummy data for <code>weight</code> and <code>height</code>. Note that the list of 5 numbers is wrapped in parentheses with a <code>c</code> in front. This is how R creates a “vector” (similar to a column of data). We have just created two such objects called <code>weight</code> and <code>height</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> weight <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">70.9</span>, <span class="fl">87.2</span>, <span class="fl">90.8</span>, <span class="fl">68.1</span>, <span class="fl">72.6</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> height <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">170</span>, <span class="dv">185</span>, <span class="dv">178</span>, <span class="dv">175</span>, <span class="dv">180</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s find the bmi of the 5 subjects that we created. Notice how the output is reported back to us.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> weight<span class="sc">/</span> (height <span class="sc">/</span> <span class="dv">100</span>)<span class="sc">^</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 24.53287 25.47845 28.65800 22.23673 22.40741</code></pre>
+</div>
+</div>
+<p>Now, lets find the mean of the <code>height</code> variable, by using the function <code>mean</code>. After you type the word <code>mean</code> in your script, hit <code>tab</code> and see what appears. If you press <code>F1</code> it wil bring up a help page for the mean function. You can also type <code>?mean</code>.</p>
+<p><img src="./img/rhelp.PNG" class="img-fluid"></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">mean</span>(height)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 177.6</code></pre>
+</div>
+</div>
+<p>In our R script, lets save the <code>mean(height)</code> as <code>mean_hgt</code> and <code>weight/ (height / 100)^2</code> as <code>bmi</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> mean_hgt <span class="ot">&lt;-</span> <span class="fu">mean</span>(height)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> bmi <span class="ot">&lt;-</span> weight<span class="sc">/</span> (height <span class="sc">/</span> <span class="dv">100</span>)<span class="sc">^</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Where did they go? There is no longer any output in the console! Remember, you can view objects in the Environment tab in the upper right hand window of Rstudio.</p>
+<p><img src="./img/environment.png" class="img-fluid"></p>
+</section>
+<section id="functions-and-help" class="level3" data-number="2.5.2">
+<h3 data-number="2.5.2" class="anchored" data-anchor-id="functions-and-help"><span class="header-section-number">2.5.2</span> Functions and Help</h3>
+<p>R has many built-in functions to aid you in your work, typically the R community refers to these as base-R functions. Where a base-R function is lacking or not available, then enterprising folks have used R’s powerful package building process to supplement base-R functions. We will cover packages very soon, specifically the <code>tidyverse</code> package. Now lets take another look at our <code>mean</code> function again. You can type <code>?mean</code> to bring up documentation and examples of how to use the <code>mean</code> function or tab and <code>f1</code> right you type the function.</p>
+<p><img src="./img/r_mean_help.PNG" class="img-fluid"></p>
+<p>If you scroll to the bottom of the help page, you can see an example. Try to run the example in your console by highligting the text and clicking <code>ctrl+enter</code> . What is the value of <code>xm</code>?</p>
+</section>
+<section id="clearing-history-console-environment" class="level3" data-number="2.5.3">
+<h3 data-number="2.5.3" class="anchored" data-anchor-id="clearing-history-console-environment"><span class="header-section-number">2.5.3</span> Clearing History, Console, Environment</h3>
+<p>The console can be cleared by choosing the menu item <code>Edit -&gt; Clear Console</code>. Else you can use the keyboard shortcut <em>Ctrl + L</em>.</p>
+<p>You can also clear the console by clicking the broom.</p>
+<p><img src="./img/clear1.PNG" class="img-fluid"></p>
+<p>To clear the Environment Variables you can click another broom. It is a good programming practice to clear your environmental variables after you are finish writing your script and then rerun it.</p>
+<p><img src="./img/clear2.PNG" class="img-fluid"></p>
+</section>
+<section id="restarting-or-terminating-our-session" class="level3" data-number="2.5.4">
+<h3 data-number="2.5.4" class="anchored" data-anchor-id="restarting-or-terminating-our-session"><span class="header-section-number">2.5.4</span> Restarting or Terminating our Session</h3>
+<p>Sometimes it makes sense to restart with a clean slate (eg to test code). The current R session can be restarted by choosing the menu item <code>Session -&gt; Restart R</code>. This removes all objects and unloads all packages.</p>
+<p>Note that closing the browser does not terminate the R session. To completely terminate the session you should use the orange ‘power button’ icon in the top right hand part of the window.</p>
+<p>It is possible to save objects (eg large data sets that take a long time to import) using the <code>save</code> function but this is not covered on this course.</p>
+</section>
+<section id="a-paneful-tour" class="level3" data-number="2.5.5">
+<h3 data-number="2.5.5" class="anchored" data-anchor-id="a-paneful-tour"><span class="header-section-number">2.5.5</span> A Paneful Tour</h3>
+<p>The interface of RStudio consists of 4 main panes and sub-panes within those main panes</p>
+<p>Additional panes can appear for additional functionality, e.g.&nbsp;the R Markdown or Git pane. Note, the Editor pane is only visible if at least one source code file is open.</p>
+<ul>
+<li><code>Editor</code> pane for editing source code files like R scripts or R Markdown files (top left part in the screenshot)</li>
+<li><code>Console</code> pane for running R code interactively</li>
+<li><code>Terminal</code> pane for using a terminal within RStudio</li>
+<li><code>Jobs</code> pane for running R jobs</li>
+<li><code>Environment</code> pane displaying objects created in a R session</li>
+<li><code>History</code> pane displaying the statement history</li>
+<li><code>Connections</code> pane for connections to databases</li>
+<li><code>Files</code> pane for browsing and handling files/directories</li>
+<li><code>Plots</code> pane displaying plots</li>
+<li><code>Packages</code> pane for installing and updating R packages</li>
+<li><code>Help</code> pane displaying R help pages</li>
+<li><code>Viewer</code> pane displaying rendered R Markdown documents and Shiny apps</li>
+</ul>
+<p>As you work through this training keep in mind that this comes with accompanying script that contains all the code and exercise solutions: This script can be found at <code>/home/gsk_R_training/tidyverse.R</code>.</p>
+</section>
+</section>
+<section id="packages" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="packages"><span class="header-section-number">2.6</span> Packages</h2>
+<p>An R package is just a collection of R <em>objects</em>. The majority of these objects are functions but may also be data or other forms of object.</p>
+<p>R is essentially a collection of “packages”. An R package is what other programming languages usually call a “library” (or “module” in SAS). In other words it is a bundle of code that implements some functionality that extends the language. This course is based around one package in particular, called “tidyverse” (which is itself a collection of other packages).</p>
+<p>The R installation itself is actually just a collection of around 30 packages, several of which are automatically loaded when you start an R session:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># R packages loaded in my session:</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> <span class="fu">search</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] ".GlobalEnv"        "package:haven"     "package:lubridate"
+ [4] "package:forcats"   "package:stringr"   "package:dplyr"    
+ [7] "package:purrr"     "package:readr"     "package:tidyr"    
+[10] "package:tibble"    "package:ggplot2"   "package:tidyverse"
+[13] "package:stats"     "package:graphics"  "package:grDevices"
+[16] "package:utils"     "package:datasets"  "package:methods"  
+[19] "Autoloads"         "package:base"     </code></pre>
+</div>
+</div>
+<p>The vast majority of R packages contain utility functions for performing data manipulation or analysis, or for drawing graphics. In many cases they also come packed with examples and even dummy data sets to use.</p>
+<p>The 30 packages that make up the base R installation are maintained by the <a href="https://www.r-project.org/contributors.html">R Core Team</a>. However there are also more than 10,000 publically available R packages available on <a href="https://cran.r-project.org/">CRAN</a> (The Comprehensive R Archive Network).</p>
+<iframe height="900" width="750" frameborder="yes" src="https://gallery.shinyapps.io/cran-explorer/?_ga=2.118984969.1876785344.1589225611-1547009910.1569460555#cran-stats">
+</iframe>
+<section id="loading-packages" class="level3" data-number="2.6.1">
+<h3 data-number="2.6.1" class="anchored" data-anchor-id="loading-packages"><span class="header-section-number">2.6.1</span> Loading Packages</h3>
+<p>Each time we start a new R session, only a handful of our installed packages are actually loaded.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># These packages are currently loaded in my environment:</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> <span class="fu">search</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] ".GlobalEnv"        "package:haven"     "package:lubridate"
+ [4] "package:forcats"   "package:stringr"   "package:dplyr"    
+ [7] "package:purrr"     "package:readr"     "package:tidyr"    
+[10] "package:tibble"    "package:ggplot2"   "package:tidyverse"
+[13] "package:stats"     "package:graphics"  "package:grDevices"
+[16] "package:utils"     "package:datasets"  "package:methods"  
+[19] "Autoloads"         "package:base"     </code></pre>
+</div>
+</div>
+<p>This course is based around the tidyverse, which is not loaded by default. We can either load the package manually by checking the box next to the named package in the packages menu or, as is more common when writing scripts, we can add a statement <code>library(PACKAGENAME)</code> to our script.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># Run this or the course won't be much fun!</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> <span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>It is good practice to place all of our library calls at the top of our script</strong>. Thus, when sharing a script anyone else can immediately see what they need to have installed in order to use the script.</p>
+<p>The ‘tidyverse’ is an umbrella term/package for a number of other packages. Calling <code>library(tidyverse)</code> actually loads several useful packages including readr, dplyr, tidyr, stringr, forcats and ggplot2. This is a great short-hand when working interactively but for formal code development it is <strong>best practice to load the components that you actually need individually</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">library</span>(readr)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">library</span>(dplyr)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">library</span>(tidyr)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># etc.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We will need to install the required packages ourselves. There are a few ways to do so but the simplest is to use the Packages tab in RStudio. To install a package we click on the <em>Packages</em> tab and then click on the <em>Install</em> icon.</p>
+<p>The <em>Install</em> icon gives us options to install locally, or from repositories such as CRAN. We simply type the package name and click <em>Install</em>. Always leave the ‘dependencies’ check-box checked as this also installs any other packages that your chosen package needs in order to work!</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./img/install.PNG" class="img-fluid figure-img"></p>
+<figcaption><em>Figure 1: Installing a Package</em></figcaption>
+</figure>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<div class="global-footnote">
+
+If you notice an issue, have suggestions for improvements, or want to view the source code, you can find it on <a href="https://github.com/GSK-Biostatistics/intro_to_r_and_the_tidyverse_training" target="_blank">GitHub</a>.
+
+</div>
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./01_materials_external.html" class="pagination-link" aria-label="Course Materials">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Course Materials</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./03_vectors.html" class="pagination-link" aria-label="Data Types and Vectors">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data Types and Vectors</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul></ul></div></div></div></footer><script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
