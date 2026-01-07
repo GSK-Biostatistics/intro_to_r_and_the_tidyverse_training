@@ -1,17 +1,23 @@
+ 
+
+#### 01_materials_external.R
 
 
 
 
-## 
-## install.packages("gskRtraining")
-## library("gskRtraining")
-## 
-## setup_training()
+# 
+# install.packages("gskRtraining")
+# library("gskRtraining")
+# 
+# setup_training() 
+
+#### 02_r_rstudio.R
+
 
 
 
 params <-
-list(who = "gsk")
+list(who = "external")
 
 library(tidyverse); theme_set(theme_bw(base_size = 12)) # This sets the default ggplot theme to white
 library(haven)
@@ -33,14 +39,16 @@ z <- "GSK"
 # Things I have created
 objects()
 
-## # Remove all objects from workspace
-## rm(list=ls())
+# # Remove all objects from workspace
+# rm(list=ls())
 
+try({
 # Use values that have been previously stored
 x + y
 
 # Now let's do something silly to get a really helpful error message!
 x + z
+})
 
 
 weight <- c(70.9, 87.2, 90.8, 68.1, 72.6)
@@ -64,10 +72,13 @@ search()
 # Run this or the course won't be much fun!
 library(tidyverse)
 
-## library(readr)
-## library(dplyr)
-## library(tidyr)
-## # etc.
+# library(readr)
+# library(dplyr)
+# library(tidyr)
+# # etc. 
+
+#### 03_vectors.R
+
 
 
 
@@ -150,23 +161,23 @@ mis_let
 mis_log <- c(mis_num > 5)
 mis_log
 
-## # Exercise Answers: Data Types and Vectors
-## 
-## # 1
-## library(tidyverse)
-## # 2
-## my_vec <- c(4, 9, 2, 1, 6, 3)
-## my_vec + 1
-## my_vec2 <- c(my_vec, NA)
-## my_vec2 + 1
-## # 3
-## 1:20
-## # 4
-## seq(18, 65, length = 3)
-## # 5
-## rep("GSK", 50)
-## # 6
-## rep(1:3, times = c(6, 4, 5))
+# # Exercise Answers: Data Types and Vectors
+# 
+# # 1
+# library(tidyverse)
+# # 2
+# my_vec <- c(4, 9, 2, 1, 6, 3)
+# my_vec + 1
+# my_vec2 <- c(my_vec, NA)
+# my_vec2 + 1
+# # 3
+# 1:20
+# # 4
+# seq(18, 65, length = 3)
+# # 5
+# rep("GSK", 50)
+# # 6
+# rep(1:3, times = c(6, 4, 5))
 
 
 
@@ -198,14 +209,17 @@ sample(treatment, 50, replace = TRUE)
 # rougly 4 'Other' for every 'GSK' entry
 sample(treatment, 50, replace = TRUE, prob=c(1,4))   
 
-## objects("package:datasets")
+# objects("package:datasets")
 
 # In-built airquality data
 head(airquality)
 tail(airquality)
 
 # Specifying a custom number of rows to display
-head(airquality, 1)
+head(airquality, 1) 
+
+#### 04_data_frames.R
+
 
 
 
@@ -231,16 +245,19 @@ my_df
 # Extract the SUBJID column
 pull(my_df, SUBJID)
 
-## # Exercise Answers: Data Frames
-## 
-## # 1
-## my_df <- tibble(SUBJID = 1:20,
-##                 AGE = round(runif(20, min = 18, max = 65)),
-##                 STATUS = sample(c("Ongoing", "Completed"), 20, replace = TRUE))
-## # 2
-## crossing(COUNTRY = c("UK", "USA", "FRA"),
-##          STATUS = c("Ongoing", "Completed"),
-##          TRT = c("GSK", "OTHER"))
+# # Exercise Answers: Data Frames
+# 
+# # 1
+# my_df <- tibble(SUBJID = 1:20,
+#                 AGE = round(runif(20, min = 18, max = 65)),
+#                 STATUS = sample(c("Ongoing", "Completed"), 20, replace = TRUE))
+# # 2
+# crossing(COUNTRY = c("UK", "USA", "FRA"),
+#          STATUS = c("Ongoing", "Completed"),
+#          TRT = c("GSK", "OTHER")) 
+
+#### 05_importing_and_exporting_data.R
+
 
 
 
@@ -268,36 +285,39 @@ dm <- read_sas("./data/dm.sas7bdat")
 # View the data
 dm    # or try View(dm)
 
-## # What is my current working directory?
-## getwd()
+# # What is my current working directory?
+# getwd()
 
 
 
-## # What files are in the working directory?
-## list.files()
+# # What files are in the working directory?
+# list.files()
 
 
 
-## # Set my working directory to where some data are stored
-## setwd("/mnt/code/gsk_R_training/data")
+# # Set my working directory to where some data are stored
+# setwd("/mnt/code/gsk_R_training/data")
 
-## dm <- read_sas("dm.sas7bdat")
+# dm <- read_sas("dm.sas7bdat")
 
-## # I have SAS files here:
-## sdtm <- "/mnt/code/gsk_R_training/data"
-## 
-## # Now I want to read in data
-## dm <- read_sas( file.path(sdtm, "dm.sas7bdat") )
+# # I have SAS files here:
+# sdtm <- "/mnt/code/gsk_R_training/data"
+# 
+# # Now I want to read in data
+# dm <- read_sas( file.path(sdtm, "dm.sas7bdat") )
 
-## # Exercise Answers: Importing
-## # 1
-## theoph <- read_csv("theoph.csv")
-## # 2
-## act <- read_sas("act.sas7bdat")
+# # Exercise Answers: Importing
+# # 1
+# theoph <- read_csv("theoph.csv")
+# # 2
+# act <- read_sas("act.sas7bdat")
 
-## write_csv(dm, "dm.csv")
+# write_csv(dm, "dm.csv")
 
-## write_csv(dm, "dm_saslike.csv", na = ".")
+# write_csv(dm, "dm_saslike.csv", na = ".") 
+
+#### 06_basic_data_processing.R
+
 
 
 
@@ -382,17 +402,17 @@ arrange(dm, desc(AGE))
 # Sort by multiple variables
 arrange(dm, desc(ARM), COUNTRY, desc(AGE))
 
-## # Exercise Answers: Subsetting
-## # 1
-## filter(act, USUBJID == "STD123456:000005")
-## # 2
-## filter(act, VISITNUM %in% c(10, 20))
-## # 3
-## select(act, USUBJID, contains("VIS"))
-## # 4
-## select(act, -QSDTC)
-## # 5
-## arrange(act, USUBJID, desc(VISITNUM))
+# # Exercise Answers: Subsetting
+# # 1
+# filter(act, USUBJID == "STD123456:000005")
+# # 2
+# filter(act, VISITNUM %in% c(10, 20))
+# # 3
+# select(act, USUBJID, contains("VIS"))
+# # 4
+# select(act, -QSDTC)
+# # 5
+# arrange(act, USUBJID, desc(VISITNUM))
 
 # Create a new column that is the square of the height column
 mutate(vs, Height_sq = HEIGHT ^2)
@@ -423,7 +443,10 @@ around50 <- filter(dm, 48 <= AGE, AGE <= 52)
 mutate(around50, 
        AgeCat1 = cut(AGE, c(18, 50, Inf), labels = c("<=50", ">50")),
        AgeCat2 = cut(AGE, c(18, 50, Inf), labels = c("<50", ">=50"), 
-                     right = FALSE)) 
+                     right = FALSE))  
+
+#### 06_xxx_factors.R
+
 
 
 
@@ -482,7 +505,10 @@ Continent <- fct_recode(COUNTRY,
 Continent
 
 # Alternatively
-Continent <- fct_collapse(COUNTRY, Europe = c("UK", "FRA", "GER", "IRE"))
+Continent <- fct_collapse(COUNTRY, Europe = c("UK", "FRA", "GER", "IRE")) 
+
+#### 06_yyy_stringr.R
+
 
 
 
@@ -533,37 +559,40 @@ messy_text <- c("How did    I   end  up with  so   much white           space?")
 # "\\s+" searches for cases with any length of white space
 str_replace_all(messy_text, pattern="\\s+", " ")
 
-## # Exercise Answers: String Manipulation
-## # 1
-## act <- mutate(act, ACTTOT = ACT0101 + ACT0102 + ACT0103 + ACT0104 + ACT0105)
-## act
-## # 2
-## act <- mutate(act, ACTRESP = cut(ACTTOT,
-##                                  c(4, 19, 25),
-##                                  labels = c("uncontrolled", "controlled")))
-## # 3
-## act <- mutate(act,
-##        VISITNew = factor(VISITNUM),
-##        VISITNew = fct_recode(VISITNew,
-##                              "Screening" = "10",
-##                              "Randomisation" = "20",
-##                              "Week 6" = "30",
-##                              "Week 12" = "40",
-##                              "Week 18" = "50",
-##                              "Week 24" = "60",
-##                              "Early Withdrawal" = "70"))
-## # 4
-## act %>%
-##   mutate(PHONE_CALL = if_else(condition = str_detect(VISIT, "PHONE CALL"),
-##                               true = TRUE, false = FALSE))
-## # 5
-## act %>% filter(str_detect(QSDTC, "^2012"))
-## str_subset(act$QSDTC, "^2012") # alternative answer
-## # 6
-## SUBJID <- 1:20
-## SUBJID_formatted <- str_pad(SUBJID, 6, pad="0")
-## USUBJID <- str_c("GSK456789:", SUBJID_formatted)
-## USUBJID
+# # Exercise Answers: String Manipulation
+# # 1
+# act <- mutate(act, ACTTOT = ACT0101 + ACT0102 + ACT0103 + ACT0104 + ACT0105)
+# act
+# # 2
+# act <- mutate(act, ACTRESP = cut(ACTTOT,
+#                                  c(4, 19, 25),
+#                                  labels = c("uncontrolled", "controlled")))
+# # 3
+# act <- mutate(act,
+#        VISITNew = factor(VISITNUM),
+#        VISITNew = fct_recode(VISITNew,
+#                              "Screening" = "10",
+#                              "Randomisation" = "20",
+#                              "Week 6" = "30",
+#                              "Week 12" = "40",
+#                              "Week 18" = "50",
+#                              "Week 24" = "60",
+#                              "Early Withdrawal" = "70"))
+# # 4
+# act %>%
+#   mutate(PHONE_CALL = if_else(condition = str_detect(VISIT, "PHONE CALL"),
+#                               true = TRUE, false = FALSE))
+# # 5
+# act %>% filter(str_detect(QSDTC, "^2012"))
+# str_subset(act$QSDTC, "^2012") # alternative answer
+# # 6
+# SUBJID <- 1:20
+# SUBJID_formatted <- str_pad(SUBJID, 6, pad="0")
+# USUBJID <- str_c("GSK456789:", SUBJID_formatted)
+# USUBJID 
+
+#### 06_zzz_dates.R
+
 
 
 
@@ -602,7 +631,10 @@ difftime(ymd("2017-12-25"), today())
 
 transmute(vs, 
           Height_m2 = (HEIGHT/100) ^2, 
-          BMI = WEIGHT / Height_m2)
+          BMI = WEIGHT / Height_m2) 
+
+#### 07_magrittr.R
+
 
 
 
@@ -642,15 +674,18 @@ p_val %>%
 "red" %>%
   hist(rnorm(100), col = .) 
 
-## # Exercise Answers: Piping
-## # 1 a-c
-## act_bl <- act %>%
-##   filter(VISITNUM == 20) %>%
-##   mutate(ACTBL = ACT0101 + ACT0102 + ACT0103 + ACT0104 + ACT0105) %>%
-##   select(USUBJID, ACTBL)
-## # 2
-## # act_bl %>%
-## #   write_csv("act_bl.csv")
+# # Exercise Answers: Piping
+# # 1 a-c
+# act_bl <- act %>%
+#   filter(VISITNUM == 20) %>%
+#   mutate(ACTBL = ACT0101 + ACT0102 + ACT0103 + ACT0104 + ACT0105) %>%
+#   select(USUBJID, ACTBL)
+# # 2
+# # act_bl %>%
+# #   write_csv("act_bl.csv") 
+
+#### 08_summaries_aggregation.R
+
 
 
 
@@ -698,36 +733,36 @@ theoph %>%
   group_by(SUBJID) %>%
   slice(n())
 
-## # Exercise Answers: Grouping
-## # 1
-## theoph %>%
-##   group_by(SUBJID) %>%
-##   summarise(Cmax = max(CONC))
-## # 2
-## act_basic <- act_long %>%
-##   group_by(USUBJID, VISITNUM, VISIT) %>%
-##   mutate(ACTTOT = sum(QSSTRESN)) %>%
-##   select(-QSTEST, -QSORRES, -QSSTRESN) %>%
-##   slice(1)
-## # 3
-## act_basic %>%
-##   group_by(USUBJID) %>%
-##   filter(VISITNUM == 20) %>%
-##   rename(ACTBL = ACTTOT) %>%
-##   select(USUBJID, ACTBL)
-## # 4
-## act_full %>%
-##   group_by(ARM, VISITNUM, VISIT) %>%
-##   summarise(N=n(),
-##             Mean = mean(ACTTOT),
-##             SD = sd(ACTTOT))
-## # 5
-## act_basic %>%
-##   group_by(USUBJID) %>%
-##   filter(!any(VISITNUM == 60)) %>%
-##   summarise(ACTTOT = min(ACTTOT),
-##             WOCF = TRUE)
-## 
+# # Exercise Answers: Grouping
+# # 1
+# theoph %>%
+#   group_by(SUBJID) %>%
+#   summarise(Cmax = max(CONC))
+# # 2
+# act_basic <- act_long %>%
+#   group_by(USUBJID, VISITNUM, VISIT) %>%
+#   mutate(ACTTOT = sum(QSSTRESN)) %>%
+#   select(-QSTEST, -QSORRES, -QSSTRESN) %>%
+#   slice(1)
+# # 3
+# act_basic %>%
+#   group_by(USUBJID) %>%
+#   filter(VISITNUM == 20) %>%
+#   rename(ACTBL = ACTTOT) %>%
+#   select(USUBJID, ACTBL)
+# # 4
+# act_full %>%
+#   group_by(ARM, VISITNUM, VISIT) %>%
+#   summarise(N=n(),
+#             Mean = mean(ACTTOT),
+#             SD = sd(ACTTOT))
+# # 5
+# act_basic %>%
+#   group_by(USUBJID) %>%
+#   filter(!any(VISITNUM == 60)) %>%
+#   summarise(ACTTOT = min(ACTTOT),
+#             WOCF = TRUE)
+# 
 
 # Overwrite dm with a grouped version of dm
 dm <- dm %>% 
@@ -737,7 +772,10 @@ dm
 # Remove the grouping
 dm <- dm %>%
   ungroup()
-dm
+dm 
+
+#### 09_setting_merging.R
+
 
 
 
@@ -791,27 +829,30 @@ semi_join(dm_head, vs_missing, by = "USUBJID")
 # Show the records in dm that would NOT be merged if performing an inner/left join
 anti_join(dm_head, vs_missing, by = "USUBJID")
 
-## # Exercise Answers: Setting and Merging
-## # 1
-## full_join(act, sl, by = "USUBJID")
-## # 2
-## act_main <- dm %>%
-##   full_join(vs, by = "USUBJID") %>%
-##   full_join(act, by = "USUBJID") %>%
-##   full_join(sl, by = "USUBJID")
-## # 3
-## wocf <- act_main %>%
-##   group_by(USUBJID) %>%
-##   filter(!any(VISITNUM == 60)) %>%
-##   arrange(ACTTOT) %>%
-##   slice(1) %>%
-##   mutate(VISITNUM = 60,
-##          VISIT = "VISIT 6 (WEEK 24)",
-##          VISITNew = "Week 24",
-##          WOCF = TRUE)
-## act_main <- act_main %>%
-##   bind_rows(wocf) %>%
-##   arrange(USUBJID, VISITNUM)
+# # Exercise Answers: Setting and Merging
+# # 1
+# full_join(act, sl, by = "USUBJID")
+# # 2
+# act_main <- dm %>%
+#   full_join(vs, by = "USUBJID") %>%
+#   full_join(act, by = "USUBJID") %>%
+#   full_join(sl, by = "USUBJID")
+# # 3
+# wocf <- act_main %>%
+#   group_by(USUBJID) %>%
+#   filter(!any(VISITNUM == 60)) %>%
+#   arrange(ACTTOT) %>%
+#   slice(1) %>%
+#   mutate(VISITNUM = 60,
+#          VISIT = "VISIT 6 (WEEK 24)",
+#          VISITNew = "Week 24",
+#          WOCF = TRUE)
+# act_main <- act_main %>%
+#   bind_rows(wocf) %>%
+#   arrange(USUBJID, VISITNUM) 
+
+#### 10_transposing.R
+
 
 
 
@@ -871,39 +912,42 @@ act_stats %>%
   print(n = 7)
 options(dplyr.summarise.inform = TRUE)
 
-## # Exercise Answers: Transposing
-## # 1
-## act_sum <- act %>%
-##   pivot_longer(ACT0101:ACT0105,
-##          names_to = "Question", values_to = "Score") %>%
-##   group_by(USUBJID, VISITNUM, VISIT) %>%
-##   summarise(ACTTOT = sum(Score))
-## # 2
-## act_stats <- act_full %>%
-##   group_by(ARM, VISITNUM, VISIT) %>%
-##   summarise(n = n(),
-##             Mean = mean(ACTTOT),
-##             Median = median(ACTTOT),
-##             SD = sd(ACTTOT),
-##             Min = min(ACTTOT),
-##             Max = max(ACTTOT))
-## act_stats %>%
-##   pivot_longer(n:Max, names_to = "Stat", values_to = "value") %>%
-##   pivot_wider(names_from = ARM, values_from = value)
-## # 3
-## 
-## act_stats <- act_full %>%
-##   group_by(ARM, VISITNUM, VISIT) %>%
-##   summarise(n = format(n(), nsmall=0),
-##             Mean = format(mean(ACTTOT), digits=1, nsmall=1),
-##             Median = format(median(ACTTOT), digits=1, nsmall=1),
-##             SD = format(sd(ACTTOT),digits=2, nsmall=2),
-##             Min = format(min(ACTTOT), nsmall=0),
-##             Max = format(max(ACTTOT), nsmall=0))
-## 
-## act_stats %>%
-##   pivot_longer(n:Max, names_to = "Stat", values_to = "value") %>%
-##   pivot_wider(names_from = ARM, values_from = value)
+# # Exercise Answers: Transposing
+# # 1
+# act_sum <- act %>%
+#   pivot_longer(ACT0101:ACT0105,
+#          names_to = "Question", values_to = "Score") %>%
+#   group_by(USUBJID, VISITNUM, VISIT) %>%
+#   summarise(ACTTOT = sum(Score))
+# # 2
+# act_stats <- act_full %>%
+#   group_by(ARM, VISITNUM, VISIT) %>%
+#   summarise(n = n(),
+#             Mean = mean(ACTTOT),
+#             Median = median(ACTTOT),
+#             SD = sd(ACTTOT),
+#             Min = min(ACTTOT),
+#             Max = max(ACTTOT))
+# act_stats %>%
+#   pivot_longer(n:Max, names_to = "Stat", values_to = "value") %>%
+#   pivot_wider(names_from = ARM, values_from = value)
+# # 3
+# 
+# act_stats <- act_full %>%
+#   group_by(ARM, VISITNUM, VISIT) %>%
+#   summarise(n = format(n(), nsmall=0),
+#             Mean = format(mean(ACTTOT), digits=1, nsmall=1),
+#             Median = format(median(ACTTOT), digits=1, nsmall=1),
+#             SD = format(sd(ACTTOT),digits=2, nsmall=2),
+#             Min = format(min(ACTTOT), nsmall=0),
+#             Max = format(max(ACTTOT), nsmall=0))
+# 
+# act_stats %>%
+#   pivot_longer(n:Max, names_to = "Stat", values_to = "value") %>%
+#   pivot_wider(names_from = ARM, values_from = value) 
+
+#### 11_statistical_modelling.R
+
 
 
 
@@ -962,20 +1006,23 @@ ggplot(pop_data_modelled) +
 
 tidy(pop_lm)
 
-## # Exercise Answers: Modelling
-## # 1
-## act_post_bl <- act_full %>%
-##   filter(20 < VISITNUM, VISITNUM < 70)
-## act_mod <- lm(data = act_post_bl, ACTCHGBL ~ ARM + AGE + factor(VISITNUM))
-## act_mod
-## # 2
-## act_mod_aug <- augment(act_mod)
-## ggplot(act_mod_aug) +
-##   geom_point(aes(x = .fitted, y = .std.resid))
-## # 3
-## act_mod %>%
-##   tidy() %>%
-##   filter(p.value < 0.05)
+# # Exercise Answers: Modelling
+# # 1
+# act_post_bl <- act_full %>%
+#   filter(20 < VISITNUM, VISITNUM < 70)
+# act_mod <- lm(data = act_post_bl, ACTCHGBL ~ ARM + AGE + factor(VISITNUM))
+# act_mod
+# # 2
+# act_mod_aug <- augment(act_mod)
+# ggplot(act_mod_aug) +
+#   geom_point(aes(x = .fitted, y = .std.resid))
+# # 3
+# act_mod %>%
+#   tidy() %>%
+#   filter(p.value < 0.05) 
+
+#### 11_xxx_other_models.R
+
 
 
 

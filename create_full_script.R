@@ -2,7 +2,7 @@ library(knitr)
 
 # List of file names to combine
 file_names <- c(
-  "01_materials_gsk",
+  "01_materials_external",
   "02_r_rstudio",
   "03_vectors",
   "04_data_frames",
@@ -36,9 +36,9 @@ for (file_name in file_names) {
   
   # Read the content of the current file
   file_content <- readLines(output)
-  # 
-  # # Add the file name as a comment before the content
-  # combined_content <- paste(combined_content, paste0("\n\n#### ", output, "\n"))
+   
+  # Add the file name as a comment before the content
+   combined_content <- paste(combined_content, paste0("\n\n#### ", output, "\n"))
   
   # Append the content of the current file to combined_content
   combined_content <- paste(combined_content, "\n\n", paste(file_content, collapse = "\n"), sep = "\n")
@@ -47,6 +47,6 @@ for (file_name in file_names) {
 }
 
 # Write the combined content to a new file
-writeLines(combined_content, "full_script.R")
+writeLines(combined_content, "data/full_script.R")
 
 
