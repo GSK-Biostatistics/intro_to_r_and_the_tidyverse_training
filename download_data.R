@@ -1,10 +1,3 @@
-# Load required libraries
-if (!requireNamespace("httr", quietly = TRUE)) install.packages("httr")
-if (!requireNamespace("jsonlite", quietly = TRUE)) install.packages("jsonlite")
-
-library(httr)
-library(jsonlite)
-
 # Function to download all files from a specific GitHub folder
 download_data <- function(owner, repo, path, branch = "main", dest_dir = "directory") {
  
@@ -34,13 +27,3 @@ download_data <- function(owner, repo, path, branch = "main", dest_dir = "direct
   
   message("Success! All files downloaded to: ", normalizePath(dest_dir))
 }
-
-
-#download data from the tidyverse training
-download_data(
-  owner = "GSK-Biostatistics",
-  repo = "intro_to_r_and_the_tidyverse_training",
-  path = "data",
-  branch = "main",
-  dest_dir = "directory" #update this where you want the files to be saved
-)
