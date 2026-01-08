@@ -7,7 +7,7 @@ These materials have been written such that you should be able to follow along w
 To follow along with the exercises, you will need to download the course datasets and script to your local RStudio.
 
 ::: callout-tip
-In the code below, change `"/path/to/your/folder"` to the actual location on your computer where you want to save your work (e.g., `"Tidyverse_Training"`).
+In the code below, change `"/path/to/your/folder"` to the actual location on your computer where you want to save your work (e.g., `"~/Tidyverse_Training"`).
 :::
 
 ```{r, eval=FALSE}
@@ -19,24 +19,26 @@ library(httr)
 library(jsonlite)
 
 # 2. Source the download function from GitHub
-source("https://raw.githubusercontent.com/GSK-Biostatistics/intro_to_r_and_the_tidyverse_training/copy_folder/download_data.R")
+source("https://raw.githubusercontent.com/GSK-Biostatistics/intro_to_r_and_the_tidyverse_training/main/download_data.R")
 
 # 3. Run the function to get your data
 download_data(
   owner    = "GSK-Biostatistics",
   repo     = "intro_to_r_and_the_tidyverse_training",
   path     = "data",
-  dest_dir = "/path/to/your/folder" # <--- EDIT THIS PATH
+  dest_dir = "/path/to/your/folder" # <--- EDIT THIS PATH 
 )
 
 ```
 
-After running this code a new folder will be created called `data` in your chosen location. The folder will contain the data and course script. The script for this course is called `course_script.R`. This script contains a copy of all of the code from the grey boxes within these materials, as well as the answers to the exercises (note that these are commented out but should run if un-commented).
+After running this code a new folder will be created called `data` in your chosen location. The folder will contain the data and course script. The script for this course is called `full_script.R`. This script contains a copy of all of the code from the grey boxes within these materials, as well as the answers to the exercises (note that these are commented out but should run if un-commented).
 
-The new folder should look like this: <img src="./img/new_course_data.PNG" class="border"/>
+The new folder should look like this:
+
+![](img/new_course_data.PNG)
 
 ## Initialising the Course 'Project'
 
-Now you have copied the materials, please open the newly created `gsk_R_training` directory (folder) and click on the RStudio project file (`gsk_R_training.Rproj`) to start a new project. This ensures all the relative paths work as expected. We will briefly discuss further benefits of RStudio Projects later in the course.
+Now you have downloaded the materials, open the folder you created with the data saved in it and click on the RStudio project file (`intro_to_r_and_the_tidyverse_training.Rproj`) to start a new project. This ensures all the relative paths work as expected. We will briefly discuss further benefits of RStudio Projects later in the course.
 
-<img src="./img/open_proj.png" class="border"/>
+![](img/open_proj.png)

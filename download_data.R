@@ -1,15 +1,14 @@
-#' Download Data and Scripts from GitHub
+#' Download Course Materials from GitHub
 #'
-#' This function connects to the GitHub API to download all files from a 
-#' specific folder within a repository.
+#' This function downloads the data folder, the main course script, 
+#' and the RProject file into a structured local directory.
 #'
 #' @param owner String. The GitHub username or organization (e.g., "GSK-Biostatistics").
 #' @param repo String. The name of the repository.
-#' @param path String. The path to the folder within the repo you want to download.
+#' @param path String. The folder containing datasets (e.g., "data").
 #' @param branch String. The branch name (default is "main").
-#' @param dest_dir String. The local directory where you want the files saved.
+#' @param dest_dir String. The local "Base" folder (e.g., "~/tidyverse_training").
 #'
-#' @return Invisible NULL. The function's primary purpose is the side effect of downloading files.
 #' @export
 #'
 #' @examples
@@ -21,32 +20,52 @@
 #'   dest_dir = "~/Tidyverse_Training"
 #' )
 #' }
-# Function to download all files from a specific GitHub folder
 download_data <- function(owner, repo, path, branch = "main", dest_dir = "directory") {
- 
-  # Create destination directory if it doesn't exist
-  if (!dir.exists(dest_dir)) dir.create(dest_dir)
   
-  # Construct the GitHub API URL to list folder contents
+  # 1. Create the BASE directory (where .Rproj and scripts go)
+  if (!dir.exists(dest_dir)) {
+    dir.create(dest_dir, recursive = TRUE)
+  }
+  
+  # 2. Create the DATA sub-folder
+  data_dir <- file.path(dest_dir, "data")
+  if (!dir.exists(data_dir)) {
+    dir.create(data_dir)
+  }
+  
+  # 3. Download the root files (into the BASE folder)
+  root_files <- c("full_script.R", "intro_to_r_and_the_tidyverse_training.Rproj")
+  
+  message("--- Setting up Project Root ---")
+  for (f in root_files) {
+    raw_url <- paste0("https://raw.githubusercontent.com/", owner, "/", repo, "/", branch, "/", f)
+    dest_path <- file.path(dest_dir, f) # Stays in the main folder
+    
+    tryCatch({
+      download.file(raw_url, destfile = dest_path, mode = "wb", quiet = TRUE)
+      message("Downloaded: ", f)
+    }, error = function(e) message("Skipping ", f, " (not found in root)."))
+  }
+  
+  # 4. Download the data folder contents (into the /data folder)
   api_url <- paste0("https://api.github.com/repos/", owner, "/", repo, "/contents/", path, "?ref=", branch)
   
-  # Fetch the file list
-  res <- GET(api_url)
-  stop_for_status(res)
-  files <- fromJSON(content(res, as = "text"))
+  res <- httr::GET(api_url)
+  httr::stop_for_status(res)
+  files <- jsonlite::fromJSON(httr::content(res, as = "text"))
   
-  message("Starting download...")
-  # Loop through files and download each one
+  message("\n--- Downloading Data Files ---")
   for (i in 1:nrow(files)) {
     if (files$type[i] == "file") {
-      file_url <- files$download_url[i]
+      file_url  <- files$download_url[i]
       file_name <- files$name[i]
-      dest_path <- file.path(dest_dir, file_name)
+      dest_path <- file.path(data_dir, file_name) # Put in /data/
       
-      message("Downloading: ", file_name, "...")
       download.file(file_url, destfile = dest_path, mode = "wb", quiet = TRUE)
+      message("Downloaded to /data: ", file_name)
     }
   }
   
-  message("Success! All files downloaded to: ", normalizePath(dest_dir))
+  message("\nSetup Complete!")
+  message("Location: ", normalizePath(dest_dir))
 }
