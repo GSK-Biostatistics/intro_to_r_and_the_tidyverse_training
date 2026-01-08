@@ -3,10 +3,11 @@
 These materials have been written such that you should be able to follow along without the aid of an instructor.
 
 ## Getting Started
-To follow along with the exercises, you will need to download the course datasets and scripts to your local RStudio.
 
-::: {.callout-tip}
-In the code below, change `"C:/path/to/your/folder"` to the actual location on your computer where you want to save your work (e.g., `"Documents/Tidyverse_Training"`).
+To follow along with the exercises, you will need to download the course datasets and script to your local RStudio.
+
+::: callout-tip
+In the code below, change `"/path/to/your/folder"` to the actual location on your computer where you want to save your work (e.g., `"Tidyverse_Training"`).
 :::
 
 ```{r, eval=FALSE}
@@ -25,20 +26,12 @@ download_data(
   owner    = "GSK-Biostatistics",
   repo     = "intro_to_r_and_the_tidyverse_training",
   path     = "data",
-  dest_dir = "C:/path/to/your/folder" # <--- EDIT THIS PATH
+  dest_dir = "/path/to/your/folder" # <--- EDIT THIS PATH
 )
 
 ```
 
-To get the data you will need to install the `gskRtraining` package and then run the `setup_training()` function. After running the `setup_training()` function a new directory/project will be created called `gsk_R_training` in your home directory, or in the `/mnt/code/` folder if you're working in Domino. The folder will contain the data and course scripts.  The script for this course is called 'tidyverse.R'.  This script contains a copy of all of the code from the grey boxes within these materials, as well as the answers to the exercises (note that these are commented out but should run if un-commented).
-
-```{r,eval = FALSE}
- 
-install.packages("gskRtraining")
-library("gskRtraining")
-
-setup_training()
-```
+After running this code a new folder will be created called `data` in your chosen location. The folder will contain the data and course script. The script for this course is called `course_script.R`. This script contains a copy of all of the code from the grey boxes within these materials, as well as the answers to the exercises (note that these are commented out but should run if un-commented).
 
 The new folder should look like this: <img src="./img/new_course_data.PNG" class="border"/>
 
