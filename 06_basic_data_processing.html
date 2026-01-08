@@ -1227,13 +1227,13 @@ Levels: Europe USA</code></pre>
 <span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a>treats <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"ICS"</span>, <span class="st">"ICS/LABA"</span>), <span class="dv">10</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb103-3"><a href="#cb103-3" aria-hidden="true" tabindex="-1"></a>treats</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "ICS"      "ICS/LABA" "ICS"      "ICS"      "ICS"      "ICS/LABA"
- [7] "ICS"      "ICS"      "ICS"      "ICS/LABA"</code></pre>
+<pre><code> [1] "ICS"      "ICS"      "ICS"      "ICS/LABA" "ICS/LABA" "ICS"     
+ [7] "ICS"      "ICS/LABA" "ICS/LABA" "ICS"     </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find subjects with LABA component</span></span>
 <span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_detect</span>(treats, <span class="st">"LABA"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] FALSE  TRUE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE</code></pre>
+<pre><code> [1] FALSE FALSE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE</code></pre>
 </div>
 </div>
 </section>
@@ -1395,24 +1395,24 @@ Attaching package: 'lubridate'</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb128"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb128-1"><a href="#cb128-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Today is a</span></span>
 <span id="cb128-2"><a href="#cb128-2" aria-hidden="true" tabindex="-1"></a><span class="fu">weekdays</span>(<span class="fu">today</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "Wednesday"</code></pre>
+<pre><code>[1] "Thursday"</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb130"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1" aria-hidden="true" tabindex="-1"></a><span class="co"># When can I leave?</span></span>
 <span id="cb130-2"><a href="#cb130-2" aria-hidden="true" tabindex="-1"></a><span class="fu">today</span>() <span class="sc">+</span> <span class="fu">hours</span>(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "2026-01-07 03:00:00 UTC"</code></pre>
+<pre><code>[1] "2026-01-08 03:00:00 UTC"</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb132"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1" aria-hidden="true" tabindex="-1"></a><span class="co"># DBF is today, how long until SAC?</span></span>
 <span id="cb132-2"><a href="#cb132-2" aria-hidden="true" tabindex="-1"></a>DBF <span class="ot">&lt;-</span> <span class="fu">today</span>()</span>
 <span id="cb132-3"><a href="#cb132-3" aria-hidden="true" tabindex="-1"></a>SAC <span class="ot">&lt;-</span> DBF <span class="sc">+</span> <span class="fu">weeks</span>(<span class="dv">5</span>)</span>
 <span id="cb132-4"><a href="#cb132-4" aria-hidden="true" tabindex="-1"></a>SAC</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "2026-02-11"</code></pre>
+<pre><code>[1] "2026-02-12"</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb134"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb134-1"><a href="#cb134-1" aria-hidden="true" tabindex="-1"></a><span class="co"># How many days until Christmas?</span></span>
 <span id="cb134-2"><a href="#cb134-2" aria-hidden="true" tabindex="-1"></a><span class="fu">difftime</span>(<span class="fu">ymd</span>(<span class="st">"2017-12-25"</span>), <span class="fu">today</span>()) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Time difference of -2935 days</code></pre>
+<pre><code>Time difference of -2936 days</code></pre>
 </div>
 </div>
 </section>

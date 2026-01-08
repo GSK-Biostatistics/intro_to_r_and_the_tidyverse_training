@@ -241,7 +241,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#initialising-the-course-project" id="toc-initialising-the-course-project" class="nav-link active" data-scroll-target="#initialising-the-course-project"><span class="header-section-number">1.1</span> Initialising the Course ‘Project’</a></li>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link active" data-scroll-target="#getting-started"><span class="header-section-number">1.1</span> Getting Started</a></li>
+  <li><a href="#initialising-the-course-project" id="toc-initialising-the-course-project" class="nav-link" data-scroll-target="#initialising-the-course-project"><span class="header-section-number">1.2</span> Initialising the Course ‘Project’</a></li>
   </ul>
 <div class="toc-actions"><ul></ul></div></nav>
 </nav>
@@ -257,18 +258,49 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>These materials have been written such that you should be able to follow along without the aid of an instructor.</p>
-<p>To get the data you will need to install the <code>gskRtraining</code> package and then run the <code>setup_training()</code> function. After running the <code>setup_training()</code> function a new directory/project will be created called <code>gsk_R_training</code> in your home directory, or in the <code>/mnt/code/</code> folder if you’re working in Domino. The folder will contain the data and course scripts. The script for this course is called ‘tidyverse.R’. This script contains a copy of all of the code from the grey boxes within these materials, as well as the answers to the exercises (note that these are commented out but should run if un-commented).</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"gskRtraining"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"gskRtraining"</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">setup_training</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="getting-started" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="getting-started"><span class="header-section-number">1.1</span> Getting Started</h2>
+<p>To follow along with the exercises, you will need to download the course datasets and script to your local RStudio.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<p>The new folder should look like this: <img src="./img/new_course_data.PNG" class="border"></p>
-<section id="initialising-the-course-project" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="initialising-the-course-project"><span class="header-section-number">1.1</span> Initialising the Course ‘Project’</h2>
-<p>Now you have copied the materials, please open the newly created <code>gsk_R_training</code> directory (folder) and click on the RStudio project file (<code>gsk_R_training.Rproj</code>) to start a new project. This ensures all the relative paths work as expected. We will briefly discuss further benefits of RStudio Projects later in the course.</p>
-<p><img src="./img/open_proj.png" class="border"></p>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In the code below, change <code>"/path/to/your/folder"</code> to the actual location on your computer where you want to save your work (e.g., <code>"~/Tidyverse_Training"</code>).</p>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Install and load helper packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"httr"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"jsonlite"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jsonlite)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Copy the `download` function from GitHub into your environment</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"https://raw.githubusercontent.com/GSK-Biostatistics/intro_to_r_and_the_tidyverse_training/main/download_data.R"</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Run the function to get your data</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">download_data</span>(</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">owner    =</span> <span class="st">"GSK-Biostatistics"</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">repo     =</span> <span class="st">"intro_to_r_and_the_tidyverse_training"</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">path     =</span> <span class="st">"data"</span>,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">dest_dir =</span> <span class="st">"/path/to/your/folder"</span> <span class="co"># &lt;--- EDIT THIS PATH </span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>After running this code a new folder will be created called <code>data</code> in your chosen location. The folder will contain the data and course script. The script for this course is called <code>full_script.R</code>. This script contains a copy of all of the code from the grey boxes within these materials, as well as the answers to the exercises (note that these are commented out but should run if un-commented).</p>
+<p>The new folder should look like this:</p>
+<p><img src="img/new_course_data.PNG" class="img-fluid"></p>
+</section>
+<section id="initialising-the-course-project" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="initialising-the-course-project"><span class="header-section-number">1.2</span> Initialising the Course ‘Project’</h2>
+<p>Now you have downloaded the materials, open the folder you created with the data saved in it and click on the RStudio project file (<code>intro_to_r_and_the_tidyverse_training.Rproj</code>) to start a new project. This ensures all the relative paths work as expected. We will briefly discuss further benefits of RStudio Projects later in the course.</p>
+<p><img src="img/open_proj.png" class="img-fluid"></p>
 
 
 </section>
