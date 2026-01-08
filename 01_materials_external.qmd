@@ -18,7 +18,7 @@ install.packages("jsonlite")
 library(httr)
 library(jsonlite)
 
-# 2. Source the download function from GitHub
+# 2. Copy the `download` function from GitHub into your environment
 source("https://raw.githubusercontent.com/GSK-Biostatistics/intro_to_r_and_the_tidyverse_training/main/download_data.R")
 
 # 3. Run the function to get your data
