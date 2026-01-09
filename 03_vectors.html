@@ -612,23 +612,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample values from this set, with replacement</span></span>
 <span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(treatment, <span class="dv">50</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "Other" "Other" "Other" "GSK"   "GSK"   "Other" "Other" "Other" "Other"
-[10] "Other" "GSK"   "GSK"   "Other" "GSK"   "GSK"   "Other" "GSK"   "Other"
-[19] "GSK"   "Other" "GSK"   "Other" "Other" "GSK"   "Other" "GSK"   "Other"
-[28] "Other" "GSK"   "GSK"   "Other" "GSK"   "Other" "Other" "GSK"   "Other"
-[37] "Other" "GSK"   "GSK"   "Other" "Other" "GSK"   "Other" "Other" "Other"
-[46] "GSK"   "Other" "Other" "Other" "GSK"  </code></pre>
+<pre><code> [1] "GSK"   "GSK"   "Other" "Other" "GSK"   "Other" "Other" "Other" "Other"
+[10] "GSK"   "Other" "GSK"   "GSK"   "GSK"   "GSK"   "Other" "GSK"   "GSK"  
+[19] "Other" "Other" "Other" "Other" "GSK"   "Other" "Other" "Other" "GSK"  
+[28] "GSK"   "GSK"   "GSK"   "GSK"   "GSK"   "GSK"   "Other" "GSK"   "Other"
+[37] "GSK"   "GSK"   "Other" "Other" "GSK"   "Other" "GSK"   "GSK"   "GSK"  
+[46] "GSK"   "Other" "GSK"   "GSK"   "Other"</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample again but this time we want more 'Other' in our population,</span></span>
 <span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a><span class="co"># rougly 4 'Other' for every 'GSK' entry</span></span>
 <span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(treatment, <span class="dv">50</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">4</span>))   </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "GSK"   "Other" "Other" "GSK"   "Other" "Other" "Other" "Other" "Other"
-[10] "Other" "Other" "Other" "Other" "Other" "Other" "GSK"   "Other" "Other"
-[19] "Other" "Other" "Other" "Other" "Other" "Other" "Other" "Other" "Other"
-[28] "Other" "Other" "Other" "Other" "GSK"   "Other" "GSK"   "Other" "GSK"  
-[37] "GSK"   "Other" "GSK"   "Other" "Other" "Other" "Other" "Other" "GSK"  
-[46] "Other" "Other" "Other" "Other" "Other"</code></pre>
+<pre><code> [1] "Other" "Other" "Other" "Other" "Other" "Other" "Other" "Other" "Other"
+[10] "Other" "Other" "GSK"   "Other" "Other" "Other" "Other" "GSK"   "GSK"  
+[19] "Other" "GSK"   "Other" "Other" "Other" "Other" "Other" "Other" "Other"
+[28] "GSK"   "Other" "Other" "Other" "Other" "Other" "GSK"   "Other" "Other"
+[37] "Other" "GSK"   "Other" "Other" "GSK"   "Other" "Other" "Other" "GSK"  
+[46] "GSK"   "Other" "Other" "GSK"   "Other"</code></pre>
 </div>
 </div>
 </section>
